@@ -26,6 +26,38 @@ export const Route = createRootRoute({
         name: 'keywords',
         content: 'perfumes, dior, chanel, gucci, lattafa, kenya, best prices',
       },
+      {
+        property: 'og:type',
+        content: 'website',
+      },
+      {
+        property: 'og:title',
+        content: "Remi's Perfumes",
+      },
+      {
+        property: 'og:description',
+        content: 'Dior, Chanel, Gucci, Lattafa and more perfumes at the best prices in Kenya.',
+      },
+      {
+        property: 'og:image',
+        content: Logo,
+      },
+      {
+        name: 'twitter:card',
+        content: 'summary_large_image',
+      },
+      {
+        name: 'twitter:title',
+        content: "Remi's Perfumes",
+      },
+      {
+        name: 'twitter:description',
+        content: 'Dior, Chanel, Gucci, Lattafa and more perfumes at the best prices in Kenya.',
+      },
+      {
+        name: 'twitter:image',
+        content: Logo,
+      },
     ],
     links: [
       {

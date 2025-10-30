@@ -1,15 +1,49 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Poppins:wght@400;500;700&display=swap');
 
-body {
-  @apply m-0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@theme {
+  /* Colors stored as space-separated RGB to pair with Tailwind's rgb(var(--token) / <alpha-value>) usage. */
+  /* Logo & Primary Brand Colors */
+  --color-brand-light: oklch(91.75% 0.038 10.3);
+  /* Soft Blush */
+  --color-brand: oklch(73.4% 0.075 10.9);
+  /* Muted Rose */
+  --color-brand-dark: oklch(68.5% 0.076 11.2);
+  /* Deep Rosewood */
+
+  /* Luxury Accent Colors */
+  --color-accent-light: oklch(82.61% 0.106 87.2);
+  /* Pale Bronze */
+  --color-accent: oklch(64.1% 0.111 81.3);
+  /* Warm Bronze */
+  --color-accent-dark: oklch(53.25% 0.102 78.4);
+  /* Rich Copper */
+
+  /* Neutral Backgrounds */
+  --color-neutral-bg-light: oklch(98.39% 0.003 91.0);
+  /* Creamy Off-White */
+  --color-neutral-bg: oklch(95.63% 0.007 81.6);
+  /* Soft Beige */
+
+  /* Neutral Text Colors */
+  --color-neutral-text: oklch(33.1% 0 0);
+  /* Deep Charcoal */
+  --color-neutral-text-secondary: oklch(47.6% 0 0);
+  /* Mid-Grey */
+
+  /* UI Colors (Success, Error) */
+  --color-ui-success: oklch(70.9% 0.081 123.6);
+  /* Sage Green */
+  --color-ui-error: oklch(61.8% 0.134 22.8);
+  /* Dusty Red */
+
+  /* Fonts */
+  --font-primary: 'Poppins', sans-serif;
+  --font-secondary: 'Lato', sans-serif;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

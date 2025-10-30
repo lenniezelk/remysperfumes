@@ -1,8 +1,7 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
-
-import Header from '../components/Header'
+import Logo from '@/assets/logo.svg';
 
 import appCss from '../styles.css?url'
 
@@ -17,13 +16,26 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TanStack Start Starter',
+        title: "Remi's Perfumes",
+      },
+      {
+        name: 'description',
+        content: 'Dior, Chanel, Gucci, Lattafa and more perfumes at the best prices in Kenya.',
+      },
+      {
+        name: 'keywords',
+        content: 'perfumes, dior, chanel, gucci, lattafa, kenya, best prices',
       },
     ],
     links: [
       {
         rel: 'stylesheet',
         href: appCss,
+      },
+      {
+        rel: 'icon',
+        type: 'image/svg+xml',
+        href: Logo,
       },
     ],
   }),
@@ -34,13 +46,10 @@ export const Route = createRootRoute({
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <head>
+      <body className='font-primary'>
         <HeadContent />
-      </head>
-      <body>
-        <Header />
         {children}
-        <TanStackDevtools
+        {import.meta.env.DEV && <TanStackDevtools
           config={{
             position: 'bottom-right',
           }}
@@ -50,7 +59,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               render: <TanStackRouterDevtoolsPanel />,
             },
           ]}
-        />
+        />}
         <Scripts />
       </body>
     </html>

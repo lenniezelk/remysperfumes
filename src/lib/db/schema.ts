@@ -1,4 +1,4 @@
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { int, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const category = sqliteTable("Category", {
     id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
@@ -93,6 +93,25 @@ export const saleItem = sqliteTable("SaleItem", {
     quantity_sold: int("quantity_sold").notNull(),
     price_at_sale: int("price_at_sale").notNull(),
     cost_at_sale: int("cost_at_sale").notNull(),
+    created_at: int("created_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
+    updated_at: int("updated_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
+});
+
+export const role = sqliteTable("Role", {
+    id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+    name: text("name").notNull().unique(),
+    description: text("description"),
+    created_at: int("created_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
+    updated_at: int("updated_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
+});
+
+export const user = sqliteTable("User", {
+    id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+    email: text("email").notNull().unique(),
+    name: text("first_name").notNull(),
+    role_id: text("role_id")
+        .references(() => role.id),
+    is_active: integer("is_active", { mode: 'boolean' }).notNull().$defaultFn(() => false),
     created_at: int("created_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
     updated_at: int("updated_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
 });

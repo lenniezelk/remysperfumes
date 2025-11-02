@@ -10,8 +10,12 @@
     "lint": "eslint",
     "format": "prettier",
     "check": "prettier --write . && eslint --fix",
-    "cf-typegen": "wrangler types",
-    "deploy": "pnpm build && wrangler deploy"
+    "deploy": "pnpm build && wrangler deploy",
+    "cf-typegen": "wrangler types --env-interface Env",
+    "db-generate": "drizzle-kit generate",
+    "db:local:migrate": "wrangler d1 migrations apply DB --local",
+    "db:local:query": "wrangler d1 execute DB --local --command",
+    "db:local:execute": "wrangler d1 execute DB --local --file"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.6",
@@ -21,6 +25,8 @@
     "@tanstack/react-router-ssr-query": "^1.131.7",
     "@tanstack/react-start": "^1.132.0",
     "@tanstack/router-plugin": "^1.132.0",
+    "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.44.7",
     "lucide-react": "^0.544.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -36,11 +42,14 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.0.4",
+    "drizzle-kit": "^0.31.6",
     "jsdom": "^27.0.0",
     "prettier": "^3.5.3",
+    "tsx": "^4.20.6",
     "typescript": "^5.7.2",
     "vite": "^7.1.7",
     "vitest": "^3.0.5",
-    "web-vitals": "^5.1.0"
+    "web-vitals": "^5.1.0",
+    "wrangler": "^4.45.3"
   }
 }

@@ -4,6 +4,9 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 import Logo from '@/assets/logo.svg';
 
 import appCss from '@/styles.css?url'
+import { useAppSession } from '@/lib/useAppSession';
+import { Result, User } from '@/lib/types';
+import { createServerFn } from '@tanstack/react-start';
 
 export const Route = createRootRoute({
   head: () => ({
@@ -73,7 +76,33 @@ export const Route = createRootRoute({
   }),
 
   shellComponent: RootDocument,
+  beforeLoad: async () => {
+    const result = await fetchMe();
+    if (result.success === "SUCCESS") {
+      return { user: result.data };
+    } else {
+      return { user: null };
+    }
+  },
+  notFoundComponent: () => <div>404 - Not Found</div>,
 })
+
+const fetchMe = createServerFn({ method: 'GET' }).handler(async (): Promise<Result<User>> => {
+  const session = await useAppSession();
+
+  if (!session.data?.user) {
+    return {
+      success: "ERROR",
+      error: "User not found",
+    };
+  }
+
+  return {
+    success: "SUCCESS",
+    data: session.data.user,
+  };
+});
+
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (

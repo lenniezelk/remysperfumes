@@ -12,7 +12,7 @@
     "check": "prettier --write . && eslint --fix",
     "deploy": "pnpm build && wrangler deploy",
     "cf-typegen": "wrangler types --env-interface Env",
-    "db-generate": "drizzle-kit generate",
+    "db:generate": "drizzle-kit generate",
     "db:local:migrate": "wrangler d1 migrations apply DB --local",
     "db:local:query": "wrangler d1 execute DB --local --command",
     "db:local:execute": "wrangler d1 execute DB --local --file"

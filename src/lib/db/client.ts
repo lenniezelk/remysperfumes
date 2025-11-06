@@ -1,9 +1,8 @@
 import { drizzle } from "drizzle-orm/d1";
-import { getBindings } from "@/lib/cf_bindings";
-
+import { env } from "cloudflare:workers";
 
 const dbClient = () => {
-    return drizzle(getBindings().DB);
+    return drizzle(env.DB);
 }
 
 export default dbClient;

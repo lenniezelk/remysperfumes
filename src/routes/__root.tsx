@@ -2,11 +2,12 @@ import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import Logo from '@/assets/logo.svg';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import appCss from '@/styles.css?url'
-import { useAppSession } from '@/lib/useAppSession';
-import { Result, User } from '@/lib/types';
-import { createServerFn } from '@tanstack/react-start';
+import { AuthProvider } from '@/lib/auth/admin-auth-context';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { getEnvVars } from '@/lib/env-vars';
 
 export const Route = createRootRoute({
   head: () => ({
@@ -76,40 +77,46 @@ export const Route = createRootRoute({
   }),
 
   shellComponent: RootDocument,
-  beforeLoad: async () => {
-    const result = await fetchMe();
-    if (result.success === "SUCCESS") {
-      return { user: result.data };
-    } else {
-      return { user: null };
-    }
-  },
   notFoundComponent: () => <div>404 - Not Found</div>,
+  beforeLoad: async () => {
+    const envVars = await getEnvVars();
+
+    if (envVars.status === 'SUCCESS') {
+      return {
+        GOOGLE_OAUTH_CLIENT_ID: envVars?.data?.GOOGLE_OAUTH_CLIENT_ID || '',
+      }
+    }
+
+    return {
+      GOOGLE_OAUTH_CLIENT_ID: '',
+    }
+  }
 })
 
-const fetchMe = createServerFn({ method: 'GET' }).handler(async (): Promise<Result<User>> => {
-  const session = await useAppSession();
+const queryClient = new QueryClient();
 
-  if (!session.data?.user) {
-    return {
-      success: "ERROR",
-      error: "User not found",
-    };
-  }
+const App = ({ children }: { children: React.ReactNode }) => {
+  const context = Route.useRouteContext();
 
-  return {
-    success: "SUCCESS",
-    data: session.data.user,
-  };
-});
-
+  return (
+    <GoogleOAuthProvider clientId={context.GOOGLE_OAUTH_CLIENT_ID}>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+      </QueryClientProvider>
+    </GoogleOAuthProvider>
+  )
+}
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className='font-primary'>
         <HeadContent />
-        {children}
+        <App>
+          {children}
+        </App>
         {import.meta.env.DEV && <TanStackDevtools
           config={{
             position: 'bottom-right',

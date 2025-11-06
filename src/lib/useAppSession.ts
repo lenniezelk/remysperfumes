@@ -1,8 +1,9 @@
 import { useSession } from "@tanstack/react-start/server"
-import { AppSession } from "@/lib/types";
+import { AdminAppSession } from "@/lib/types";
 
-export function useAppSession() {
-    return useSession<AppSession>({
+export function useAdminAppSession() {
+    return useSession<AdminAppSession>({
+        name: 'adminAppSession',
         password: process.env.SESSION_SECRET || 'default_secret',
     });
 }

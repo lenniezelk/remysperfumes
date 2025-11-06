@@ -1,6 +1,6 @@
 import { int, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const category = sqliteTable("Category", {
+export const categoryTable = sqliteTable("Category", {
     id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
     name: text("name").notNull(),
     description: text("description"),
@@ -8,7 +8,7 @@ export const category = sqliteTable("Category", {
     updated_at: int("updated_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
 });
 
-export const manufacturer = sqliteTable("Manufacturer", {
+export const manufacturerTable = sqliteTable("Manufacturer", {
     id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
     name: text("name").notNull(),
     contact_info: text("contact_info"),
@@ -16,26 +16,26 @@ export const manufacturer = sqliteTable("Manufacturer", {
     updated_at: int("updated_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
 });
 
-export const product = sqliteTable("Product", {
+export const productTable = sqliteTable("Product", {
     id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
     name: text("name").notNull(),
     description: text("description"),
     category_id: text("category_id")
         .notNull()
-        .references(() => category.id),
+        .references(() => categoryTable.id),
     brand: text("brand"),
     default_sell_price: int("default_sell_price").notNull(),
     created_at: int("created_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
     updated_at: int("updated_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
     manufacturer: text("manufacturer")
-        .references(() => manufacturer.id),
+        .references(() => manufacturerTable.id),
 });
 
-export const productVariant = sqliteTable("ProductVariant", {
+export const productVariantTable = sqliteTable("ProductVariant", {
     id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
     product_id: text("product_id")
         .notNull()
-        .references(() => product.id),
+        .references(() => productTable.id),
     name: text("name").notNull(),
     sku: text("sku").notNull().unique(),
     default_sell_price: int("default_sell_price"),
@@ -44,7 +44,7 @@ export const productVariant = sqliteTable("ProductVariant", {
     updated_at: int("updated_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
 });
 
-export const supplier = sqliteTable("Supplier", {
+export const supplierTable = sqliteTable("Supplier", {
     id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
     name: text("name").notNull(),
     contact_info: text("contact_info"),
@@ -52,11 +52,11 @@ export const supplier = sqliteTable("Supplier", {
     updated_at: int("updated_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
 });
 
-export const stockBatch = sqliteTable("StockBatch", {
+export const stockBatchTable = sqliteTable("StockBatch", {
     id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
     product_variant_id: text("product_variant_id")
         .notNull()
-        .references(() => productVariant.id),
+        .references(() => productVariantTable.id),
     quantity_received: int("quantity_received").notNull(),
     quantity_remaining: int("quantity_remaining").notNull(),
     buy_price_per_unit: int("buy_price_per_unit").notNull(),
@@ -66,10 +66,10 @@ export const stockBatch = sqliteTable("StockBatch", {
     created_at: int("created_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
     updated_at: int("updated_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
     supplier: text("supplier")
-        .references(() => supplier.id),
+        .references(() => supplierTable.id),
 });
 
-export const sale = sqliteTable("Sale", {
+export const saleTable = sqliteTable("Sale", {
     id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
     date: int("date", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
     total_amount: int("total_amount").notNull(),
@@ -79,17 +79,17 @@ export const sale = sqliteTable("Sale", {
     customer_contact: text("customer_contact"),
 });
 
-export const saleItem = sqliteTable("SaleItem", {
+export const saleItemTable = sqliteTable("SaleItem", {
     id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
     sale_id: text("sale_id")
         .notNull()
-        .references(() => sale.id),
+        .references(() => saleTable.id),
     product_variant_id: text("product_variant_id")
         .notNull()
-        .references(() => productVariant.id),
+        .references(() => productVariantTable.id),
     stock_batch_id: text("stock_batch_id")
         .notNull()
-        .references(() => stockBatch.id),
+        .references(() => stockBatchTable.id),
     quantity_sold: int("quantity_sold").notNull(),
     price_at_sale: int("price_at_sale").notNull(),
     cost_at_sale: int("cost_at_sale").notNull(),
@@ -97,7 +97,7 @@ export const saleItem = sqliteTable("SaleItem", {
     updated_at: int("updated_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
 });
 
-export const role = sqliteTable("Role", {
+export const roleTable = sqliteTable("Role", {
     id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
     name: text("name").notNull().unique(),
     description: text("description"),
@@ -105,12 +105,12 @@ export const role = sqliteTable("Role", {
     updated_at: int("updated_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
 });
 
-export const user = sqliteTable("User", {
+export const userTable = sqliteTable("User", {
     id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
     email: text("email").notNull().unique(),
     name: text("first_name").notNull(),
     role_id: text("role_id")
-        .references(() => role.id),
+        .references(() => roleTable.id),
     is_active: integer("is_active", { mode: 'boolean' }).notNull().$defaultFn(() => false),
     created_at: int("created_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
     updated_at: int("updated_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),

@@ -18,8 +18,10 @@
     "db:local:execute": "wrangler d1 execute DB --local --file"
   },
   "dependencies": {
+    "@react-oauth/google": "^0.12.2",
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/react-devtools": "^0.7.0",
+    "@tanstack/react-query": "^5.90.6",
     "@tanstack/react-router": "^1.132.0",
     "@tanstack/react-router-devtools": "^1.132.0",
     "@tanstack/react-router-ssr-query": "^1.131.7",
@@ -27,11 +29,13 @@
     "@tanstack/router-plugin": "^1.132.0",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.44.7",
+    "jose": "^6.1.0",
     "lucide-react": "^0.544.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "tailwindcss": "^4.0.6",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.13.17",

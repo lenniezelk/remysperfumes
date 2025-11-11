@@ -7,6 +7,7 @@ export const getEnvVars = createServerFn({ method: 'GET' }).handler(async (): Pr
         status: "SUCCESS",
         data: {
             GOOGLE_OAUTH_CLIENT_ID: env.GOOGLE_OAUTH_CLIENT_ID || '',
+            CLOUDFLARE_TURNSTILE_SECRET: env.CLOUDFLARE_TURNSTILE_SECRET || '',
         },
     };
 });

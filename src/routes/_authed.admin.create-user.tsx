@@ -1,6 +1,5 @@
 import Container from '@/components/Container';
-import { getCurrentAdminUser } from '@/lib/auth/auth';
-import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useNotifications } from '@/components/notifications/Notification';
 import { useForm } from '@tanstack/react-form';
 import { CreateUserData } from '@/lib/types';
@@ -9,17 +8,8 @@ import { fetchCreateUserInitialData } from '@/lib/auth/auth';
 import Heading from '@/components/Heading';
 import { FieldInfo } from '@/components/FieldInfo';
 
-export const Route = createFileRoute('/admin/create-user')({
+export const Route = createFileRoute('/_authed/admin/create-user')({
   component: RouteComponent,
-  // beforeLoad: async () => {
-  //   const user = await getCurrentAdminUser();
-
-  //   if (user.status === 'ERROR') {
-  //     throw redirect({ to: '/admin/login' });
-  //   }
-
-  //   return {};
-  // },
   loader: async () => fetchCreateUserInitialData(),
 })
 

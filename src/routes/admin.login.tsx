@@ -9,15 +9,19 @@ import { Input } from '@/components/Input';
 import { FieldInfo } from '@/components/FieldInfo';
 import { useEnvVars } from '@/components/EnvVars';
 import { useState, useEffect, useRef } from 'react';
+import { z } from 'zod';
 
 
 export const Route = createFileRoute('/admin/login')({
+  validateSearch: z.object({
+    redirect: z.url().optional()
+  }),
   component: RouteComponent,
-  beforeLoad: async () => {
+  beforeLoad: async ({ search }) => {
     const user = await getCurrentAdminUser();
 
     if (user.status === 'SUCCESS') {
-      throw redirect({ to: '/admin' });
+      throw redirect({ to: search.redirect || '/admin', replace: true });
     }
 
     return {}
@@ -30,6 +34,7 @@ function RouteComponent() {
   const notifications = useNotifications();
   const navigate = useNavigate();
   const { CLOUDFLARE_TURNSTILE_SECRET } = useEnvVars();
+  const search = Route.useSearch();
 
   useEffect(() => {
     // Define callback functions in the global scope for Turnstile
@@ -49,7 +54,7 @@ function RouteComponent() {
     onSubmit: async (values) => {
       loginAdminUser({ data: values.value }).then((res) => {
         if (res.status === 'SUCCESS') {
-          navigate({ to: '/admin', replace: true });
+          navigate({ to: search.redirect || '/admin', replace: true });
         } else {
           notifications.addNotification({
             type: 'ERROR',

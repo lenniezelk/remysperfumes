@@ -14,11 +14,10 @@ const AdminLayout: FC<AdminLayoutProps> = ({ children, currentPath }) => {
       {/* Sidebar */}
       <aside className="w-64 bg-white shadow-md border-r border-gray-200 p-4">
         <Link to="/admin">
-          <Heading level={3} className="text-brand">
+          <Heading level={3} className="text-brand mb-4">
             Dashboard
           </Heading>
         </Link>
-        "
         <nav className="space-y-1">
           {modelsBlueprint.map((model) => {
             const Icon = model.icon

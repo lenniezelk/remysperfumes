@@ -1,10 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
 import { useAdminAppSession } from "@/lib/useAppSession";
-import { GoogleAuthData, Result, CreateUserData, User, RoleKey, Role } from "@/lib/types";
+import { GoogleAuthData, Result, CreateUserData, User, RoleKey, Role, LoginAdminUserInput } from "@/lib/types";
 import dbClient from "@/lib/db/client";
 import { roleTable, userTable } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-import { createRandomPassword, hashPassword } from "./utils";
+import { createRandomPassword, hashPassword, verifyPassword } from "./utils";
 
 export const getCurrentAdminUser = createServerFn({ method: 'GET' }).handler(async (): Promise<Result<User>> => {
     const session = await useAdminAppSession();
@@ -20,29 +20,45 @@ export const getCurrentAdminUser = createServerFn({ method: 'GET' }).handler(asy
     };
 });
 
-export const loginAdminUser = createServerFn({ method: 'POST' }).inputValidator(GoogleAuthData).handler(async (ctx): Promise<Result<User>> => {
+export const loginAdminUser = createServerFn({ method: 'POST' }).inputValidator(LoginAdminUserInput).handler(async (ctx): Promise<Result<User>> => {
     const db = dbClient();
     const data = ctx.data;
+
+    const errorMessage = "Invalid email or password or user is not active";
 
     const dbUser = await db.select().from(userTable).where(eq(userTable.email, data.email)).limit(1);
     if (dbUser.length === 0) {
         return {
             status: "ERROR",
-            error: "User not found",
+            error: errorMessage,
         };
     }
 
     if (!dbUser[0].is_active) {
         return {
             status: "ERROR",
-            error: "User is not active",
+            error: errorMessage,
         };
     }
 
     if (!dbUser[0].role_id) {
         return {
             status: "ERROR",
-            error: "User has no role assigned",
+            error: errorMessage,
+        };
+    }
+
+    if (dbUser[0].password_hash === null) {
+        return {
+            status: "ERROR",
+            error: errorMessage,
+        };
+    }
+
+    if (!(await verifyPassword(data.password, dbUser[0].password_hash || ''))) {
+        return {
+            status: "ERROR",
+            error: errorMessage,
         };
     }
 

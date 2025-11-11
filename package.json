@@ -16,7 +16,8 @@
     "db:local:migrate": "wrangler d1 migrations apply DB --local",
     "db:local:query": "wrangler d1 execute DB --local --command",
     "db:local:execute": "wrangler d1 execute DB --local --file",
-    "seed:local": "tsx src/lib/db/seed.ts"
+    "seed:local:roles": "tsx src/lib/db/seed.ts --add-roles",
+    "seed:local:superadmin": "tsx src/lib/db/seed.ts --add-superadmin"
   },
   "dependencies": {
     "@react-oauth/google": "^0.12.2",

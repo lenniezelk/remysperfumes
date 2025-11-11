@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export type RoleKey = 'admin' | 'manager' | 'staff';
+export type RoleKey = 'superadmin' | 'admin' | 'manager' | 'staff';
 
 export interface Role {
     id: string;
@@ -36,6 +36,7 @@ export type GoogleAuthData = z.infer<typeof GoogleAuthData>;
 
 export interface EnvVars {
     GOOGLE_OAUTH_CLIENT_ID: string;
+    CLOUDFLARE_TURNSTILE_SECRET: string;
 };
 
 export const CreateUserData = z.object({
@@ -43,4 +44,9 @@ export const CreateUserData = z.object({
     email: z.email(),
     role_id: z.uuid({ message: "Invalid role ID" }),
     // password: z.string().min(8).max(100).regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&+\-_=.,;:'"\[\]{}()]/, "Password must be at least 8 characters long and contain at least one letter and one number"),
+});
+
+export const LoginAdminUserInput = z.object({
+    email: z.email(),
+    password: z.string(),
 });

@@ -9,6 +9,7 @@ import { AuthProvider } from '@/lib/auth/admin-auth-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { getEnvVars } from '@/lib/env-vars';
 import { NotificationProvider, NotificationsList } from '@/components/notifications/Notification';
+import { EnvVarsProvider } from '@/components/EnvVars';
 
 export const Route = createRootRoute({
   head: () => ({
@@ -74,22 +75,28 @@ export const Route = createRootRoute({
         type: 'image/svg+xml',
         href: Logo,
       },
+      {
+        rel: 'preconnect',
+        href: 'https://challenges.cloudflare.com'
+      }
     ],
   }),
 
   shellComponent: RootDocument,
   notFoundComponent: () => <div>404 - Not Found</div>,
-  beforeLoad: async () => {
+  loader: async () => {
     const envVars = await getEnvVars();
 
     if (envVars.status === 'SUCCESS') {
       return {
         GOOGLE_OAUTH_CLIENT_ID: envVars?.data?.GOOGLE_OAUTH_CLIENT_ID || '',
+        CLOUDFLARE_TURNSTILE_SECRET: envVars?.data?.CLOUDFLARE_TURNSTILE_SECRET || '',
       }
     }
 
     return {
       GOOGLE_OAUTH_CLIENT_ID: '',
+      CLOUDFLARE_TURNSTILE_SECRET: '',
     }
   }
 })
@@ -97,19 +104,21 @@ export const Route = createRootRoute({
 const queryClient = new QueryClient();
 
 const App = ({ children }: { children: React.ReactNode }) => {
-  const context = Route.useRouteContext();
+  const { GOOGLE_OAUTH_CLIENT_ID, CLOUDFLARE_TURNSTILE_SECRET } = Route.useLoaderData();
 
   return (
-    <NotificationProvider>
-      <GoogleOAuthProvider clientId={context.GOOGLE_OAUTH_CLIENT_ID}>
-        <QueryClientProvider client={queryClient}>
-          <AuthProvider>
-            {children}
-            <NotificationsList />
-          </AuthProvider>
-        </QueryClientProvider>
-      </GoogleOAuthProvider>
-    </NotificationProvider>
+    <EnvVarsProvider envVars={{ GOOGLE_OAUTH_CLIENT_ID, CLOUDFLARE_TURNSTILE_SECRET }}>
+      <NotificationProvider>
+        <GoogleOAuthProvider clientId={GOOGLE_OAUTH_CLIENT_ID}>
+          <QueryClientProvider client={queryClient}>
+            <AuthProvider>
+              {children}
+              <NotificationsList />
+            </AuthProvider>
+          </QueryClientProvider>
+        </GoogleOAuthProvider>
+      </NotificationProvider>
+    </EnvVarsProvider>
   )
 }
 
@@ -133,6 +142,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           ]}
         />}
         <Scripts />
+        <script
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+          async
+          defer
+        ></script>
       </body>
     </html>
   )

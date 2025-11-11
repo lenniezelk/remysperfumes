@@ -109,7 +109,7 @@ export const roleTable = sqliteTable("Role", {
 export const userTable = sqliteTable("User", {
     id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
     email: text("email").notNull().unique(),
-    name: text("first_name").notNull(),
+    name: text("name").notNull(),
     role_id: text("role_id")
         .references(() => roleTable.id),
     is_active: integer("is_active", { mode: 'boolean' }).notNull().$defaultFn(() => false),

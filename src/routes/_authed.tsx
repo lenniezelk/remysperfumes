@@ -1,14 +1,18 @@
-import { getCurrentAdminUser } from '@/lib/auth/auth';
+import { getCurrentAdminUser } from '@/lib/auth/auth'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_authed')({
   beforeLoad: async ({ location }) => {
-    const user = await getCurrentAdminUser();
+    const user = await getCurrentAdminUser()
 
     if (user.status === 'SUCCESS') {
-      return { user: user.data };
+      return { user: user.data }
     }
 
-    throw redirect({ to: '/admin/login', replace: true, search: { redirect: location.href } });
+    throw redirect({
+      to: '/admin/login',
+      replace: true,
+      search: { redirect: location.href },
+    })
   },
-});
+})

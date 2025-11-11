@@ -1,9 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
 import { useAdminAppSession } from "@/lib/useAppSession";
-import { GoogleAuthData, Result, User } from "@/lib/types";
+import { GoogleAuthData, Result, CreateUserData, User, RoleKey, Role } from "@/lib/types";
 import dbClient from "@/lib/db/client";
 import { roleTable, userTable } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import { createRandomPassword, hashPassword } from "./utils";
 
 export const getCurrentAdminUser = createServerFn({ method: 'GET' }).handler(async (): Promise<Result<User>> => {
     const session = await useAdminAppSession();
@@ -54,6 +55,8 @@ export const loginAdminUser = createServerFn({ method: 'POST' }).inputValidator(
         role: {
             id: dbRole[0].id,
             name: dbRole[0].name,
+            description: dbRole[0].description || '',
+            key: dbRole[0].key as RoleKey,
         },
     };
 
@@ -75,5 +78,80 @@ export const logoutAdminUser = createServerFn({ method: 'POST' }).handler(async 
     return {
         status: "SUCCESS",
         data: null,
+    };
+});
+
+export const createAdminUser = createServerFn({ method: 'POST' }).inputValidator(CreateUserData).handler(async (ctx): Promise<Result<User>> => {
+    const db = dbClient();
+    const data = ctx.data;
+
+    const existingUser = await db.select().from(userTable).where(eq(userTable.email, data.email)).limit(1);
+    if (existingUser.length > 0) {
+        return {
+            status: "ERROR",
+            error: "User already exists",
+        };
+    }
+
+    const password = createRandomPassword(8);
+
+    const dbRRole = await db.select().from(roleTable).where(eq(roleTable.id, data.role_id)).limit(1);
+    if (dbRRole.length === 0) {
+        return {
+            status: "ERROR",
+            error: "Role not found",
+        };
+    }
+
+    const newUser = {
+        id: crypto.randomUUID(),
+        name: data.name,
+        email: data.email,
+        password_hash: await hashPassword(password),
+        role_id: data.role_id,
+        is_active: false,
+        created_at: new Date(),
+        updated_at: new Date(),
+    };
+
+    // log password to console for now
+    console.log(`New user created: ${data.email} with password: ${password}`);
+
+    await db.insert(userTable).values(newUser);
+
+    const user = {
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+        role: {
+            id: dbRRole[0].id,
+            name: dbRRole[0].name,
+            description: dbRRole[0].description || '',
+            key: dbRRole[0].key as RoleKey,
+        },
+    }
+
+    const session = await useAdminAppSession();
+    await session.update({
+        user,
+    });
+
+    return {
+        status: "SUCCESS",
+        data: user,
+    };
+});
+
+export const fetchCreateUserInitialData = createServerFn({ method: 'GET' }).handler(async (): Promise<{ roles: Role[] }> => {
+    const db = dbClient();
+    const roles = await db.select().from(roleTable).all();
+
+    return {
+        roles: roles.map(role => ({
+            id: role.id,
+            name: role.name,
+            description: role.description || '',
+            key: role.key as RoleKey,
+        })),
     };
 });

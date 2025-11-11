@@ -8,6 +8,7 @@ import appCss from '@/styles.css?url'
 import { AuthProvider } from '@/lib/auth/admin-auth-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { getEnvVars } from '@/lib/env-vars';
+import { NotificationProvider, NotificationsList } from '@/components/notifications/Notification';
 
 export const Route = createRootRoute({
   head: () => ({
@@ -99,13 +100,16 @@ const App = ({ children }: { children: React.ReactNode }) => {
   const context = Route.useRouteContext();
 
   return (
-    <GoogleOAuthProvider clientId={context.GOOGLE_OAUTH_CLIENT_ID}>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
-      </QueryClientProvider>
-    </GoogleOAuthProvider>
+    <NotificationProvider>
+      <GoogleOAuthProvider clientId={context.GOOGLE_OAUTH_CLIENT_ID}>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            {children}
+            <NotificationsList />
+          </AuthProvider>
+        </QueryClientProvider>
+      </GoogleOAuthProvider>
+    </NotificationProvider>
   )
 }
 

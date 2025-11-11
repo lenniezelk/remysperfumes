@@ -103,6 +103,7 @@ export const roleTable = sqliteTable("Role", {
     description: text("description"),
     created_at: int("created_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
     updated_at: int("updated_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
+    key: text("key").notNull().unique(),
 });
 
 export const userTable = sqliteTable("User", {
@@ -114,4 +115,6 @@ export const userTable = sqliteTable("User", {
     is_active: integer("is_active", { mode: 'boolean' }).notNull().$defaultFn(() => false),
     created_at: int("created_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
     updated_at: int("updated_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
+    password_hash: text("password_hash"),
+    last_login_at: int("last_login_at", { mode: 'timestamp_ms' }),
 });

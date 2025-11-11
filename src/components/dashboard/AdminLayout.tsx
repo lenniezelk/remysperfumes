@@ -13,9 +13,11 @@ const AdminLayout: FC<AdminLayoutProps> = ({ children, currentPath }) => {
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
       <aside className="w-64 bg-white shadow-md border-r border-gray-200 p-4">
-        <Heading level={3} className="text-brand">
-          Dashboard
-        </Heading>
+        <Link to="/admin">
+          <Heading level={3} className="text-brand">
+            Dashboard
+          </Heading>
+        </Link>
         "
         <nav className="space-y-1">
           {modelsBlueprint.map((model) => {
@@ -30,7 +32,7 @@ const AdminLayout: FC<AdminLayoutProps> = ({ children, currentPath }) => {
                   ${
                     isActive
                       ? 'bg-accent text-white shadow'
-                      : 'text-gray-700 hover:bg-gray-100'
+                      : 'text-gray-700 hover:bg-accent hover:text-white'
                   }
                 `}
               >

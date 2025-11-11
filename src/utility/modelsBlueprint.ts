@@ -25,30 +25,23 @@ export const modelsBlueprint: ModelBlueprint[] = [
     name: 'Categories',
     description: 'Manage product categories',
     icon: Tags,
-    route: '/dashboard/category',
+    route: '/dashboard/categories',
     children: [
       {
         key: 'product',
         name: 'Products',
         description: 'Manage products',
         icon: Package,
-        route: '/admin/product',
+        route: '/dashboard/products',
       },
     ],
-  },
-  {
-    key: 'manufacturer',
-    name: 'Manufacturers',
-    description: 'Manage manufacturers',
-    icon: Factory,
-    route: '/admin/manufacturer',
   },
   {
     key: 'product',
     name: 'Products',
     description: 'Manage products',
     icon: Package,
-    route: '/admin/product',
+    route: '/dashboard/products',
     children: [
       {
         key: 'product-variant',
@@ -69,13 +62,6 @@ export const modelsBlueprint: ModelBlueprint[] = [
     ],
   },
   {
-    key: 'supplier',
-    name: 'Suppliers',
-    description: 'Manage suppliers',
-    icon: Users,
-    route: '/admin/supplier',
-  },
-  {
     key: 'sale',
     name: 'Sales',
     description: 'View all sales',
@@ -90,6 +76,20 @@ export const modelsBlueprint: ModelBlueprint[] = [
         route: '/admin/sale-item',
       },
     ],
+  },
+  {
+    key: 'supplier',
+    name: 'Suppliers',
+    description: 'Manage suppliers',
+    icon: Users,
+    route: '/admin/supplier',
+  },
+  {
+    key: 'manufacturer',
+    name: 'Manufacturers',
+    description: 'Manage manufacturers',
+    icon: Factory,
+    route: '/admin/manufacturer',
   },
   {
     key: 'role',

@@ -11,7 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthedRouteImport } from './routes/_authed'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DashboardCategoryRouteImport } from './routes/dashboard.category'
+import { Route as DashboardProductsRouteImport } from './routes/dashboard.products'
+import { Route as DashboardCategoriesRouteImport } from './routes/dashboard.categories'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AuthedAdminRouteImport } from './routes/_authed.admin'
 import { Route as AuthedAdminCreateUserRouteImport } from './routes/_authed.admin.create-user'
@@ -25,9 +26,14 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardCategoryRoute = DashboardCategoryRouteImport.update({
-  id: '/dashboard/category',
-  path: '/dashboard/category',
+const DashboardProductsRoute = DashboardProductsRouteImport.update({
+  id: '/dashboard/products',
+  path: '/dashboard/products',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardCategoriesRoute = DashboardCategoriesRouteImport.update({
+  id: '/dashboard/categories',
+  path: '/dashboard/categories',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
@@ -50,14 +56,16 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AuthedAdminRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
-  '/dashboard/category': typeof DashboardCategoryRoute
+  '/dashboard/categories': typeof DashboardCategoriesRoute
+  '/dashboard/products': typeof DashboardProductsRoute
   '/admin/create-user': typeof AuthedAdminCreateUserRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AuthedAdminRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
-  '/dashboard/category': typeof DashboardCategoryRoute
+  '/dashboard/categories': typeof DashboardCategoriesRoute
+  '/dashboard/products': typeof DashboardProductsRoute
   '/admin/create-user': typeof AuthedAdminCreateUserRoute
 }
 export interface FileRoutesById {
@@ -66,7 +74,8 @@ export interface FileRoutesById {
   '/_authed': typeof AuthedRouteWithChildren
   '/_authed/admin': typeof AuthedAdminRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
-  '/dashboard/category': typeof DashboardCategoryRoute
+  '/dashboard/categories': typeof DashboardCategoriesRoute
+  '/dashboard/products': typeof DashboardProductsRoute
   '/_authed/admin/create-user': typeof AuthedAdminCreateUserRoute
 }
 export interface FileRouteTypes {
@@ -75,14 +84,16 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/admin/login'
-    | '/dashboard/category'
+    | '/dashboard/categories'
+    | '/dashboard/products'
     | '/admin/create-user'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
     | '/admin/login'
-    | '/dashboard/category'
+    | '/dashboard/categories'
+    | '/dashboard/products'
     | '/admin/create-user'
   id:
     | '__root__'
@@ -90,7 +101,8 @@ export interface FileRouteTypes {
     | '/_authed'
     | '/_authed/admin'
     | '/admin/login'
-    | '/dashboard/category'
+    | '/dashboard/categories'
+    | '/dashboard/products'
     | '/_authed/admin/create-user'
   fileRoutesById: FileRoutesById
 }
@@ -98,7 +110,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthedRoute: typeof AuthedRouteWithChildren
   AdminLoginRoute: typeof AdminLoginRoute
-  DashboardCategoryRoute: typeof DashboardCategoryRoute
+  DashboardCategoriesRoute: typeof DashboardCategoriesRoute
+  DashboardProductsRoute: typeof DashboardProductsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -117,11 +130,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/category': {
-      id: '/dashboard/category'
-      path: '/dashboard/category'
-      fullPath: '/dashboard/category'
-      preLoaderRoute: typeof DashboardCategoryRouteImport
+    '/dashboard/products': {
+      id: '/dashboard/products'
+      path: '/dashboard/products'
+      fullPath: '/dashboard/products'
+      preLoaderRoute: typeof DashboardProductsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/categories': {
+      id: '/dashboard/categories'
+      path: '/dashboard/categories'
+      fullPath: '/dashboard/categories'
+      preLoaderRoute: typeof DashboardCategoriesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/login': {
@@ -175,7 +195,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthedRoute: AuthedRouteWithChildren,
   AdminLoginRoute: AdminLoginRoute,
-  DashboardCategoryRoute: DashboardCategoryRoute,
+  DashboardCategoriesRoute: DashboardCategoriesRoute,
+  DashboardProductsRoute: DashboardProductsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

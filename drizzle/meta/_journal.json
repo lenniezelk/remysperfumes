@@ -15,6 +15,13 @@
       "when": 1762073833751,
       "tag": "0001_deep_roulette",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1762869299002,
+      "tag": "0002_kind_tinkerer",
+      "breakpoints": true
     }
   ]
 }

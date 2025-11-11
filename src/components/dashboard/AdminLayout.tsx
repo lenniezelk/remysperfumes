@@ -10,7 +10,7 @@ interface AdminLayoutProps {
 
 const AdminLayout: FC<AdminLayoutProps> = ({ children, currentPath }) => {
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-linear-to-br from-neutral-bg-light to-neutral-bg">
       {/* Sidebar */}
       <aside className="w-64 bg-white shadow-md border-r border-gray-200 p-4">
         <Link to="/admin">

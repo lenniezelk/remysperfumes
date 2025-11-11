@@ -1,20 +1,35 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import { Link } from '@tanstack/react-router'
+import { getCurrentAdminUser } from '@/lib/auth/auth'
 import { modelsBlueprint } from '@/utility/modelsBlueprint'
 import ContainerNoOverflow from '@/components/ContainerNoOverflow'
 import Heading from '@/components/Heading'
 
 export const Route = createFileRoute('/_authed/admin')({
+  beforeLoad: async ({ location }) => {
+    const user = await getCurrentAdminUser()
+
+    if (user.status === 'SUCCESS') {
+      return { user: user.data }
+    }
+
+    throw redirect({
+      to: '/admin/login',
+      replace: true,
+      search: { redirect: location.href },
+    })
+  },
   component: RouteComponent,
 })
 
 function RouteComponent() {
+  const { user } = Route.useRouteContext()
   return (
     <ContainerNoOverflow>
       <div className="p-8">
         <Heading level={1} className="mb-4 flex justify-between items-baseline">
           <span className="text-brand">Dashboard</span>
-          <span className="text-accent text-sm"> Wellcome Admin</span>
+          <span className="text-accent text-sm"> Welcome {user?.name}</span>
         </Heading>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

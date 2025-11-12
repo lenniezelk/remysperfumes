@@ -1,7 +1,6 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { useLocation } from '@tanstack/react-router'
-import AdminLayout from '@/components/dashboard/AdminLayout'
+import { createFileRoute, useLocation } from '@tanstack/react-router'
 import Heading from '@/components/Heading'
+import AdminLayout from '@/components/dashboard/AdminLayout'
 
 export const Route = createFileRoute('/_authed/admin/products')({
   component: ProductsPage,

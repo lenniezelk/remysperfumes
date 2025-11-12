@@ -1,4 +1,4 @@
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createFileRoute, Outlet, useLocation } from '@tanstack/react-router'
 import { Link } from '@tanstack/react-router'
 import { getCurrentAdminUser } from '@/lib/auth/auth'
 import { modelsBlueprint } from '@/utility/modelsBlueprint'
@@ -12,6 +12,15 @@ export const Route = createFileRoute('/_authed/admin')({
 
 function RouteComponent() {
   const { data } = Route.useLoaderData()
+  const location = useLocation()
+
+  // Check if we're on a nested route
+  const isNestedRoute = location.pathname !== '/admin'
+
+  if (isNestedRoute) {
+    return <Outlet />
+  }
+
   return (
     <ContainerNoOverflow>
       <div className="p-8">

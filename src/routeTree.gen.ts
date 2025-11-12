@@ -13,7 +13,9 @@ import { Route as AuthedRouteImport } from './routes/_authed'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AuthedAdminRouteImport } from './routes/_authed.admin'
+import { Route as AuthedAdminProductsRouteImport } from './routes/_authed.admin.products'
 import { Route as AuthedAdminCreateUserRouteImport } from './routes/_authed.admin.create-user'
+import { Route as AuthedAdminCategoriesRouteImport } from './routes/_authed.admin.categories'
 
 const AuthedRoute = AuthedRouteImport.update({
   id: '/_authed',
@@ -34,9 +36,19 @@ const AuthedAdminRoute = AuthedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthedRoute,
 } as any)
+const AuthedAdminProductsRoute = AuthedAdminProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => AuthedAdminRoute,
+} as any)
 const AuthedAdminCreateUserRoute = AuthedAdminCreateUserRouteImport.update({
   id: '/create-user',
   path: '/create-user',
+  getParentRoute: () => AuthedAdminRoute,
+} as any)
+const AuthedAdminCategoriesRoute = AuthedAdminCategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
   getParentRoute: () => AuthedAdminRoute,
 } as any)
 
@@ -44,13 +56,17 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AuthedAdminRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
+  '/admin/categories': typeof AuthedAdminCategoriesRoute
   '/admin/create-user': typeof AuthedAdminCreateUserRoute
+  '/admin/products': typeof AuthedAdminProductsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AuthedAdminRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
+  '/admin/categories': typeof AuthedAdminCategoriesRoute
   '/admin/create-user': typeof AuthedAdminCreateUserRoute
+  '/admin/products': typeof AuthedAdminProductsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -58,20 +74,36 @@ export interface FileRoutesById {
   '/_authed': typeof AuthedRouteWithChildren
   '/_authed/admin': typeof AuthedAdminRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
+  '/_authed/admin/categories': typeof AuthedAdminCategoriesRoute
   '/_authed/admin/create-user': typeof AuthedAdminCreateUserRoute
+  '/_authed/admin/products': typeof AuthedAdminProductsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/admin/login' | '/admin/create-user'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/admin/login'
+    | '/admin/categories'
+    | '/admin/create-user'
+    | '/admin/products'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/admin/login' | '/admin/create-user'
+  to:
+    | '/'
+    | '/admin'
+    | '/admin/login'
+    | '/admin/categories'
+    | '/admin/create-user'
+    | '/admin/products'
   id:
     | '__root__'
     | '/'
     | '/_authed'
     | '/_authed/admin'
     | '/admin/login'
+    | '/_authed/admin/categories'
     | '/_authed/admin/create-user'
+    | '/_authed/admin/products'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -110,6 +142,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedAdminRouteImport
       parentRoute: typeof AuthedRoute
     }
+    '/_authed/admin/products': {
+      id: '/_authed/admin/products'
+      path: '/products'
+      fullPath: '/admin/products'
+      preLoaderRoute: typeof AuthedAdminProductsRouteImport
+      parentRoute: typeof AuthedAdminRoute
+    }
     '/_authed/admin/create-user': {
       id: '/_authed/admin/create-user'
       path: '/create-user'
@@ -117,15 +156,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedAdminCreateUserRouteImport
       parentRoute: typeof AuthedAdminRoute
     }
+    '/_authed/admin/categories': {
+      id: '/_authed/admin/categories'
+      path: '/categories'
+      fullPath: '/admin/categories'
+      preLoaderRoute: typeof AuthedAdminCategoriesRouteImport
+      parentRoute: typeof AuthedAdminRoute
+    }
   }
 }
 
 interface AuthedAdminRouteChildren {
+  AuthedAdminCategoriesRoute: typeof AuthedAdminCategoriesRoute
   AuthedAdminCreateUserRoute: typeof AuthedAdminCreateUserRoute
+  AuthedAdminProductsRoute: typeof AuthedAdminProductsRoute
 }
 
 const AuthedAdminRouteChildren: AuthedAdminRouteChildren = {
+  AuthedAdminCategoriesRoute: AuthedAdminCategoriesRoute,
   AuthedAdminCreateUserRoute: AuthedAdminCreateUserRoute,
+  AuthedAdminProductsRoute: AuthedAdminProductsRoute,
 }
 
 const AuthedAdminRouteWithChildren = AuthedAdminRoute._addFileChildren(

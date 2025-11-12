@@ -11,11 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthedRouteImport } from './routes/_authed'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DashboardProductsRouteImport } from './routes/dashboard.products'
-import { Route as DashboardCategoriesRouteImport } from './routes/dashboard.categories'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AuthedAdminRouteImport } from './routes/_authed.admin'
+import { Route as AuthedAdminProductsRouteImport } from './routes/_authed.admin.products'
 import { Route as AuthedAdminCreateUserRouteImport } from './routes/_authed.admin.create-user'
+import { Route as AuthedAdminCategoriesRouteImport } from './routes/_authed.admin.categories'
 
 const AuthedRoute = AuthedRouteImport.update({
   id: '/_authed',
@@ -24,16 +24,6 @@ const AuthedRoute = AuthedRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardProductsRoute = DashboardProductsRouteImport.update({
-  id: '/dashboard/products',
-  path: '/dashboard/products',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardCategoriesRoute = DashboardCategoriesRouteImport.update({
-  id: '/dashboard/categories',
-  path: '/dashboard/categories',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
@@ -46,9 +36,19 @@ const AuthedAdminRoute = AuthedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthedRoute,
 } as any)
+const AuthedAdminProductsRoute = AuthedAdminProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => AuthedAdminRoute,
+} as any)
 const AuthedAdminCreateUserRoute = AuthedAdminCreateUserRouteImport.update({
   id: '/create-user',
   path: '/create-user',
+  getParentRoute: () => AuthedAdminRoute,
+} as any)
+const AuthedAdminCategoriesRoute = AuthedAdminCategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
   getParentRoute: () => AuthedAdminRoute,
 } as any)
 
@@ -56,17 +56,17 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AuthedAdminRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
-  '/dashboard/categories': typeof DashboardCategoriesRoute
-  '/dashboard/products': typeof DashboardProductsRoute
+  '/admin/categories': typeof AuthedAdminCategoriesRoute
   '/admin/create-user': typeof AuthedAdminCreateUserRoute
+  '/admin/products': typeof AuthedAdminProductsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AuthedAdminRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
-  '/dashboard/categories': typeof DashboardCategoriesRoute
-  '/dashboard/products': typeof DashboardProductsRoute
+  '/admin/categories': typeof AuthedAdminCategoriesRoute
   '/admin/create-user': typeof AuthedAdminCreateUserRoute
+  '/admin/products': typeof AuthedAdminProductsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -74,9 +74,9 @@ export interface FileRoutesById {
   '/_authed': typeof AuthedRouteWithChildren
   '/_authed/admin': typeof AuthedAdminRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
-  '/dashboard/categories': typeof DashboardCategoriesRoute
-  '/dashboard/products': typeof DashboardProductsRoute
+  '/_authed/admin/categories': typeof AuthedAdminCategoriesRoute
   '/_authed/admin/create-user': typeof AuthedAdminCreateUserRoute
+  '/_authed/admin/products': typeof AuthedAdminProductsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -84,34 +84,32 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/admin/login'
-    | '/dashboard/categories'
-    | '/dashboard/products'
+    | '/admin/categories'
     | '/admin/create-user'
+    | '/admin/products'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
     | '/admin/login'
-    | '/dashboard/categories'
-    | '/dashboard/products'
+    | '/admin/categories'
     | '/admin/create-user'
+    | '/admin/products'
   id:
     | '__root__'
     | '/'
     | '/_authed'
     | '/_authed/admin'
     | '/admin/login'
-    | '/dashboard/categories'
-    | '/dashboard/products'
+    | '/_authed/admin/categories'
     | '/_authed/admin/create-user'
+    | '/_authed/admin/products'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthedRoute: typeof AuthedRouteWithChildren
   AdminLoginRoute: typeof AdminLoginRoute
-  DashboardCategoriesRoute: typeof DashboardCategoriesRoute
-  DashboardProductsRoute: typeof DashboardProductsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -130,20 +128,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/products': {
-      id: '/dashboard/products'
-      path: '/dashboard/products'
-      fullPath: '/dashboard/products'
-      preLoaderRoute: typeof DashboardProductsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/categories': {
-      id: '/dashboard/categories'
-      path: '/dashboard/categories'
-      fullPath: '/dashboard/categories'
-      preLoaderRoute: typeof DashboardCategoriesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/admin/login': {
       id: '/admin/login'
       path: '/admin/login'
@@ -158,6 +142,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedAdminRouteImport
       parentRoute: typeof AuthedRoute
     }
+    '/_authed/admin/products': {
+      id: '/_authed/admin/products'
+      path: '/products'
+      fullPath: '/admin/products'
+      preLoaderRoute: typeof AuthedAdminProductsRouteImport
+      parentRoute: typeof AuthedAdminRoute
+    }
     '/_authed/admin/create-user': {
       id: '/_authed/admin/create-user'
       path: '/create-user'
@@ -165,15 +156,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedAdminCreateUserRouteImport
       parentRoute: typeof AuthedAdminRoute
     }
+    '/_authed/admin/categories': {
+      id: '/_authed/admin/categories'
+      path: '/categories'
+      fullPath: '/admin/categories'
+      preLoaderRoute: typeof AuthedAdminCategoriesRouteImport
+      parentRoute: typeof AuthedAdminRoute
+    }
   }
 }
 
 interface AuthedAdminRouteChildren {
+  AuthedAdminCategoriesRoute: typeof AuthedAdminCategoriesRoute
   AuthedAdminCreateUserRoute: typeof AuthedAdminCreateUserRoute
+  AuthedAdminProductsRoute: typeof AuthedAdminProductsRoute
 }
 
 const AuthedAdminRouteChildren: AuthedAdminRouteChildren = {
+  AuthedAdminCategoriesRoute: AuthedAdminCategoriesRoute,
   AuthedAdminCreateUserRoute: AuthedAdminCreateUserRoute,
+  AuthedAdminProductsRoute: AuthedAdminProductsRoute,
 }
 
 const AuthedAdminRouteWithChildren = AuthedAdminRoute._addFileChildren(
@@ -195,8 +197,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthedRoute: AuthedRouteWithChildren,
   AdminLoginRoute: AdminLoginRoute,
-  DashboardCategoriesRoute: DashboardCategoriesRoute,
-  DashboardProductsRoute: DashboardProductsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

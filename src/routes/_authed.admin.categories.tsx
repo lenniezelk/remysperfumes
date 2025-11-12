@@ -1,18 +1,21 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useLocation } from '@tanstack/react-router'
 import AdminLayout from '@/components/dashboard/AdminLayout'
+import Heading from '@/components/Heading'
 
-export const Route = createFileRoute('/dashboard/products')({
-  component: ProductsPage,
+export const Route = createFileRoute('/_authed/admin/categories')({
+  component: CategoriesPage,
 })
 
-function ProductsPage() {
+function CategoriesPage() {
   const location = useLocation()
   return (
     <AdminLayout currentPath={location.pathname}>
       <div>
         <div className="flex justify-between">
-          <h1 className="text-2xl font-bold mb-4 text-brand">Products</h1>
+          <Heading level={4} className="text-2xl font-bold mb-4 text-brand">
+            Categories
+          </Heading>
           <button className="bg-brand text-white px-6 py-3 rounded-full text-lg font-medium mb-8 shadow-lg">
             Add New
           </button>

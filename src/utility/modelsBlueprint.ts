@@ -25,14 +25,14 @@ export const modelsBlueprint: ModelBlueprint[] = [
     name: 'Categories',
     description: 'Manage product categories',
     icon: Tags,
-    route: '/dashboard/categories',
+    route: '/admin/categories',
     children: [
       {
         key: 'product',
         name: 'Products',
         description: 'Manage products',
         icon: Package,
-        route: '/dashboard/products',
+        route: '/admin/products',
       },
     ],
   },
@@ -41,7 +41,7 @@ export const modelsBlueprint: ModelBlueprint[] = [
     name: 'Products',
     description: 'Manage products',
     icon: Package,
-    route: '/dashboard/products',
+    route: '/admin/products',
     children: [
       {
         key: 'product-variant',

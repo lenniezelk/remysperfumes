@@ -44,7 +44,7 @@ const AdminLayout: FC<AdminLayoutProps> = ({ children, currentPath }) => {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 overflow-y-auto p-6">{children}</main>
+      <main className="flex-1">{children}</main>
     </div>
   )
 }

@@ -3,16 +3,16 @@ import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 import { useNotifications } from '@/components/notifications/Notification';
 import { useForm } from '@tanstack/react-form';
 import { LoginAdminUserInput } from '@/lib/types';
-import Container from '@/components/Container';
 import Heading from '@/components/Heading';
 import { Input } from '@/components/Input';
 import { FieldInfo } from '@/components/FieldInfo';
 import { useEnvVars } from '@/components/EnvVars';
 import { useState, useEffect, useRef } from 'react';
 import { z } from 'zod';
+import Container from '@/components/Container';
 
 
-export const Route = createFileRoute('/admin/login')({
+export const Route = createFileRoute('/admin-login')({
   validateSearch: z.object({
     redirect: z.url().optional()
   }),
@@ -72,7 +72,7 @@ function RouteComponent() {
 
   return (
     <Container>
-      <Heading level={1} className='mt-12'>Login</Heading>
+      <Heading level={1} className='mt-12'>Admin Login</Heading>
       <form
         className='mt-8 w-full max-w-md space-y-4'
         onSubmit={(e) => {
@@ -141,7 +141,7 @@ function RouteComponent() {
               <button
                 type='submit'
                 disabled={!canSubmit || isSubmitting || !isTurnstileReady}
-                className={`w-full bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50`}
+                className={`btn bg-primary text-white rounded px-4 py-2 hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50`}
               >
                 {isSubmitting ? 'Submitting...' : 'Submit'}
               </button>

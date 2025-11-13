@@ -12,13 +12,13 @@ export const listUsers = createServerFn({ method: "GET" }).handler(async (): Pro
     const session = await getCurrentAdminUser();
 
     if (session.status !== "SUCCESS") {
-        throw redirect({ to: '/admin/login', replace: true });
+        throw redirect({ to: '/admin-login', replace: true });
     }
 
     const signedInUser = session.data;
 
     if (!canListUsers(signedInUser?.role?.key)) {
-        throw redirect({ to: '/admin/not-authorized', replace: true });
+        throw redirect({ to: '/not-authorized', replace: true });
     }
 
     const db = dbClient();

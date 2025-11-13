@@ -2,7 +2,7 @@ import Container from '@/components/Container'
 import Heading from '@/components/Heading'
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/admin/_authed/users/$userId')({
+export const Route = createFileRoute('/admin/users/$userId')({
     component: RouteComponent,
 })
 

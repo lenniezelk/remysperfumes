@@ -5,7 +5,7 @@ import { type User } from '@/lib/types';
 import { useState } from 'react';
 import AppLink from '@/components/AppLink';
 
-export const Route = createFileRoute('/admin/_authed/users/')({
+export const Route = createFileRoute('/admin/users/')({
     component: RouteComponent,
     loader: () => listUsers(),
 })
@@ -37,7 +37,7 @@ const columns = [
         header: 'Actions',
         cell: info => (
             <AppLink
-                to="/admin/_authed/users/$userId"
+                to="/admin/users/$userId"
                 params={{ userId: info.row.original.id }}
             >
                 Edit

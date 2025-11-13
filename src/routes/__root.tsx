@@ -125,7 +125,7 @@ const App = ({ children }: { children: React.ReactNode }) => {
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className='font-primary'>
+      <body className='font-primary text-neutral-text'>
         <HeadContent />
         <App>
           {children}

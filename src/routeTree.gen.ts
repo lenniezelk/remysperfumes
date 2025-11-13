@@ -9,74 +9,107 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AuthedRouteImport } from './routes/_authed'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AdminLoginRouteImport } from './routes/admin.login'
-import { Route as AuthedAdminRouteImport } from './routes/_authed.admin'
-import { Route as AuthedAdminProductsRouteImport } from './routes/_authed.admin.products'
-import { Route as AuthedAdminCreateUserRouteImport } from './routes/_authed.admin.create-user'
-import { Route as AuthedAdminCategoriesRouteImport } from './routes/_authed.admin.categories'
+import { Route as AdminNotAuthorizedRouteImport } from './routes/admin/not-authorized'
+import { Route as AdminLoginRouteImport } from './routes/admin/login'
+import { Route as AdminAuthedRouteImport } from './routes/admin/_authed'
+import { Route as AdminAuthedRouteRouteImport } from './routes/admin/_authed/route'
+import { Route as AdminAuthedProductsRouteImport } from './routes/admin/_authed/products'
+import { Route as AdminAuthedCategoriesRouteImport } from './routes/admin/_authed/categories'
+import { Route as AdminAuthedUsersRouteRouteImport } from './routes/admin/_authed/users/route'
+import { Route as AdminAuthedUsersIndexRouteImport } from './routes/admin/_authed/users/index'
+import { Route as AdminAuthedUsersCreateRouteImport } from './routes/admin/_authed/users/create'
+import { Route as AdminAuthedUsersUserIdRouteImport } from './routes/admin/_authed/users/$userId'
 
-const AuthedRoute = AuthedRouteImport.update({
-  id: '/_authed',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminNotAuthorizedRoute = AdminNotAuthorizedRouteImport.update({
+  id: '/not-authorized',
+  path: '/not-authorized',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
-  id: '/admin/login',
-  path: '/admin/login',
-  getParentRoute: () => rootRouteImport,
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AdminRoute,
 } as any)
-const AuthedAdminRoute = AuthedAdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => AuthedRoute,
+const AdminAuthedRoute = AdminAuthedRouteImport.update({
+  id: '/_authed',
+  getParentRoute: () => AdminRoute,
 } as any)
-const AuthedAdminProductsRoute = AuthedAdminProductsRouteImport.update({
+const AdminAuthedRouteRoute = AdminAuthedRouteRouteImport.update({
+  id: '/_authed',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAuthedProductsRoute = AdminAuthedProductsRouteImport.update({
   id: '/products',
   path: '/products',
-  getParentRoute: () => AuthedAdminRoute,
+  getParentRoute: () => AdminAuthedRoute,
 } as any)
-const AuthedAdminCreateUserRoute = AuthedAdminCreateUserRouteImport.update({
-  id: '/create-user',
-  path: '/create-user',
-  getParentRoute: () => AuthedAdminRoute,
-} as any)
-const AuthedAdminCategoriesRoute = AuthedAdminCategoriesRouteImport.update({
+const AdminAuthedCategoriesRoute = AdminAuthedCategoriesRouteImport.update({
   id: '/categories',
   path: '/categories',
-  getParentRoute: () => AuthedAdminRoute,
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedUsersRouteRoute = AdminAuthedUsersRouteRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedUsersIndexRoute = AdminAuthedUsersIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminAuthedUsersRouteRoute,
+} as any)
+const AdminAuthedUsersCreateRoute = AdminAuthedUsersCreateRouteImport.update({
+  id: '/create',
+  path: '/create',
+  getParentRoute: () => AdminAuthedUsersRouteRoute,
+} as any)
+const AdminAuthedUsersUserIdRoute = AdminAuthedUsersUserIdRouteImport.update({
+  id: '/$userId',
+  path: '/$userId',
+  getParentRoute: () => AdminAuthedUsersRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AuthedAdminRouteWithChildren
+  '/admin': typeof AdminAuthedRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
-  '/admin/categories': typeof AuthedAdminCategoriesRoute
-  '/admin/create-user': typeof AuthedAdminCreateUserRoute
-  '/admin/products': typeof AuthedAdminProductsRoute
+  '/admin/not-authorized': typeof AdminNotAuthorizedRoute
+  '/admin/users': typeof AdminAuthedUsersRouteRouteWithChildren
+  '/admin/categories': typeof AdminAuthedCategoriesRoute
+  '/admin/products': typeof AdminAuthedProductsRoute
+  '/admin/users/$userId': typeof AdminAuthedUsersUserIdRoute
+  '/admin/users/create': typeof AdminAuthedUsersCreateRoute
+  '/admin/users/': typeof AdminAuthedUsersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AuthedAdminRouteWithChildren
+  '/admin': typeof AdminAuthedRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
-  '/admin/categories': typeof AuthedAdminCategoriesRoute
-  '/admin/create-user': typeof AuthedAdminCreateUserRoute
-  '/admin/products': typeof AuthedAdminProductsRoute
+  '/admin/not-authorized': typeof AdminNotAuthorizedRoute
+  '/admin/categories': typeof AdminAuthedCategoriesRoute
+  '/admin/products': typeof AdminAuthedProductsRoute
+  '/admin/users/$userId': typeof AdminAuthedUsersUserIdRoute
+  '/admin/users/create': typeof AdminAuthedUsersCreateRoute
+  '/admin/users': typeof AdminAuthedUsersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/_authed': typeof AuthedRouteWithChildren
-  '/_authed/admin': typeof AuthedAdminRouteWithChildren
+  '/admin/_authed': typeof AdminAuthedRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
-  '/_authed/admin/categories': typeof AuthedAdminCategoriesRoute
-  '/_authed/admin/create-user': typeof AuthedAdminCreateUserRoute
-  '/_authed/admin/products': typeof AuthedAdminProductsRoute
+  '/admin/not-authorized': typeof AdminNotAuthorizedRoute
+  '/admin/_authed/users': typeof AdminAuthedUsersRouteRouteWithChildren
+  '/admin/_authed/categories': typeof AdminAuthedCategoriesRoute
+  '/admin/_authed/products': typeof AdminAuthedProductsRoute
+  '/admin/_authed/users/$userId': typeof AdminAuthedUsersUserIdRoute
+  '/admin/_authed/users/create': typeof AdminAuthedUsersCreateRoute
+  '/admin/_authed/users/': typeof AdminAuthedUsersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -84,43 +117,44 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/admin/login'
+    | '/admin/not-authorized'
+    | '/admin/users'
     | '/admin/categories'
-    | '/admin/create-user'
     | '/admin/products'
+    | '/admin/users/$userId'
+    | '/admin/users/create'
+    | '/admin/users/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
     | '/admin/login'
+    | '/admin/not-authorized'
     | '/admin/categories'
-    | '/admin/create-user'
     | '/admin/products'
+    | '/admin/users/$userId'
+    | '/admin/users/create'
+    | '/admin/users'
   id:
     | '__root__'
     | '/'
-    | '/_authed'
-    | '/_authed/admin'
+    | '/admin/_authed'
     | '/admin/login'
-    | '/_authed/admin/categories'
-    | '/_authed/admin/create-user'
-    | '/_authed/admin/products'
+    | '/admin/not-authorized'
+    | '/admin/_authed/users'
+    | '/admin/_authed/categories'
+    | '/admin/_authed/products'
+    | '/admin/_authed/users/$userId'
+    | '/admin/_authed/users/create'
+    | '/admin/_authed/users/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthedRoute: typeof AuthedRouteWithChildren
-  AdminLoginRoute: typeof AdminLoginRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_authed': {
-      id: '/_authed'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthedRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -128,75 +162,81 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/not-authorized': {
+      id: '/admin/not-authorized'
+      path: '/not-authorized'
+      fullPath: '/admin/not-authorized'
+      preLoaderRoute: typeof AdminNotAuthorizedRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/login': {
       id: '/admin/login'
-      path: '/admin/login'
+      path: '/login'
       fullPath: '/admin/login'
       preLoaderRoute: typeof AdminLoginRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
-    '/_authed/admin': {
-      id: '/_authed/admin'
-      path: '/admin'
+    '/admin/_authed': {
+      id: '/admin/_authed'
+      path: ''
       fullPath: '/admin'
-      preLoaderRoute: typeof AuthedAdminRouteImport
-      parentRoute: typeof AuthedRoute
+      preLoaderRoute: typeof AdminAuthedRouteImport
+      parentRoute: typeof AdminRoute
     }
-    '/_authed/admin/products': {
-      id: '/_authed/admin/products'
+    '/admin/_authed': {
+      id: '/admin/_authed'
+      path: ''
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminAuthedRouteRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/_authed/products': {
+      id: '/admin/_authed/products'
       path: '/products'
       fullPath: '/admin/products'
-      preLoaderRoute: typeof AuthedAdminProductsRouteImport
-      parentRoute: typeof AuthedAdminRoute
+      preLoaderRoute: typeof AdminAuthedProductsRouteImport
+      parentRoute: typeof AdminAuthedRoute
     }
-    '/_authed/admin/create-user': {
-      id: '/_authed/admin/create-user'
-      path: '/create-user'
-      fullPath: '/admin/create-user'
-      preLoaderRoute: typeof AuthedAdminCreateUserRouteImport
-      parentRoute: typeof AuthedAdminRoute
-    }
-    '/_authed/admin/categories': {
-      id: '/_authed/admin/categories'
+    '/admin/_authed/categories': {
+      id: '/admin/_authed/categories'
       path: '/categories'
       fullPath: '/admin/categories'
-      preLoaderRoute: typeof AuthedAdminCategoriesRouteImport
-      parentRoute: typeof AuthedAdminRoute
+      preLoaderRoute: typeof AdminAuthedCategoriesRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/users': {
+      id: '/admin/_authed/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminAuthedUsersRouteRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/users/': {
+      id: '/admin/_authed/users/'
+      path: '/'
+      fullPath: '/admin/users/'
+      preLoaderRoute: typeof AdminAuthedUsersIndexRouteImport
+      parentRoute: typeof AdminAuthedUsersRouteRoute
+    }
+    '/admin/_authed/users/create': {
+      id: '/admin/_authed/users/create'
+      path: '/create'
+      fullPath: '/admin/users/create'
+      preLoaderRoute: typeof AdminAuthedUsersCreateRouteImport
+      parentRoute: typeof AdminAuthedUsersRouteRoute
+    }
+    '/admin/_authed/users/$userId': {
+      id: '/admin/_authed/users/$userId'
+      path: '/$userId'
+      fullPath: '/admin/users/$userId'
+      preLoaderRoute: typeof AdminAuthedUsersUserIdRouteImport
+      parentRoute: typeof AdminAuthedUsersRouteRoute
     }
   }
 }
 
-interface AuthedAdminRouteChildren {
-  AuthedAdminCategoriesRoute: typeof AuthedAdminCategoriesRoute
-  AuthedAdminCreateUserRoute: typeof AuthedAdminCreateUserRoute
-  AuthedAdminProductsRoute: typeof AuthedAdminProductsRoute
-}
-
-const AuthedAdminRouteChildren: AuthedAdminRouteChildren = {
-  AuthedAdminCategoriesRoute: AuthedAdminCategoriesRoute,
-  AuthedAdminCreateUserRoute: AuthedAdminCreateUserRoute,
-  AuthedAdminProductsRoute: AuthedAdminProductsRoute,
-}
-
-const AuthedAdminRouteWithChildren = AuthedAdminRoute._addFileChildren(
-  AuthedAdminRouteChildren,
-)
-
-interface AuthedRouteChildren {
-  AuthedAdminRoute: typeof AuthedAdminRouteWithChildren
-}
-
-const AuthedRouteChildren: AuthedRouteChildren = {
-  AuthedAdminRoute: AuthedAdminRouteWithChildren,
-}
-
-const AuthedRouteWithChildren =
-  AuthedRoute._addFileChildren(AuthedRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthedRoute: AuthedRouteWithChildren,
-  AdminLoginRoute: AdminLoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

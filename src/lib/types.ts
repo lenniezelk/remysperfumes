@@ -1,29 +1,35 @@
 import { z } from "zod";
+import { createSelectSchema } from 'drizzle-zod';
+import { roleTable, userTable } from "./db/schema";
 
 export type RoleKey = 'superadmin' | 'admin' | 'manager' | 'staff';
+export type AdminUserRoleKey = Omit<RoleKey, 'staff'>;
 
-export interface Role {
-    id: string;
-    name: string; // user readable name
-    description: string; // user readable description
-    key: RoleKey; // internal key
+const roleSelectSchema = createSelectSchema(roleTable);
+export type RoleDB = z.infer<typeof roleSelectSchema>;
+
+export interface Role extends Omit<RoleDB, 'key' | 'created_at' | 'updated_at'> {
+    key: RoleKey;
 }
 
-export interface User {
-    id: string;
-    name: string;
-    email: string;
-    role: Role;
+const userSelectSchema = createSelectSchema(userTable);
+
+export type UserDB = z.infer<typeof userSelectSchema>;
+
+export interface User extends Omit<UserDB, 'role_id' | 'password_hash'> {
+    role: Role | null;
 }
 
 export interface AdminAppSession {
     user: User | null;
 }
 
-export interface Result<T> {
-    status: "SUCCESS" | "ERROR";
-    data?: T;
-    error?: string;
+export type Result<T> = {
+    status: "SUCCESS",
+    data: T;
+} | {
+    status: "ERROR",
+    error: string;
 }
 
 export const GoogleAuthData = z.object({

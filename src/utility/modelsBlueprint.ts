@@ -103,6 +103,6 @@ export const modelsBlueprint: ModelBlueprint[] = [
     name: 'Users',
     description: 'Manage system users',
     icon: Users,
-    route: '/admin/user',
+    route: '/admin/users',
   },
 ]

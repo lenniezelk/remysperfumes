@@ -1,32 +1,22 @@
-import { createFileRoute, Outlet, useLocation } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { Link } from '@tanstack/react-router'
-import { getCurrentAdminUser } from '@/lib/auth/auth'
 import { modelsBlueprint } from '@/utility/modelsBlueprint'
 import ContainerNoOverflow from '@/components/ContainerNoOverflow'
 import Heading from '@/components/Heading'
 
-export const Route = createFileRoute('/_authed/admin')({
-  loader: async () => await getCurrentAdminUser(),
+export const Route = createFileRoute('/admin/_authed')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { data } = Route.useLoaderData()
-  const location = useLocation()
-
-  // Check if we're on a nested route
-  const isNestedRoute = location.pathname !== '/admin'
-
-  if (isNestedRoute) {
-    return <Outlet />
-  }
+  const { user } = Route.useRouteContext()
 
   return (
     <ContainerNoOverflow>
       <div className="p-8">
         <Heading level={1} className="mb-4 flex justify-between items-baseline">
           <span className="text-brand">Dashboard</span>
-          <span className="text-accent text-sm"> Welcome {data?.name}</span>
+          <span className="text-accent text-sm"> Welcome {user?.name}</span>
         </Heading>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

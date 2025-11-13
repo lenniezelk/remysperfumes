@@ -13,7 +13,7 @@ interface AdminAuthContext {
 
 const AdminUserAuthContext = createContext<AdminAuthContext | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+export function AdminAuthenticationProvider({ children }: { children: React.ReactNode }) {
     const getUser = useServerFn(getCurrentAdminUser);
 
     const { data, isLoading, error, refetch } = useQuery({
@@ -22,7 +22,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     })
 
     const value = {
-        user: data?.data || null,
+        user: data?.status === "SUCCESS" ? data.data : null,
         isLoading,
         error,
         refetch

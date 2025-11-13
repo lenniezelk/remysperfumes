@@ -5,7 +5,7 @@ import Logo from '@/assets/logo.svg';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import appCss from '@/styles.css?url'
-import { AuthProvider } from '@/lib/auth/admin-auth-context';
+import { AdminAuthenticationProvider } from '@/lib/auth/admin-auth-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { getEnvVars } from '@/lib/env-vars';
 import { NotificationProvider, NotificationsList } from '@/components/notifications/Notification';
@@ -111,10 +111,10 @@ const App = ({ children }: { children: React.ReactNode }) => {
       <NotificationProvider>
         <GoogleOAuthProvider clientId={GOOGLE_OAUTH_CLIENT_ID}>
           <QueryClientProvider client={queryClient}>
-            <AuthProvider>
+            <AdminAuthenticationProvider>
               {children}
               <NotificationsList />
-            </AuthProvider>
+            </AdminAuthenticationProvider>
           </QueryClientProvider>
         </GoogleOAuthProvider>
       </NotificationProvider>

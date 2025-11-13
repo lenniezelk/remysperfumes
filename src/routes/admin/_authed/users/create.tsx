@@ -8,7 +8,7 @@ import { fetchCreateUserInitialData } from '@/lib/auth/auth';
 import Heading from '@/components/Heading';
 import { FieldInfo } from '@/components/FieldInfo';
 
-export const Route = createFileRoute('/_authed/admin/create-user')({
+export const Route = createFileRoute('/admin/_authed/users/create')({
   component: RouteComponent,
   loader: async () => fetchCreateUserInitialData(),
 })

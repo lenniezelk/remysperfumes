@@ -3,7 +3,7 @@ import Heading from '@/components/Heading'
 import AdminLayout from '@/components/dashboard/AdminLayout'
 import ContainerNoOverflow from '@/components/ContainerNoOverflow'
 
-export const Route = createFileRoute('/_authed/admin/categories')({
+export const Route = createFileRoute('/admin/categories')({
   component: CategoriesPage,
 })
 

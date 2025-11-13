@@ -3,7 +3,7 @@ import Heading from '@/components/Heading'
 import AdminLayout from '@/components/dashboard/AdminLayout'
 import ContainerNoOverflow from '@/components/ContainerNoOverflow'
 
-export const Route = createFileRoute('/_authed/admin/products')({
+export const Route = createFileRoute('/admin/products')({
   component: ProductsPage,
 })
 

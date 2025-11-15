@@ -72,8 +72,9 @@ export const loginAdminUser = createServerFn({ method: 'POST' }).inputValidator(
         };
     }
 
-    await db.update(userTable).set({ last_login_at: new Date() }).where(eq(userTable.id, dbUser[0].id));
-    dbUser = await db.select().from(userTable).where(eq(userTable.id, dbUser[0].id)).limit(1);
+    const now = new Date();
+
+    await db.update(userTable).set({ last_login_at: now }).where(eq(userTable.id, dbUser[0].id));
 
     const user: User = {
         id: dbUser[0].id,
@@ -88,7 +89,7 @@ export const loginAdminUser = createServerFn({ method: 'POST' }).inputValidator(
         created_at: dbUser[0].created_at,
         updated_at: dbUser[0].updated_at,
         is_active: dbUser[0].is_active,
-        last_login_at: dbUser[0].last_login_at,
+        last_login_at: now,
     };
 
     const session = await useAdminAppSession();

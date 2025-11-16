@@ -17,6 +17,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminProfileRouteImport } from './routes/admin/profile'
 import { Route as AdminProductsRouteImport } from './routes/admin/products'
+import { Route as AdminCreateCategoryRouteImport } from './routes/admin/create-category'
 import { Route as AdminCategoriesRouteImport } from './routes/admin/categories'
 import { Route as AdminUsersRouteRouteImport } from './routes/admin/users/route'
 import { Route as AdminManufacturersRouteRouteImport } from './routes/admin/manufacturers/route'
@@ -26,6 +27,7 @@ import { Route as AdminUsersNewRouteImport } from './routes/admin/users/new'
 import { Route as AdminUsersUserIdRouteImport } from './routes/admin/users/$userId'
 import { Route as AdminManufacturersNewRouteImport } from './routes/admin/manufacturers/new'
 import { Route as AdminManufacturersManufacturerIdRouteImport } from './routes/admin/manufacturers/$manufacturerId'
+import { Route as AdminCategoryIdRouteImport } from './routes/admin/category.$id'
 
 const NotAuthorizedRoute = NotAuthorizedRouteImport.update({
   id: '/not-authorized',
@@ -65,6 +67,11 @@ const AdminProfileRoute = AdminProfileRouteImport.update({
 const AdminProductsRoute = AdminProductsRouteImport.update({
   id: '/products',
   path: '/products',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminCreateCategoryRoute = AdminCreateCategoryRouteImport.update({
+  id: '/create-category',
+  path: '/create-category',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
@@ -113,6 +120,11 @@ const AdminManufacturersManufacturerIdRoute =
     path: '/$manufacturerId',
     getParentRoute: () => AdminManufacturersRouteRoute,
   } as any)
+const AdminCategoryIdRoute = AdminCategoryIdRouteImport.update({
+  id: '/category/$id',
+  path: '/category/$id',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -123,11 +135,13 @@ export interface FileRoutesByFullPath {
   '/admin/manufacturers': typeof AdminManufacturersRouteRouteWithChildren
   '/admin/users': typeof AdminUsersRouteRouteWithChildren
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/create-category': typeof AdminCreateCategoryRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/profile': typeof AdminProfileRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/manufacturers/$manufacturerId': typeof AdminManufacturersManufacturerIdRoute
   '/admin/manufacturers/new': typeof AdminManufacturersNewRoute
+  '/admin/category/$id': typeof AdminCategoryIdRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRoute
   '/admin/users/new': typeof AdminUsersNewRoute
   '/admin/manufacturers/': typeof AdminManufacturersIndexRoute
@@ -139,11 +153,13 @@ export interface FileRoutesByTo {
   '/admin-logout': typeof AdminLogoutRoute
   '/not-authorized': typeof NotAuthorizedRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/create-category': typeof AdminCreateCategoryRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/profile': typeof AdminProfileRoute
   '/admin': typeof AdminIndexRoute
   '/admin/manufacturers/$manufacturerId': typeof AdminManufacturersManufacturerIdRoute
   '/admin/manufacturers/new': typeof AdminManufacturersNewRoute
+  '/admin/category/$id': typeof AdminCategoryIdRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRoute
   '/admin/users/new': typeof AdminUsersNewRoute
   '/admin/manufacturers': typeof AdminManufacturersIndexRoute
@@ -159,11 +175,13 @@ export interface FileRoutesById {
   '/admin/manufacturers': typeof AdminManufacturersRouteRouteWithChildren
   '/admin/users': typeof AdminUsersRouteRouteWithChildren
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/create-category': typeof AdminCreateCategoryRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/profile': typeof AdminProfileRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/manufacturers/$manufacturerId': typeof AdminManufacturersManufacturerIdRoute
   '/admin/manufacturers/new': typeof AdminManufacturersNewRoute
+  '/admin/category/$id': typeof AdminCategoryIdRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRoute
   '/admin/users/new': typeof AdminUsersNewRoute
   '/admin/manufacturers/': typeof AdminManufacturersIndexRoute
@@ -180,11 +198,13 @@ export interface FileRouteTypes {
     | '/admin/manufacturers'
     | '/admin/users'
     | '/admin/categories'
+    | '/admin/create-category'
     | '/admin/products'
     | '/admin/profile'
     | '/admin/'
     | '/admin/manufacturers/$manufacturerId'
     | '/admin/manufacturers/new'
+    | '/admin/category/$id'
     | '/admin/users/$userId'
     | '/admin/users/new'
     | '/admin/manufacturers/'
@@ -196,11 +216,13 @@ export interface FileRouteTypes {
     | '/admin-logout'
     | '/not-authorized'
     | '/admin/categories'
+    | '/admin/create-category'
     | '/admin/products'
     | '/admin/profile'
     | '/admin'
     | '/admin/manufacturers/$manufacturerId'
     | '/admin/manufacturers/new'
+    | '/admin/category/$id'
     | '/admin/users/$userId'
     | '/admin/users/new'
     | '/admin/manufacturers'
@@ -215,11 +237,13 @@ export interface FileRouteTypes {
     | '/admin/manufacturers'
     | '/admin/users'
     | '/admin/categories'
+    | '/admin/create-category'
     | '/admin/products'
     | '/admin/profile'
     | '/admin/'
     | '/admin/manufacturers/$manufacturerId'
     | '/admin/manufacturers/new'
+    | '/admin/category/$id'
     | '/admin/users/$userId'
     | '/admin/users/new'
     | '/admin/manufacturers/'
@@ -292,6 +316,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProductsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/create-category': {
+      id: '/admin/create-category'
+      path: '/create-category'
+      fullPath: '/admin/create-category'
+      preLoaderRoute: typeof AdminCreateCategoryRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/categories': {
       id: '/admin/categories'
       path: '/categories'
@@ -354,83 +385,93 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/manufacturers/$manufacturerId'
       preLoaderRoute: typeof AdminManufacturersManufacturerIdRouteImport
       parentRoute: typeof AdminManufacturersRouteRoute
+      '/admin/category/$id': {
+        id: '/admin/category/$id'
+        path: '/category/$id'
+        fullPath: '/admin/category/$id'
+        preLoaderRoute: typeof AdminCategoryIdRouteImport
+        parentRoute: typeof AdminRouteRoute
+      }
     }
   }
-}
 
-interface AdminManufacturersRouteRouteChildren {
-  AdminManufacturersManufacturerIdRoute: typeof AdminManufacturersManufacturerIdRoute
-  AdminManufacturersNewRoute: typeof AdminManufacturersNewRoute
-  AdminManufacturersIndexRoute: typeof AdminManufacturersIndexRoute
-}
-
-const AdminManufacturersRouteRouteChildren: AdminManufacturersRouteRouteChildren =
-  {
-    AdminManufacturersManufacturerIdRoute:
-      AdminManufacturersManufacturerIdRoute,
-    AdminManufacturersNewRoute: AdminManufacturersNewRoute,
-    AdminManufacturersIndexRoute: AdminManufacturersIndexRoute,
+  interface AdminManufacturersRouteRouteChildren {
+    AdminManufacturersManufacturerIdRoute: typeof AdminManufacturersManufacturerIdRoute
+    AdminManufacturersNewRoute: typeof AdminManufacturersNewRoute
+    AdminManufacturersIndexRoute: typeof AdminManufacturersIndexRoute
   }
 
-const AdminManufacturersRouteRouteWithChildren =
-  AdminManufacturersRouteRoute._addFileChildren(
-    AdminManufacturersRouteRouteChildren,
+  const AdminManufacturersRouteRouteChildren: AdminManufacturersRouteRouteChildren =
+    {
+      AdminManufacturersManufacturerIdRoute:
+        AdminManufacturersManufacturerIdRoute,
+      AdminManufacturersNewRoute: AdminManufacturersNewRoute,
+      AdminManufacturersIndexRoute: AdminManufacturersIndexRoute,
+    }
+
+  const AdminManufacturersRouteRouteWithChildren =
+    AdminManufacturersRouteRoute._addFileChildren(
+      AdminManufacturersRouteRouteChildren,
+    )
+
+  interface AdminUsersRouteRouteChildren {
+    AdminUsersUserIdRoute: typeof AdminUsersUserIdRoute
+    AdminUsersNewRoute: typeof AdminUsersNewRoute
+    AdminUsersIndexRoute: typeof AdminUsersIndexRoute
+  }
+
+  const AdminUsersRouteRouteChildren: AdminUsersRouteRouteChildren = {
+    AdminUsersUserIdRoute: AdminUsersUserIdRoute,
+    AdminUsersNewRoute: AdminUsersNewRoute,
+    AdminUsersIndexRoute: AdminUsersIndexRoute,
+  }
+
+  const AdminUsersRouteRouteWithChildren =
+    AdminUsersRouteRoute._addFileChildren(AdminUsersRouteRouteChildren)
+
+  interface AdminRouteRouteChildren {
+    AdminManufacturersRouteRoute: typeof AdminManufacturersRouteRouteWithChildren
+    AdminUsersRouteRoute: typeof AdminUsersRouteRouteWithChildren
+    AdminCategoriesRoute: typeof AdminCategoriesRoute
+    AdminCreateCategoryRoute: typeof AdminCreateCategoryRoute
+    AdminProductsRoute: typeof AdminProductsRoute
+    AdminProfileRoute: typeof AdminProfileRoute
+    AdminIndexRoute: typeof AdminIndexRoute
+    AdminCategoryIdRoute: typeof AdminCategoryIdRoute
+  }
+
+  const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+    AdminManufacturersRouteRoute: AdminManufacturersRouteRouteWithChildren,
+    AdminUsersRouteRoute: AdminUsersRouteRouteWithChildren,
+    AdminCategoriesRoute: AdminCategoriesRoute,
+    AdminCreateCategoryRoute: AdminCreateCategoryRoute,
+    AdminProductsRoute: AdminProductsRoute,
+    AdminProfileRoute: AdminProfileRoute,
+    AdminIndexRoute: AdminIndexRoute,
+    AdminCategoryIdRoute: AdminCategoryIdRoute,
+  }
+
+  const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+    AdminRouteRouteChildren,
   )
 
-interface AdminUsersRouteRouteChildren {
-  AdminUsersUserIdRoute: typeof AdminUsersUserIdRoute
-  AdminUsersNewRoute: typeof AdminUsersNewRoute
-  AdminUsersIndexRoute: typeof AdminUsersIndexRoute
-}
+  const rootRouteChildren: RootRouteChildren = {
+    IndexRoute: IndexRoute,
+    AdminRouteRoute: AdminRouteRouteWithChildren,
+    AdminLoginRoute: AdminLoginRoute,
+    AdminLogoutRoute: AdminLogoutRoute,
+    NotAuthorizedRoute: NotAuthorizedRoute,
+  }
+  export const routeTree = rootRouteImport
+    ._addFileChildren(rootRouteChildren)
+    ._addFileTypes<FileRouteTypes>()
 
-const AdminUsersRouteRouteChildren: AdminUsersRouteRouteChildren = {
-  AdminUsersUserIdRoute: AdminUsersUserIdRoute,
-  AdminUsersNewRoute: AdminUsersNewRoute,
-  AdminUsersIndexRoute: AdminUsersIndexRoute,
-}
-
-const AdminUsersRouteRouteWithChildren = AdminUsersRouteRoute._addFileChildren(
-  AdminUsersRouteRouteChildren,
-)
-
-interface AdminRouteRouteChildren {
-  AdminManufacturersRouteRoute: typeof AdminManufacturersRouteRouteWithChildren
-  AdminUsersRouteRoute: typeof AdminUsersRouteRouteWithChildren
-  AdminCategoriesRoute: typeof AdminCategoriesRoute
-  AdminProductsRoute: typeof AdminProductsRoute
-  AdminProfileRoute: typeof AdminProfileRoute
-  AdminIndexRoute: typeof AdminIndexRoute
-}
-
-const AdminRouteRouteChildren: AdminRouteRouteChildren = {
-  AdminManufacturersRouteRoute: AdminManufacturersRouteRouteWithChildren,
-  AdminUsersRouteRoute: AdminUsersRouteRouteWithChildren,
-  AdminCategoriesRoute: AdminCategoriesRoute,
-  AdminProductsRoute: AdminProductsRoute,
-  AdminProfileRoute: AdminProfileRoute,
-  AdminIndexRoute: AdminIndexRoute,
-}
-
-const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
-  AdminRouteRouteChildren,
-)
-
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AdminRouteRoute: AdminRouteRouteWithChildren,
-  AdminLoginRoute: AdminLoginRoute,
-  AdminLogoutRoute: AdminLogoutRoute,
-  NotAuthorizedRoute: NotAuthorizedRoute,
-}
-export const routeTree = rootRouteImport
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
+  import type { getRouter } from './router.tsx'
+  import type { createStart } from '@tanstack/react-start'
+  declare module '@tanstack/react-start' {
+    interface Register {
+      ssr: true
+      router: Awaited<ReturnType<typeof getRouter>>
+    }
   }
 }

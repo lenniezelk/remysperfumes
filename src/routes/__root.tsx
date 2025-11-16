@@ -124,7 +124,7 @@ const App = ({ children }: { children: React.ReactNode }) => {
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="valentine">
       <body className='font-primary text-neutral-text'>
         <HeadContent />
         <App>

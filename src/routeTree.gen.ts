@@ -20,7 +20,7 @@ import { Route as AdminProductsRouteImport } from './routes/admin/products'
 import { Route as AdminCategoriesRouteImport } from './routes/admin/categories'
 import { Route as AdminUsersRouteRouteImport } from './routes/admin/users/route'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
-import { Route as AdminUsersCreateRouteImport } from './routes/admin/users/create'
+import { Route as AdminUsersNewRouteImport } from './routes/admin/users/new'
 import { Route as AdminUsersUserIdRouteImport } from './routes/admin/users/$userId'
 
 const NotAuthorizedRoute = NotAuthorizedRouteImport.update({
@@ -78,9 +78,9 @@ const AdminUsersIndexRoute = AdminUsersIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminUsersRouteRoute,
 } as any)
-const AdminUsersCreateRoute = AdminUsersCreateRouteImport.update({
-  id: '/create',
-  path: '/create',
+const AdminUsersNewRoute = AdminUsersNewRouteImport.update({
+  id: '/new',
+  path: '/new',
   getParentRoute: () => AdminUsersRouteRoute,
 } as any)
 const AdminUsersUserIdRoute = AdminUsersUserIdRouteImport.update({
@@ -101,7 +101,7 @@ export interface FileRoutesByFullPath {
   '/admin/profile': typeof AdminProfileRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRoute
-  '/admin/users/create': typeof AdminUsersCreateRoute
+  '/admin/users/new': typeof AdminUsersNewRoute
   '/admin/users/': typeof AdminUsersIndexRoute
 }
 export interface FileRoutesByTo {
@@ -114,7 +114,7 @@ export interface FileRoutesByTo {
   '/admin/profile': typeof AdminProfileRoute
   '/admin': typeof AdminIndexRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRoute
-  '/admin/users/create': typeof AdminUsersCreateRoute
+  '/admin/users/new': typeof AdminUsersNewRoute
   '/admin/users': typeof AdminUsersIndexRoute
 }
 export interface FileRoutesById {
@@ -130,7 +130,7 @@ export interface FileRoutesById {
   '/admin/profile': typeof AdminProfileRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRoute
-  '/admin/users/create': typeof AdminUsersCreateRoute
+  '/admin/users/new': typeof AdminUsersNewRoute
   '/admin/users/': typeof AdminUsersIndexRoute
 }
 export interface FileRouteTypes {
@@ -147,7 +147,7 @@ export interface FileRouteTypes {
     | '/admin/profile'
     | '/admin/'
     | '/admin/users/$userId'
-    | '/admin/users/create'
+    | '/admin/users/new'
     | '/admin/users/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -160,7 +160,7 @@ export interface FileRouteTypes {
     | '/admin/profile'
     | '/admin'
     | '/admin/users/$userId'
-    | '/admin/users/create'
+    | '/admin/users/new'
     | '/admin/users'
   id:
     | '__root__'
@@ -175,7 +175,7 @@ export interface FileRouteTypes {
     | '/admin/profile'
     | '/admin/'
     | '/admin/users/$userId'
-    | '/admin/users/create'
+    | '/admin/users/new'
     | '/admin/users/'
   fileRoutesById: FileRoutesById
 }
@@ -266,11 +266,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersIndexRouteImport
       parentRoute: typeof AdminUsersRouteRoute
     }
-    '/admin/users/create': {
-      id: '/admin/users/create'
-      path: '/create'
-      fullPath: '/admin/users/create'
-      preLoaderRoute: typeof AdminUsersCreateRouteImport
+    '/admin/users/new': {
+      id: '/admin/users/new'
+      path: '/new'
+      fullPath: '/admin/users/new'
+      preLoaderRoute: typeof AdminUsersNewRouteImport
       parentRoute: typeof AdminUsersRouteRoute
     }
     '/admin/users/$userId': {
@@ -285,13 +285,13 @@ declare module '@tanstack/react-router' {
 
 interface AdminUsersRouteRouteChildren {
   AdminUsersUserIdRoute: typeof AdminUsersUserIdRoute
-  AdminUsersCreateRoute: typeof AdminUsersCreateRoute
+  AdminUsersNewRoute: typeof AdminUsersNewRoute
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
 }
 
 const AdminUsersRouteRouteChildren: AdminUsersRouteRouteChildren = {
   AdminUsersUserIdRoute: AdminUsersUserIdRoute,
-  AdminUsersCreateRoute: AdminUsersCreateRoute,
+  AdminUsersNewRoute: AdminUsersNewRoute,
   AdminUsersIndexRoute: AdminUsersIndexRoute,
 }
 

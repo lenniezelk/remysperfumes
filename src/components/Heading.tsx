@@ -18,7 +18,7 @@ const Heading: React.FC<HeadingProps> = ({ level, children, className, ...props 
         case 6:
             return <h6 className={`text-primary ${className}`} {...props}>{children}</h6>;
         default:
-            return <h1 className={`text-primary ${className}`} {...props}>{children}</h1>;
+            return <h1 className={`text-4xl md:text-6xl font-bold text-primary ${className}`} {...props}>{children}</h1>;;
     }
 }
 

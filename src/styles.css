@@ -2,43 +2,97 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Poppins:wght@400;500;700&display=swap');
 @plugin "daisyui";
 
-@theme {
-  /* Colors stored as space-separated RGB to pair with Tailwind's rgb(var(--token) / <alpha-value>) usage. */
-  /* Logo & Primary Brand Colors */
-  --color-brand-light: oklch(91.75% 0.038 10.3);
-  /* Soft Blush */
-  --color-brand: oklch(73.4% 0.075 10.9);
-  /* Muted Rose */
-  --color-brand-dark: oklch(68.5% 0.076 11.2);
-  /* Deep Rosewood */
+@plugin "daisyui/theme" {
+  name: "luxury-rose-css";
+  default: true;
+  /* Set this theme as the default */
+  prefersdark: false;
+  /* Ensure it's not the default for dark mode */
+  color-scheme: light;
+  /* Helps with browser-provided UI elements */
 
-  /* Luxury Accent Colors */
-  --color-accent-light: oklch(82.61% 0.106 87.2);
-  /* Pale Bronze */
-  --color-accent: oklch(64.1% 0.111 81.3);
-  /* Warm Bronze */
-  --color-accent-dark: oklch(53.25% 0.102 78.4);
-  /* Rich Copper */
+  /* --- Base & Backgrounds --- */
+  /* Main Background: Creamy Off-White */
+  --color-base-100: oklch(98.39% 0.003 91.0);
+  /* --color-neutral-bg-light */
 
-  /* Neutral Backgrounds */
-  --color-neutral-bg-light: oklch(98.39% 0.003 91.0);
-  /* Creamy Off-White */
-  --color-neutral-bg: oklch(95.63% 0.007 81.6);
-  /* Soft Beige */
+  /* Slightly Darker Background: Soft Beige */
+  --color-base-200: oklch(95.63% 0.007 81.6);
+  /* --color-neutral-bg */
 
-  /* Neutral Text Colors */
-  --color-neutral-text: oklch(33.1% 0 0);
-  /* Deep Charcoal */
-  --color-neutral-text-secondary: oklch(47.6% 0 0);
-  /* Mid-Grey */
+  /* Even Darker Background/Borders: Soft Blush */
+  --color-base-300: oklch(91.75% 0.038 10.3);
+  /* --color-brand-light */
 
-  /* UI Colors (Success, Error) */
-  --color-ui-success: oklch(70.9% 0.081 123.6);
-  /* Sage Green */
-  --color-ui-error: oklch(61.8% 0.134 22.8);
-  /* Dusty Red */
+  /* Default Text Color: Deep Charcoal */
+  --color-base-content: oklch(33.1% 0 0);
+  /* --color-neutral-text */
 
-  /* Fonts */
+  /* --- Core Colors --- */
+
+  /* Primary (Muted Rose) */
+  --color-primary: oklch(73.4% 0.075 10.9);
+  /* --color-brand */
+  --color-primary-focus: oklch(68.5% 0.076 11.2);
+  /* --color-brand-dark */
+  --color-primary-content: oklch(98.39% 0.003 91.0);
+  /* Creamy Off-White for contrast */
+
+  /* Secondary (Warm Bronze) */
+  --color-secondary: oklch(64.1% 0.111 81.3);
+  /* --color-accent */
+  --color-secondary-focus: oklch(53.25% 0.102 78.4);
+  /* --color-accent-dark */
+  --color-secondary-content: oklch(98.39% 0.003 91.0);
+  /* Creamy Off-White for contrast */
+
+  /* Accent (Pale Bronze) */
+  --color-accent: oklch(82.61% 0.106 87.2);
+  /* --color-accent-light */
+  --color-accent-focus: oklch(64.1% 0.111 81.3);
+  /* --color-accent (for focus) */
+  --color-accent-content: oklch(33.1% 0 0);
+  /* Deep Charcoal for contrast */
+
+  /* Neutral (Deep Charcoal) */
+  --color-neutral: oklch(33.1% 0 0);
+  /* --color-neutral-text */
+  --color-neutral-content: oklch(98.39% 0.003 91.0);
+  /* Creamy Off-White for contrast */
+  --color-neutral-focus: oklch(47.6% 0 0);
+  /* --color-neutral-text-secondary (for focus/hover) */
+
+  /* --- UI / State Colors --- */
+
+  /* Info (Using Pale Bronze) */
+  --color-info: oklch(82.61% 0.106 87.2);
+  /* --color-accent-light */
+  --color-info-content: oklch(33.1% 0 0);
+
+  /* Success (Sage Green) */
+  --color-success: oklch(70.9% 0.081 123.6);
+  /* --color-ui-success */
+  --color-success-content: oklch(33.1% 0 0);
+
+  /* Warning (Using Soft Blush) */
+  --color-warning: oklch(91.75% 0.038 10.3);
+  /* --color-brand-light */
+  --color-warning-content: oklch(33.1% 0 0);
+
+  /* Error (Dusty Red) */
+  --color-error: oklch(61.8% 0.134 22.8);
+  /* --color-ui-error */
+  --color-error-content: oklch(98.39% 0.003 91.0);
+
+  /* --- Optional Custom Properties --- */
+  /* These are standard defaults, adjust if your design needs them */
+  --radius-selector: 0.25rem;
+  --radius-field: 0.25rem;
+  --radius-box: 1rem;
+  --border: 1px;
+}
+
+:root {
   --font-primary: 'Poppins', sans-serif;
   --font-secondary: 'Lato', sans-serif;
 }

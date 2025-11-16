@@ -1,20 +1,20 @@
 import Container from '@/components/Container';
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useNotifications } from '@/components/notifications/Notification';
+import { createFileRoute } from '@tanstack/react-router'
+import { NotificationsList, useNotifications } from '@/components/notifications/Notification';
 import { useForm } from '@tanstack/react-form';
 import { CreateUserData } from '@/lib/types';
 import { Input } from '@/components/Input';
-import { fetchCreateUserInitialData } from '@/lib/auth/auth';
 import Heading from '@/components/Heading';
 import { FieldInfo } from '@/components/FieldInfo';
+import Button from '@/components/Button';
+import { createAdminUser, fetchCreateUserInitialData } from '@/lib/users/users';
 
-export const Route = createFileRoute('/admin/users/create')({
+export const Route = createFileRoute('/admin/users/new')({
   component: RouteComponent,
   loader: async () => fetchCreateUserInitialData(),
 })
 
 function RouteComponent() {
-  const navigate = useNavigate();
   const notifications = useNotifications();
   const { roles } = Route.useLoaderData();
   const form = useForm({
@@ -27,35 +27,42 @@ function RouteComponent() {
       onChange: CreateUserData,
     },
     onSubmit: async (values) => {
-      console.log('Submitting form with values:', values);
+      const data = {
+        name: values.value.name,
+        email: values.value.email,
+        role_id: values.value.role_id || '',
+      }
+      createAdminUser({
+        data,
+      }).then((result) => {
+        notifications.clear();
+
+        if (result.status === 'SUCCESS') {
+          notifications.addNotification({
+            message: 'User created successfully.',
+            type: 'SUCCESS',
+          });
+          // Reset form
+          form.reset();
+        } else {
+          notifications.addNotification({
+            message: result.error || 'An error occurred while creating the user.',
+            type: 'ERROR',
+          });
+        }
+      }).catch((error) => {
+        notifications.addNotification({
+          message: error.message || 'An unexpected error occurred.',
+          type: 'ERROR',
+        });
+      });
     }
   });
 
-  // const googleLogin = async (credentialResponse: CredentialResponse) => {
-  //   const userInfo: { email: string; name: string; email_verified: boolean } = jose.decodeJwt(credentialResponse.credential as string);
-
-  //   loginAdminUser({
-  //     data: userInfo
-  //   }).then((res) => {
-  //     if (res.status === 'SUCCESS') {
-  //       navigate({ to: '/admin', replace: true });
-  //     } else {
-  //       notifications.addNotification({
-  //         type: 'ERROR',
-  //         message: res.error || 'Login failed. Please try again.',
-  //       });
-  //     }
-  //   }).catch((err) => {
-  //     notifications.addNotification({
-  //       type: 'ERROR',
-  //       message: 'Login failed. Please try again.',
-  //     });
-  //   });
-  // }
-
   return (
     <Container>
-      <Heading level={1} className='mt-12'>Create New User</Heading>
+      <NotificationsList />
+      <Heading level={2} className='mt-12'>Create New User</Heading>
       <form
         className='mt-8 w-full max-w-md space-y-4'
         onSubmit={(e) => {
@@ -66,12 +73,6 @@ function RouteComponent() {
         <div>
           <form.Field
             name="name"
-            // validators={{
-            //   onChange: ({ value }) => {
-            //     const result = CreateUserData.shape.name.safeParse(value);
-            //     return result.success ? null : result.error.issues[0].message;
-            //   }
-            // }}
             children={
               (field) => {
                 return (
@@ -93,12 +94,6 @@ function RouteComponent() {
         <div className='mt-2'>
           <form.Field
             name="email"
-            // validators={{
-            //   onChange: ({ value }) => {
-            //     const result = CreateUserData.shape.email.safeParse(value);
-            //     return result.success ? null : result.error.issues[0].message;
-            //   }
-            // }}
             children={
               (field) => {
                 return (
@@ -129,7 +124,7 @@ function RouteComponent() {
                       name={field.name}
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      className='w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300'
+                      className='select w-full'
                     >
                       {roles.map((role) => (
                         <option key={role.id} value={role.id}>{role.name}</option>
@@ -146,13 +141,12 @@ function RouteComponent() {
           <form.Subscribe
             selector={(state) => [state.canSubmit, state.isSubmitting]}
             children={([canSubmit, isSubmitting]) => (
-              <button
+              <Button
                 type='submit'
                 disabled={!canSubmit || isSubmitting}
-                className={`w-full bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50`}
               >
                 {isSubmitting ? 'Creating...' : 'Create User'}
-              </button>
+              </Button>
             )}
           />
         </div>

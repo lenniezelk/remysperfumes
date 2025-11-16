@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { createSelectSchema } from 'drizzle-zod';
 import { roleTable, userTable } from "./db/schema";
+import type { RoleKey } from "@/lib/permissions";
 
-export type RoleKey = 'superadmin' | 'admin' | 'manager' | 'staff';
 export type AdminUserRoleKey = Omit<RoleKey, 'staff'>;
 
 const roleSelectSchema = createSelectSchema(roleTable);
@@ -56,3 +56,5 @@ export const LoginAdminUserInput = z.object({
     email: z.email(),
     password: z.string(),
 });
+
+export type NotificationType = 'INFO' | 'SUCCESS' | 'ERROR' | 'WARNING';

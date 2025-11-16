@@ -1,4 +1,6 @@
 import { createContext, ReactNode, useContext, useState } from "react";
+import NotificationIcon from "../NotificationIcon";
+import { CircleX } from "lucide-react";
 
 export interface Notification {
     id: string;
@@ -16,6 +18,7 @@ interface NotificationContextType {
     addNotification: (notification: NotificationCreate) => void;
     markAsRead: (id: string) => void;
     removeNotification: (id: string) => void;
+    clear: () => void;
 }
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
@@ -62,8 +65,12 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
         setNotifications(notifications_);
     }
 
+    const clear = () => {
+        setNotifications([]);
+    }
+
     return (
-        <NotificationContext.Provider value={{ notifications, addNotification, markAsRead, removeNotification }}>
+        <NotificationContext.Provider value={{ notifications, addNotification, markAsRead, removeNotification, clear }}>
             {children}
         </NotificationContext.Provider>
     )
@@ -76,22 +83,38 @@ export function NotificationsList() {
     if (notifications.length === 0) return null;
 
     return (
-        <div className="p-1 m-0 bottom-16 left-6 fixed">
-            <ul className="list-none flex flex-col gap-2 rounded-sm">
-                {notifications.map((notif) => (
-                    <li key={notif.id} className="">
-                        <NotificationItem notification={notif} />
-                    </li>
-                ))}
-            </ul>
-        </div>
+        <ul className="list-none flex flex-col gap-2 rounded-sm w-full">
+            {notifications.map((notif) => (
+                <li key={notif.id} className="">
+                    <NotificationItem notification={notif} />
+                </li>
+            ))}
+        </ul>
     )
 }
 
 function NotificationItem({ notification }: { notification: Notification }) {
+    const { removeNotification } = useNotifications();
+
     return (
-        <div className="">
-            <p>{notification.message}</p>
+        <div role="alert" className={`w-full flex flex-col p-2 border rounded-sm shadow-md alert alert-${notification.type.toLowerCase()} alert-soft`}>
+            <div className="flex flex-row justify-end mb-1 w-full">
+                <button
+                    aria-label="Close notification"
+                    className="rounded-sm p-1 cursor-pointer"
+                    onClick={() => {
+                        removeNotification(notification.id);
+                    }}
+                >
+                    <CircleX size={24} />
+                </button>
+            </div>
+            <div className="flex flex-row items-center">
+                <span className="mr-2">
+                    <NotificationIcon type={notification.type} />
+                </span>
+                <p className="font-bold">{notification.message}</p>
+            </div>
         </div>
     )
 }

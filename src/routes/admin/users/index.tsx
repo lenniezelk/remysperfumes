@@ -1,9 +1,10 @@
 import { listUsers } from '@/lib/users/users'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { type User } from '@/lib/types';
 import { useState } from 'react';
 import AppLink from '@/components/AppLink';
+import Button from '@/components/Button';
 
 export const Route = createFileRoute('/admin/users/')({
     component: RouteComponent,
@@ -54,9 +55,15 @@ function RouteComponent() {
         columns,
         getCoreRowModel: getCoreRowModel(),
     })
+    const navigate = useNavigate();
 
     return (
         <div className='w-full overflow-x-auto'>
+            <div className="flex justify-end mb-4">
+                <Button variant="primary" onClick={() => navigate({ to: '/admin/users/new' })}>
+                    Create New User
+                </Button>
+            </div>
             <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                     {table.getHeaderGroups().map(headerGroup => (

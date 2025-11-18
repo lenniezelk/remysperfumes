@@ -1,4 +1,4 @@
-import { listUsers } from '@/lib/users/users'
+import { listUsers } from '@/lib/server/users/users'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { type User } from '@/lib/types';
@@ -29,6 +29,10 @@ const columns = [
         header: 'Active',
         cell: info => info.getValue() ? 'Yes' : 'No',
     }),
+    columnHelper.accessor('deleted_at', {
+        header: 'Deleted',
+        cell: info => info.getValue() ? `Yes on ${new Date(info.getValue()!).toLocaleDateString()}` : 'No',
+    }),
     columnHelper.accessor('last_login_at', {
         header: 'Last Login',
         cell: info => info.getValue()?.toLocaleDateString() ?? 'Never',
@@ -41,7 +45,7 @@ const columns = [
                 to="/admin/users/$userId"
                 params={{ userId: info.row.original.id }}
             >
-                Edit
+                Edit/Delete
             </AppLink>
         ),
     }),

@@ -26,7 +26,7 @@ export const loginAdminUser = createServerFn({ method: 'POST' }).inputValidator(
     const db = dbClient();
     const data = ctx.data;
 
-    const errorMessage = "Invalid email or password or user is not active";
+    const errorMessage = "Invalid email or password or user is not active or has been deleted";
 
     let dbUser = await db.select().from(userTable).where(eq(userTable.email, data.email)).limit(1);
     if (dbUser.length === 0) {
@@ -36,7 +36,7 @@ export const loginAdminUser = createServerFn({ method: 'POST' }).inputValidator(
         };
     }
 
-    if (!dbUser[0].is_active) {
+    if (!dbUser[0].is_active || dbUser[0].deleted_at !== null) {
         return {
             status: "ERROR",
             error: errorMessage,
@@ -91,6 +91,7 @@ export const loginAdminUser = createServerFn({ method: 'POST' }).inputValidator(
         updated_at: dbUser[0].updated_at,
         is_active: dbUser[0].is_active,
         last_login_at: now,
+        deleted_at: dbUser[0].deleted_at,
     };
 
     const session = await useAdminAppSession();

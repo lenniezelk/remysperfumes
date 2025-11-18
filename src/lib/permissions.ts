@@ -42,3 +42,7 @@ export const canEditOrDeleteUser = (currentUserRole: RoleKey | undefined, target
     const creatableRoles = rolesUserCanCreateBasedOnRole(currentUserRole);
     return targetUserRole ? creatableRoles.includes(targetUserRole) : false;
 };
+
+export const canManageManufacturers = (roleKey: string | undefined): boolean => {
+    return hasPermission(roleKey as RoleKey | undefined, roles.MANAGER);
+};

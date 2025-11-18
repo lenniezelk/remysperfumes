@@ -1,7 +1,7 @@
 import { listUsers } from '@/lib/server/users/users'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { type User } from '@/lib/types';
+import { type UserWithPermissions } from '@/lib/types';
 import { useState } from 'react';
 import AppLink from '@/components/AppLink';
 import Button from '@/components/Button';
@@ -11,7 +11,7 @@ export const Route = createFileRoute('/admin/users/')({
     loader: () => listUsers(),
 })
 
-const columnHelper = createColumnHelper<User>();
+const columnHelper = createColumnHelper<UserWithPermissions>();
 const columns = [
     columnHelper.accessor('name', {
         header: 'Name',
@@ -44,6 +44,7 @@ const columns = [
             <AppLink
                 to="/admin/users/$userId"
                 params={{ userId: info.row.original.id }}
+                disabled={!info.row.original.canEditOrDelete}
             >
                 Edit/Delete
             </AppLink>
@@ -53,7 +54,7 @@ const columns = [
 
 function RouteComponent() {
     const initialData = Route.useLoaderData()
-    const [data, setData] = useState<User[]>(() => initialData.status === 'SUCCESS' ? initialData.data : []);
+    const [data] = useState<UserWithPermissions[]>(() => initialData.status === 'SUCCESS' ? initialData.data : []);
     const table = useReactTable({
         data,
         columns,

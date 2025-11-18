@@ -10,5 +10,9 @@ export interface User extends Omit<UserDB, 'role_id' | 'password_hash'> {
     role: Role | null;
 }
 
+export interface UserWithPermissions extends User {
+    canEditOrDelete: boolean;
+}
+
 const userUpdateSchema = createUpdateSchema(userTable);
 export type UserUpdateData = z.infer<typeof userUpdateSchema>;

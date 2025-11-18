@@ -3,14 +3,14 @@ import { getCurrentAdminUser } from "@/lib/auth/auth";
 import { redirect } from "@tanstack/react-router";
 import dbClient from "@/lib/db/client";
 import { userTable, roleTable } from "@/lib/db/schema";
-import { desc, eq, is } from "drizzle-orm";
-import { Role, type Result, type User, type UserUpdateData } from "@/lib/types";
-import { canManageUsers, rolesUserCanCreateBasedOnRole, type RoleKey } from "@/lib/permissions";
+import { desc, eq } from "drizzle-orm";
+import { Role, type Result, type User, type UserWithPermissions, type UserUpdateData } from "@/lib/types";
+import { canEditOrDeleteUser, canManageUsers, rolesUserCanCreateBasedOnRole, type RoleKey } from "@/lib/permissions";
 import { createRandomPassword, hashPassword } from "@/lib/auth/utils";
 import { z } from "zod";
 
 
-export const listUsers = createServerFn({ method: "GET" }).handler(async (): Promise<Result<User[]>> => {
+export const listUsers = createServerFn({ method: "GET" }).handler(async (): Promise<Result<UserWithPermissions[]>> => {
     const session = await getCurrentAdminUser();
 
     if (session.status !== "SUCCESS") {
@@ -50,6 +50,7 @@ export const listUsers = createServerFn({ method: "GET" }).handler(async (): Pro
             is_active: User.is_active,
             last_login_at: User.last_login_at,
             deleted_at: User.deleted_at,
+            canEditOrDelete: canEditOrDeleteUser(signedInUser?.role?.key, Role ? (Role.key as RoleKey) : undefined),
         })),
     }
 });
@@ -164,10 +165,6 @@ export const fetchEditUserInitialData = createServerFn({ method: 'GET' }).inputV
 
     const signedInUser = session.data;
 
-    if (!canManageUsers(signedInUser?.role?.key)) {
-        throw redirect({ to: '/not-authorized', replace: true });
-    }
-
     const db = dbClient();
     const users = await db
         .select()
@@ -181,6 +178,10 @@ export const fetchEditUserInitialData = createServerFn({ method: 'GET' }).inputV
             status: "ERROR",
             error: "User not found",
         };
+    }
+
+    if (!canManageUsers(signedInUser?.role?.key) || !canEditOrDeleteUser(signedInUser?.role?.key, users[0].Role ? (users[0].Role.key as RoleKey) : undefined)) {
+        throw redirect({ to: '/not-authorized', replace: true });
     }
 
     const { User: dbUser, Role: dbRole } = users[0];

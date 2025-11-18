@@ -37,3 +37,8 @@ export const rolesUserCanCreateBasedOnRole = (roleKey: RoleKey | undefined): Rol
             return [];
     }
 };
+
+export const canEditOrDeleteUser = (currentUserRole: RoleKey | undefined, targetUserRole: RoleKey | undefined): boolean => {
+    const creatableRoles = rolesUserCanCreateBasedOnRole(currentUserRole);
+    return targetUserRole ? creatableRoles.includes(targetUserRole) : false;
+};

@@ -9,7 +9,7 @@ export {
 } from './auth';
 
 // User types
-export type { User, UserDB, UserUpdateData } from './user';
+export type { User, UserDB, UserWithPermissions, UserUpdateData } from './user';
 
 // Role types
 export {

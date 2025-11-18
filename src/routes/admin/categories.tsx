@@ -1,7 +1,6 @@
 import {
   createFileRoute,
   useLocation,
-  Link,
   useNavigate,
 } from '@tanstack/react-router'
 import { useState, useMemo } from 'react'
@@ -15,6 +14,7 @@ import {
   flexRender,
 } from '@tanstack/react-table'
 import Heading from '@/components/Heading'
+import Button from '@/components/Button'
 import AdminLayout from '@/components/dashboard/AdminLayout'
 import ContainerNoOverflow from '@/components/ContainerNoOverflow'
 import { deleteCategory } from '@/api/categories/server-fns'
@@ -129,9 +129,12 @@ function CategoriesPage() {
           <Heading level={4} className="text-2xl font-bold mb-4 text-brand">
             Categories
           </Heading>
-          <button className="bg-accent text-white px-6 py-3 rounded-full text-lg font-medium mb-8 shadow-lg">
-            <Link to="/admin/create-category">Add New</Link>
-          </button>
+          <Button
+            variant="primary"
+            onClick={() => navigate({ to: '/admin/create-category' })}
+          >
+            Add New Category
+          </Button>
         </div>
         {!data?.data || data?.data?.categories.length == 0 ? (
           <Heading level={3}>No categories found.</Heading>
@@ -176,16 +179,18 @@ function CategoriesPage() {
 
             {/* Pagination controls */}
             <div className="flex justify-end mt-4 space-x-2">
-              <button
-                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+              <Button
+                variant="primary"
+                className="disabled:opacity-80"
                 onClick={() => setPage((old) => Math.max(old - 1, 1))}
                 disabled={page === 1}
               >
                 Previous
-              </button>
+              </Button>
               <span className="px-4 py-2">Page {page}</span>
-              <button
-                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+              <Button
+                variant="primary"
+                className="disabled:opacity-80"
                 onClick={() =>
                   setPage((old) =>
                     data?.data?.categories?.length ===
@@ -200,7 +205,7 @@ function CategoriesPage() {
                 }
               >
                 Next
-              </button>
+              </Button>
             </div>
           </div>
         )}

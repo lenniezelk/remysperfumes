@@ -10,6 +10,7 @@ import {
   categorySchema,
   type CreateCategoryInput,
 } from '@/api/categories/types'
+import Button from '@/components/Button'
 
 export const Route = createFileRoute('/admin/create-category')({
   component: RouteComponent,
@@ -100,13 +101,13 @@ function RouteComponent() {
           <form.Subscribe
             selector={(state) => [state.canSubmit, state.isSubmitting]}
             children={([canSubmit, isSubmitting]) => (
-              <button
+              <Button
                 type="submit"
                 disabled={!canSubmit || isSubmitting}
-                className="w-full bg-accent text-white rounded-xl px-4 py-2 hover:bg-brand cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                className="disabled:opacity-80"
               >
                 {isSubmitting ? 'Creating...' : 'Create Category'}
-              </button>
+              </Button>
             )}
           />
         </div>

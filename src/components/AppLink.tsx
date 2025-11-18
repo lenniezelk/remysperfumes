@@ -1,7 +1,22 @@
 import { LinkComponentProps, Link } from "@tanstack/react-router";
+import { ReactNode } from "react";
 
-interface AppLinkProps extends LinkComponentProps { }
+interface AppLinkProps extends LinkComponentProps {
+    disabled?: boolean;
+    title?: string;
+    children?: ReactNode;
+}
 
-export default function AppLink({ className, ...props }: AppLinkProps) {
-    return <Link className={`link ${className ?? ''}`} {...props} />;
+export default function AppLink({ className, disabled, title, children, ...props }: AppLinkProps) {
+    if (disabled) {
+        return (
+            <span
+                className={`link cursor-not-allowed ${className ?? ''}`}
+                title={title || 'This action is not available'}
+            >
+                {children}
+            </span>
+        );
+    }
+    return <Link className={`link ${className ?? ''}`} {...props}>{children}</Link>;
 }

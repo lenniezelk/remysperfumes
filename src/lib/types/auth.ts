@@ -2,7 +2,7 @@ import { z } from "zod";
 import type { User } from "./user";
 
 export const GoogleAuthData = z.object({
-    email: z.string().email(),
+    email: z.email(),
     name: z.string(),
     emailVerified: z.boolean().optional(),
 });

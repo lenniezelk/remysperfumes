@@ -1,13 +1,11 @@
-import Container from '@/components/Container';
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { NotificationsList, useNotifications } from '@/components/notifications/Notification';
 import { useForm } from '@tanstack/react-form';
-import { CreateUserData } from '@/lib/types';
 import { Input } from '@/components/Input';
 import Heading from '@/components/Heading';
 import { FieldInfo } from '@/components/FieldInfo';
 import Button from '@/components/Button';
-import { createAdminUser, fetchCreateUserInitialData } from '@/lib/users/users';
+import { createAdminUser, fetchCreateUserInitialData, CreateUserData } from '@/lib/server/users/users';
 
 export const Route = createFileRoute('/admin/users/new')({
   component: RouteComponent,
@@ -17,11 +15,14 @@ export const Route = createFileRoute('/admin/users/new')({
 function RouteComponent() {
   const notifications = useNotifications();
   const { roles } = Route.useLoaderData();
+  const navigate = useNavigate();
+  const router = useRouter();
   const form = useForm({
     defaultValues: {
       name: '',
       email: '',
       role_id: roles.length > 0 ? roles.find(role => role.key === 'staff')?.id : '',
+      is_active: true,
     },
     validators: {
       onChange: CreateUserData,
@@ -31,6 +32,7 @@ function RouteComponent() {
         name: values.value.name,
         email: values.value.email,
         role_id: values.value.role_id || '',
+        is_active: values.value.is_active,
       }
       createAdminUser({
         data,
@@ -44,6 +46,8 @@ function RouteComponent() {
           });
           // Reset form
           form.reset();
+          router.invalidate();
+          navigate({ to: '/admin/users' });
         } else {
           notifications.addNotification({
             message: result.error || 'An error occurred while creating the user.',
@@ -60,7 +64,7 @@ function RouteComponent() {
   });
 
   return (
-    <Container>
+    <>
       <NotificationsList />
       <Heading level={2} className='mt-12'>Create New User</Heading>
       <form
@@ -137,7 +141,35 @@ function RouteComponent() {
             }
           />
         </div>
-        <div className='mt-4'>
+        <div className='mt-2'>
+          <form.Field
+            name="is_active"
+            children={
+              (field) => {
+                return (
+                  <label className='flex items-center space-x-2'>
+                    <input
+                      type='checkbox'
+                      name={field.name}
+                      checked={field.state.value}
+                      onChange={(e) => field.handleChange(e.target.checked)}
+                      className='checkbox'
+                    />
+                    <span>Is Active?</span>
+                  </label>
+                )
+              }
+            }
+          />
+        </div>
+        <div className='flex flex-row justify-between mt-8'>
+          <button
+            type='button'
+            className='btn btn-neutral'
+            onClick={() => navigate({ to: '/admin/users' })}
+          >
+            Cancel
+          </button>
           <form.Subscribe
             selector={(state) => [state.canSubmit, state.isSubmitting]}
             children={([canSubmit, isSubmitting]) => (
@@ -151,6 +183,6 @@ function RouteComponent() {
           />
         </div>
       </form>
-    </Container>
+    </>
   )
 }

@@ -117,4 +117,5 @@ export const userTable = sqliteTable("User", {
     updated_at: int("updated_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
     password_hash: text("password_hash"),
     last_login_at: int("last_login_at", { mode: 'timestamp_ms' }),
+    deleted_at: int("deleted_at", { mode: 'timestamp_ms' }),
 });

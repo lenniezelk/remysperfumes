@@ -47,6 +47,7 @@ function RouteComponent() {
           // Reset form
           form.reset();
           router.invalidate();
+          notifications.clear();
           navigate({ to: '/admin/users' });
         } else {
           notifications.addNotification({

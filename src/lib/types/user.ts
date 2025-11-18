@@ -15,4 +15,4 @@ export interface UserWithPermissions extends User {
 }
 
 const userUpdateSchema = createUpdateSchema(userTable);
-export type UserUpdateData = z.infer<typeof userUpdateSchema>;
+export type UserUpdateData = Omit<z.infer<typeof userUpdateSchema>, 'id' | 'created_at'>;

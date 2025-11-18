@@ -17,3 +17,6 @@ export {
     type RoleDB,
     type AdminUserRoleKey,
 } from './role';
+
+// Manufacturer types
+export type { Manufacturer, ManufacturerCreateData, ManufacturerUpdateData } from './manufacturer';

@@ -13,47 +13,44 @@ import {
   flexRender,
 } from '@tanstack/react-table'
 import {
-  listCategoriesPaginated,
-  deleteCategory,
-} from '@/lib/server/categories/server-fns'
+  listProductsPaginated,
+  deleteProduct,
+} from '@/lib/server/products/server-fns'
 import Heading from '@/components/Heading'
 import Button from '@/components/Button'
 import AdminLayout from '@/components/dashboard/AdminLayout'
 import ContainerNoOverflow from '@/components/ContainerNoOverflow'
 
-export const Route = createFileRoute('/admin/categories/')({
-  component: CategoriesPage,
+export const Route = createFileRoute('/admin/products/')({
+  component: ProductsPage,
 })
 
-function CategoriesPage() {
+function ProductsPage() {
   const [page, setPage] = useState(1)
   const location = useLocation()
   const queryClient = useQueryClient()
   const navigate = useNavigate()
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['categories', 'paginated', page],
-    queryFn: () => listCategoriesPaginated({ data: { page, pageSize: 10 } }),
+    queryKey: ['products', 'paginated', page],
+    queryFn: () => listProductsPaginated({ data: { page, pageSize: 10 } }),
   })
 
   const mutation = useMutation({
-    mutationFn: (id: string) => deleteCategory({ data: { id } }),
+    mutationFn: (id: string) => deleteProduct({ data: { id } }),
     onSuccess: () => {
-      console.log('Category deleted')
-      // Invalidate the categories list
+      // Invalidate the products list
       queryClient.invalidateQueries({
-        predicate: (query) => query.queryKey[0] === 'categories',
+        predicate: (query) => query.queryKey[0] === 'products',
       })
     },
   })
 
   const handleEdit = (id: string) => {
-    console.log('Edit category', id)
-    navigate({ to: `/admin/categories/category/${id}` })
+    navigate({ to: `/admin/products/product/${id}` })
   }
 
   const handleDelete = (id: string) => {
-    console.log('Delete category', id)
     mutation.mutate(id)
   }
 
@@ -62,6 +59,9 @@ function CategoriesPage() {
     () => [
       { accessorKey: 'name', header: 'Name' },
       { accessorKey: 'description', header: 'Description' },
+      { accessorKey: 'category_name', header: 'Category' },
+      { accessorKey: 'brand', header: 'Brand' },
+      { accessorKey: 'manufacturer_name', header: 'Manufacturer' },
       {
         accessorKey: 'created_at',
         header: 'Created At',
@@ -101,7 +101,7 @@ function CategoriesPage() {
   )
 
   const table = useReactTable({
-    data: data?.data?.categories || [],
+    data: data?.data?.products || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
@@ -129,17 +129,17 @@ function CategoriesPage() {
       <div className="p-6">
         <div className="flex justify-between">
           <Heading level={4} className="text-2xl font-bold mb-4 text-brand">
-            Categories
+            Products
           </Heading>
           <Button
             variant="primary"
-            onClick={() => navigate({ to: '/admin/categories/new' })}
+            onClick={() => navigate({ to: '/admin/products/new' })}
           >
-            Add New Category
+            Add New Product
           </Button>
         </div>
-        {!data?.data || data?.data?.categories.length == 0 ? (
-          <Heading level={3}>No categories found.</Heading>
+        {!data?.data || data?.data?.products.length == 0 ? (
+          <Heading level={3}>No prodcuts found.</Heading>
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full border border-gray-200 rounded-md">
@@ -195,14 +195,14 @@ function CategoriesPage() {
                 className="disabled:opacity-80"
                 onClick={() =>
                   setPage((old) =>
-                    data?.data?.categories?.length ===
+                    data?.data?.products?.length ===
                     data?.data?.pagination?.pageSize
                       ? old + 1
                       : old,
                   )
                 }
                 disabled={
-                  data?.data?.categories?.length <
+                  data?.data?.products?.length <
                   data?.data?.pagination?.pageSize
                 }
               >

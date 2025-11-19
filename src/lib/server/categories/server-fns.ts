@@ -13,6 +13,31 @@ import {
 } from './types'
 import { canManageCategoriesMiddleware } from '../middleware/canManageCategories'
 
+// server function to get all categories without pagination
+export const getAllCategories = createServerFn({ method: 'GET' })
+  .middleware([canManageCategoriesMiddleware])
+  .handler(async () => {
+    try {
+      const categories = await db()
+        .select()
+        .from(categoryTable)
+        .orderBy(desc(categoryTable.created_at))
+
+      return {
+        success: true,
+        data: categories,
+        message: 'Categories retrieved successfully',
+      }
+    } catch (error) {
+      console.error('Error retrieving categories:', error)
+      return {
+        success: false,
+        data: null,
+        message: 'Failed to retrieve categories',
+      }
+    }
+  })
+
 // Server function to list categories with pagination (with Zod validation)
 export const listCategoriesPaginated = createServerFn({ method: 'GET' })
   .middleware([canManageCategoriesMiddleware])
@@ -84,14 +109,19 @@ export const createCategory = createServerFn({
 
     const { name, description } = parsed.data
 
-    await db()
+    const result = await db()
       .insert(categoryTable)
       .values({
         name,
         description: description ?? '',
       })
+      .returning()
 
-    return { success: true }
+    return {
+      success: true,
+      data: result[0],
+      message: 'Category created successfully',
+    }
   })
 
 // POST function to update a category

@@ -37,31 +37,31 @@ export const modelsBlueprint: ModelBlueprint[] = [
       },
     ],
   },
-  // {
-  //   key: 'product',
-  //   name: 'Products',
-  //   description: 'Manage products',
-  //   icon: Package,
-  //   route: '/admin/products',
-  //   children: [
-  //     {
-  //       key: 'product-variant',
-  //       name: 'Product Variants',
-  //       description: 'Manage product variants',
-  //       icon: Layers,
-  //       route: '/admin/product-variant',
-  //       children: [
-  //         {
-  //           key: 'stock-batch',
-  //           name: 'Stock Batches',
-  //           description: 'Manage stock batches',
-  //           icon: Boxes,
-  //           route: '/admin/stock-batch',
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // },
+  {
+    key: 'product',
+    name: 'Products',
+    description: 'Manage products',
+    icon: Package,
+    route: '/admin/products',
+    // children: [
+    //   {
+    //     key: 'product-variant',
+    //     name: 'Product Variants',
+    //     description: 'Manage product variants',
+    //     icon: Layers,
+    //     route: '/admin/product-variant',
+    //     children: [
+    //       {
+    //         key: 'stock-batch',
+    //         name: 'Stock Batches',
+    //         description: 'Manage stock batches',
+    //         icon: Boxes,
+    //         route: '/admin/stock-batch',
+    //       },
+    //     ],
+    //   },
+    // ],
+  },
   // {
   //   key: 'sale',
   //   name: 'Sales',

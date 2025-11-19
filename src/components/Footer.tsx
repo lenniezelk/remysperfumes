@@ -1,15 +1,24 @@
 export default function Footer() {
-    return (
-        <footer className="px-4 pb-6 text-center text-sm text-neutral-text-secondary">
-            © {new Date().getFullYear()} Remi's Perfumes • Website by{' '}
-            <a
-                href="https://lennyk.dev/"
-                className="text-accent hover:text-accent-dark transition-colors"
-                target="_blank"
-                rel="noreferrer"
-            >
-                LennyK
-            </a>
-        </footer>
-    )
+  return (
+    <footer className="px-4 pb-6 text-center text-sm text-neutral-text-secondary">
+      © {new Date().getFullYear()} Remi's Perfumes • Website by{' '}
+      <a
+        href="https://lennyk.dev/"
+        className="text-accent hover:text-accent-dark transition-colors"
+        target="_blank"
+        rel="noreferrer"
+      >
+        LennyK
+      </a>{' '}
+      and{' '}
+      <a
+        href="https://ciirakibebe.ciirakibebe-portfolio.workers.dev/"
+        className="text-accent hover:text-accent-dark transition-colors"
+        target="_blank"
+        rel="noreferrer"
+      >
+        CiiraKibebe
+      </a>
+    </footer>
+  )
 }

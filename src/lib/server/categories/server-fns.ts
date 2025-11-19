@@ -11,9 +11,11 @@ import {
   type PaginationInput,
   type CreateCategoryInput,
 } from './types'
+import { canManageCategoriesMiddleware } from '../middleware/canManageCategories'
 
 // Server function to list categories with pagination (with Zod validation)
 export const listCategoriesPaginated = createServerFn({ method: 'GET' })
+  .middleware([canManageCategoriesMiddleware])
   .inputValidator(paginationSchema)
   .handler(async ({ data }: { data: PaginationInput }) => {
     const { page, pageSize } = data
@@ -63,6 +65,7 @@ export const listCategoriesPaginated = createServerFn({ method: 'GET' })
 export const createCategory = createServerFn({
   method: 'POST',
 })
+  .middleware([canManageCategoriesMiddleware])
   .inputValidator(categorySchema)
   .handler(async ({ data }: { data: CreateCategoryInput }) => {
     const parsed = categorySchema.safeParse(data)
@@ -95,6 +98,7 @@ export const createCategory = createServerFn({
 export const updateCategory = createServerFn({
   method: 'POST',
 })
+  .middleware([canManageCategoriesMiddleware])
   .inputValidator(updateCategorySchema)
   .handler(async ({ data }: { data: UpdateCategoryInput }) => {
     const parsed = updateCategorySchema.safeParse(data)
@@ -128,6 +132,7 @@ export const updateCategory = createServerFn({
 
 // Get function to get a category by ID
 export const getCategoryById = createServerFn({ method: 'GET' })
+  .middleware([canManageCategoriesMiddleware])
   .inputValidator(individualCategorySchema)
   .handler(async ({ data }: { data: { id: string } }) => {
     const { id } = data
@@ -159,6 +164,7 @@ export const getCategoryById = createServerFn({ method: 'GET' })
 export const deleteCategory = createServerFn({
   method: 'POST',
 })
+  .middleware([canManageCategoriesMiddleware])
   .inputValidator(individualCategorySchema)
   .handler(async ({ data }: { data: { id: string } }) => {
     const { id } = data

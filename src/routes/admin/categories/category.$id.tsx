@@ -5,14 +5,17 @@ import { Input } from '@/components/Input'
 import { FieldInfo } from '@/components/FieldInfo'
 import Heading from '@/components/Heading'
 import Container from '@/components/Container'
-import { updateCategory, getCategoryById } from '@/api/categories/server-fns'
+import {
+  updateCategory,
+  getCategoryById,
+} from '@/lib/server/categories/server-fns'
 import {
   updateCategorySchema,
   type UpdateCategoryInput,
-} from '@/api/categories/types'
+} from '@/lib/server/categories/types'
 import Button from '@/components/Button'
 
-export const Route = createFileRoute('/admin/category/$id')({
+export const Route = createFileRoute('/admin/categories/category/$id')({
   loader: async ({ params }) => {
     const res = await getCategoryById({ data: { id: params.id } })
     if ('error' in res)

@@ -17,17 +17,17 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminProfileRouteImport } from './routes/admin/profile'
 import { Route as AdminProductsRouteImport } from './routes/admin/products'
-import { Route as AdminCreateCategoryRouteImport } from './routes/admin/create-category'
-import { Route as AdminCategoriesRouteImport } from './routes/admin/categories'
 import { Route as AdminUsersRouteRouteImport } from './routes/admin/users/route'
 import { Route as AdminManufacturersRouteRouteImport } from './routes/admin/manufacturers/route'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as AdminManufacturersIndexRouteImport } from './routes/admin/manufacturers/index'
+import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
 import { Route as AdminUsersNewRouteImport } from './routes/admin/users/new'
 import { Route as AdminUsersUserIdRouteImport } from './routes/admin/users/$userId'
 import { Route as AdminManufacturersNewRouteImport } from './routes/admin/manufacturers/new'
 import { Route as AdminManufacturersManufacturerIdRouteImport } from './routes/admin/manufacturers/$manufacturerId'
-import { Route as AdminCategoryIdRouteImport } from './routes/admin/category.$id'
+import { Route as AdminCategoriesNewRouteImport } from './routes/admin/categories/new'
+import { Route as AdminCategoriesCategoryIdRouteImport } from './routes/admin/categories/category.$id'
 
 const NotAuthorizedRoute = NotAuthorizedRouteImport.update({
   id: '/not-authorized',
@@ -69,16 +69,6 @@ const AdminProductsRoute = AdminProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => AdminRouteRoute,
 } as any)
-const AdminCreateCategoryRoute = AdminCreateCategoryRouteImport.update({
-  id: '/create-category',
-  path: '/create-category',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
-  id: '/categories',
-  path: '/categories',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
 const AdminUsersRouteRoute = AdminUsersRouteRouteImport.update({
   id: '/users',
   path: '/users',
@@ -98,6 +88,11 @@ const AdminManufacturersIndexRoute = AdminManufacturersIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminManufacturersRouteRoute,
+} as any)
+const AdminCategoriesIndexRoute = AdminCategoriesIndexRouteImport.update({
+  id: '/categories/',
+  path: '/categories/',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminUsersNewRoute = AdminUsersNewRouteImport.update({
   id: '/new',
@@ -120,11 +115,17 @@ const AdminManufacturersManufacturerIdRoute =
     path: '/$manufacturerId',
     getParentRoute: () => AdminManufacturersRouteRoute,
   } as any)
-const AdminCategoryIdRoute = AdminCategoryIdRouteImport.update({
-  id: '/category/$id',
-  path: '/category/$id',
+const AdminCategoriesNewRoute = AdminCategoriesNewRouteImport.update({
+  id: '/categories/new',
+  path: '/categories/new',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminCategoriesCategoryIdRoute =
+  AdminCategoriesCategoryIdRouteImport.update({
+    id: '/categories/category/$id',
+    path: '/categories/category/$id',
+    getParentRoute: () => AdminRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -134,36 +135,36 @@ export interface FileRoutesByFullPath {
   '/not-authorized': typeof NotAuthorizedRoute
   '/admin/manufacturers': typeof AdminManufacturersRouteRouteWithChildren
   '/admin/users': typeof AdminUsersRouteRouteWithChildren
-  '/admin/categories': typeof AdminCategoriesRoute
-  '/admin/create-category': typeof AdminCreateCategoryRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/profile': typeof AdminProfileRoute
   '/admin/': typeof AdminIndexRoute
-  '/admin/category/$id': typeof AdminCategoryIdRoute
+  '/admin/categories/new': typeof AdminCategoriesNewRoute
   '/admin/manufacturers/$manufacturerId': typeof AdminManufacturersManufacturerIdRoute
   '/admin/manufacturers/new': typeof AdminManufacturersNewRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRoute
   '/admin/users/new': typeof AdminUsersNewRoute
+  '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/manufacturers/': typeof AdminManufacturersIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
+  '/admin/categories/category/$id': typeof AdminCategoriesCategoryIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin-login': typeof AdminLoginRoute
   '/admin-logout': typeof AdminLogoutRoute
   '/not-authorized': typeof NotAuthorizedRoute
-  '/admin/categories': typeof AdminCategoriesRoute
-  '/admin/create-category': typeof AdminCreateCategoryRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/profile': typeof AdminProfileRoute
   '/admin': typeof AdminIndexRoute
-  '/admin/category/$id': typeof AdminCategoryIdRoute
+  '/admin/categories/new': typeof AdminCategoriesNewRoute
   '/admin/manufacturers/$manufacturerId': typeof AdminManufacturersManufacturerIdRoute
   '/admin/manufacturers/new': typeof AdminManufacturersNewRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRoute
   '/admin/users/new': typeof AdminUsersNewRoute
+  '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/manufacturers': typeof AdminManufacturersIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
+  '/admin/categories/category/$id': typeof AdminCategoriesCategoryIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -174,18 +175,18 @@ export interface FileRoutesById {
   '/not-authorized': typeof NotAuthorizedRoute
   '/admin/manufacturers': typeof AdminManufacturersRouteRouteWithChildren
   '/admin/users': typeof AdminUsersRouteRouteWithChildren
-  '/admin/categories': typeof AdminCategoriesRoute
-  '/admin/create-category': typeof AdminCreateCategoryRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/profile': typeof AdminProfileRoute
   '/admin/': typeof AdminIndexRoute
-  '/admin/category/$id': typeof AdminCategoryIdRoute
+  '/admin/categories/new': typeof AdminCategoriesNewRoute
   '/admin/manufacturers/$manufacturerId': typeof AdminManufacturersManufacturerIdRoute
   '/admin/manufacturers/new': typeof AdminManufacturersNewRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRoute
   '/admin/users/new': typeof AdminUsersNewRoute
+  '/admin/categories/': typeof AdminCategoriesIndexRoute
   '/admin/manufacturers/': typeof AdminManufacturersIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
+  '/admin/categories/category/$id': typeof AdminCategoriesCategoryIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -197,36 +198,36 @@ export interface FileRouteTypes {
     | '/not-authorized'
     | '/admin/manufacturers'
     | '/admin/users'
-    | '/admin/categories'
-    | '/admin/create-category'
     | '/admin/products'
     | '/admin/profile'
     | '/admin/'
-    | '/admin/category/$id'
+    | '/admin/categories/new'
     | '/admin/manufacturers/$manufacturerId'
     | '/admin/manufacturers/new'
     | '/admin/users/$userId'
     | '/admin/users/new'
+    | '/admin/categories'
     | '/admin/manufacturers/'
     | '/admin/users/'
+    | '/admin/categories/category/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin-login'
     | '/admin-logout'
     | '/not-authorized'
-    | '/admin/categories'
-    | '/admin/create-category'
     | '/admin/products'
     | '/admin/profile'
     | '/admin'
-    | '/admin/category/$id'
+    | '/admin/categories/new'
     | '/admin/manufacturers/$manufacturerId'
     | '/admin/manufacturers/new'
     | '/admin/users/$userId'
     | '/admin/users/new'
+    | '/admin/categories'
     | '/admin/manufacturers'
     | '/admin/users'
+    | '/admin/categories/category/$id'
   id:
     | '__root__'
     | '/'
@@ -236,18 +237,18 @@ export interface FileRouteTypes {
     | '/not-authorized'
     | '/admin/manufacturers'
     | '/admin/users'
-    | '/admin/categories'
-    | '/admin/create-category'
     | '/admin/products'
     | '/admin/profile'
     | '/admin/'
-    | '/admin/category/$id'
+    | '/admin/categories/new'
     | '/admin/manufacturers/$manufacturerId'
     | '/admin/manufacturers/new'
     | '/admin/users/$userId'
     | '/admin/users/new'
+    | '/admin/categories/'
     | '/admin/manufacturers/'
     | '/admin/users/'
+    | '/admin/categories/category/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -316,20 +317,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProductsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
-    '/admin/create-category': {
-      id: '/admin/create-category'
-      path: '/create-category'
-      fullPath: '/admin/create-category'
-      preLoaderRoute: typeof AdminCreateCategoryRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/categories': {
-      id: '/admin/categories'
-      path: '/categories'
-      fullPath: '/admin/categories'
-      preLoaderRoute: typeof AdminCategoriesRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
     '/admin/users': {
       id: '/admin/users'
       path: '/users'
@@ -357,6 +344,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/manufacturers/'
       preLoaderRoute: typeof AdminManufacturersIndexRouteImport
       parentRoute: typeof AdminManufacturersRouteRoute
+    }
+    '/admin/categories/': {
+      id: '/admin/categories/'
+      path: '/categories'
+      fullPath: '/admin/categories'
+      preLoaderRoute: typeof AdminCategoriesIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/users/new': {
       id: '/admin/users/new'
@@ -386,11 +380,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminManufacturersManufacturerIdRouteImport
       parentRoute: typeof AdminManufacturersRouteRoute
     }
-    '/admin/category/$id': {
-      id: '/admin/category/$id'
-      path: '/category/$id'
-      fullPath: '/admin/category/$id'
-      preLoaderRoute: typeof AdminCategoryIdRouteImport
+    '/admin/categories/new': {
+      id: '/admin/categories/new'
+      path: '/categories/new'
+      fullPath: '/admin/categories/new'
+      preLoaderRoute: typeof AdminCategoriesNewRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/categories/category/$id': {
+      id: '/admin/categories/category/$id'
+      path: '/categories/category/$id'
+      fullPath: '/admin/categories/category/$id'
+      preLoaderRoute: typeof AdminCategoriesCategoryIdRouteImport
       parentRoute: typeof AdminRouteRoute
     }
   }
@@ -434,23 +435,23 @@ const AdminUsersRouteRouteWithChildren = AdminUsersRouteRoute._addFileChildren(
 interface AdminRouteRouteChildren {
   AdminManufacturersRouteRoute: typeof AdminManufacturersRouteRouteWithChildren
   AdminUsersRouteRoute: typeof AdminUsersRouteRouteWithChildren
-  AdminCategoriesRoute: typeof AdminCategoriesRoute
-  AdminCreateCategoryRoute: typeof AdminCreateCategoryRoute
   AdminProductsRoute: typeof AdminProductsRoute
   AdminProfileRoute: typeof AdminProfileRoute
   AdminIndexRoute: typeof AdminIndexRoute
-  AdminCategoryIdRoute: typeof AdminCategoryIdRoute
+  AdminCategoriesNewRoute: typeof AdminCategoriesNewRoute
+  AdminCategoriesIndexRoute: typeof AdminCategoriesIndexRoute
+  AdminCategoriesCategoryIdRoute: typeof AdminCategoriesCategoryIdRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminManufacturersRouteRoute: AdminManufacturersRouteRouteWithChildren,
   AdminUsersRouteRoute: AdminUsersRouteRouteWithChildren,
-  AdminCategoriesRoute: AdminCategoriesRoute,
-  AdminCreateCategoryRoute: AdminCreateCategoryRoute,
   AdminProductsRoute: AdminProductsRoute,
   AdminProfileRoute: AdminProfileRoute,
   AdminIndexRoute: AdminIndexRoute,
-  AdminCategoryIdRoute: AdminCategoryIdRoute,
+  AdminCategoriesNewRoute: AdminCategoriesNewRoute,
+  AdminCategoriesIndexRoute: AdminCategoriesIndexRoute,
+  AdminCategoriesCategoryIdRoute: AdminCategoriesCategoryIdRoute,
 }
 
 const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(

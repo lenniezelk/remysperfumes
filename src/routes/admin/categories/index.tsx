@@ -4,7 +4,7 @@ import {
   useNavigate,
 } from '@tanstack/react-router'
 import { useState, useMemo } from 'react'
-import { listCategoriesPaginated } from '@/api/categories/server-fns'
+import { listCategoriesPaginated } from '@/lib/server/categories/server-fns'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Loader, Edit, Trash } from 'lucide-react'
 import {
@@ -17,9 +17,9 @@ import Heading from '@/components/Heading'
 import Button from '@/components/Button'
 import AdminLayout from '@/components/dashboard/AdminLayout'
 import ContainerNoOverflow from '@/components/ContainerNoOverflow'
-import { deleteCategory } from '@/api/categories/server-fns'
+import { deleteCategory } from '@/lib/server/categories/server-fns'
 
-export const Route = createFileRoute('/admin/categories')({
+export const Route = createFileRoute('/admin/categories/')({
   component: CategoriesPage,
 })
 
@@ -47,7 +47,7 @@ function CategoriesPage() {
 
   const handleEdit = (id: string) => {
     console.log('Edit category', id)
-    navigate({ to: `/admin/category/${id}` })
+    navigate({ to: `/admin/categories/category/${id}` })
   }
 
   const handleDelete = (id: string) => {
@@ -131,7 +131,7 @@ function CategoriesPage() {
           </Heading>
           <Button
             variant="primary"
-            onClick={() => navigate({ to: '/admin/create-category' })}
+            onClick={() => navigate({ to: '/admin/categories/new' })}
           >
             Add New Category
           </Button>

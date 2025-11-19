@@ -5,14 +5,14 @@ import { Input } from '@/components/Input'
 import { FieldInfo } from '@/components/FieldInfo'
 import Heading from '@/components/Heading'
 import Container from '@/components/Container'
-import { createCategory } from '@/api/categories/server-fns'
+import { createCategory } from '@/lib/server/categories/server-fns'
 import {
   categorySchema,
   type CreateCategoryInput,
-} from '@/api/categories/types'
+} from '@/lib/server/categories/types'
 import Button from '@/components/Button'
 
-export const Route = createFileRoute('/admin/create-category')({
+export const Route = createFileRoute('/admin/categories/new')({
   component: RouteComponent,
 })
 

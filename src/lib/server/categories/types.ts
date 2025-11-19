@@ -15,14 +15,14 @@ export type PaginationInput = z.infer<typeof paginationSchema>
 // Zod validation for category
 export const categorySchema = z.object({
   name: z.string().min(1, 'Name is required'),
-  description: z.string().default(''),
+  description: z.string(),
 })
 
 // zod validation for updating category
 export const updateCategorySchema = z.object({
   id: z.string(),
   name: z.string().min(1, 'Name is required'),
-  description: z.string().default(''),
+  description: z.string(),
 })
 
 export type CreateCategoryInput = z.infer<typeof categorySchema>

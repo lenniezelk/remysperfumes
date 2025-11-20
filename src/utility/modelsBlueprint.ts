@@ -10,6 +10,8 @@ import {
   ShoppingCart,
   Database,
 } from 'lucide-react'
+import { type RoleKey } from '@/lib/permissions'
+import { roles } from '@/lib/permissions'
 
 export interface ModelBlueprint {
   key: string
@@ -17,6 +19,7 @@ export interface ModelBlueprint {
   description: string
   icon: LucideIcon
   route: FileRouteTypes['to']
+  roles: RoleKey[]
   children?: ModelBlueprint[]
 }
 
@@ -27,6 +30,7 @@ export const modelsBlueprint: ModelBlueprint[] = [
     description: 'Manage product categories',
     icon: Tags,
     route: '/admin/categories',
+    roles: [roles.MANAGER, roles.ADMIN, roles.SUPERADMIN],
     children: [
       {
         key: 'product',
@@ -34,6 +38,7 @@ export const modelsBlueprint: ModelBlueprint[] = [
         description: 'Manage products',
         icon: Package,
         route: '/admin/products',
+        roles: [roles.MANAGER, roles.ADMIN, roles.SUPERADMIN],
       },
     ],
   },
@@ -43,6 +48,7 @@ export const modelsBlueprint: ModelBlueprint[] = [
     description: 'Manage products',
     icon: Package,
     route: '/admin/products',
+    roles: [roles.MANAGER, roles.ADMIN, roles.SUPERADMIN],
     // children: [
     //   {
     //     key: 'product-variant',
@@ -84,6 +90,7 @@ export const modelsBlueprint: ModelBlueprint[] = [
     description: 'Manage suppliers',
     icon: Users,
     route: '/admin/suppliers',
+    roles: [roles.MANAGER, roles.ADMIN, roles.SUPERADMIN],
   },
   {
     key: 'manufacturer',
@@ -91,6 +98,7 @@ export const modelsBlueprint: ModelBlueprint[] = [
     description: 'Manage manufacturers',
     icon: Factory,
     route: '/admin/manufacturers',
+    roles: [roles.MANAGER, roles.ADMIN, roles.SUPERADMIN],
   },
   // {
   //   key: 'role',
@@ -105,5 +113,6 @@ export const modelsBlueprint: ModelBlueprint[] = [
     description: 'Manage system users',
     icon: Users,
     route: '/admin/users',
+    roles: [roles.MANAGER, roles.ADMIN, roles.SUPERADMIN],
   },
 ]

@@ -50,6 +50,13 @@ export const canEditOrDeleteUser = (
   return targetUserRole ? creatableRoles.includes(targetUserRole) : false
 }
 
+export const canViewDashboardCard = (
+  roleKey: RoleKey | undefined,
+  rolesAllowed: RoleKey[],
+): boolean => {
+  return roleKey ? rolesAllowed.includes(roleKey) : false
+}
+
 export const canManageManufacturers = (
   roleKey: string | undefined,
 ): boolean => {
@@ -61,7 +68,7 @@ export const canManageCategories = (roleKey: string | undefined): boolean => {
 }
 
 export const canManageProducts = (roleKey: string | undefined): boolean => {
-  return hasPermission(roleKey as RoleKey | undefined, roles.STAFF)
+  return hasPermission(roleKey as RoleKey | undefined, roles.MANAGER)
 }
 
 export const canManageSuppliers = (roleKey: string | undefined): boolean => {

@@ -56,9 +56,9 @@ function RouteComponent() {
             type: 'ERROR',
           });
         }
-      }).catch((error) => {
+      }).catch(() => {
         notifications.addNotification({
-          message: error.message || 'An unexpected error occurred.',
+          message: 'An unexpected error occurred.',
           type: 'ERROR',
         });
       });

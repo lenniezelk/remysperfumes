@@ -6,7 +6,7 @@ import { listSuppliers } from '@/lib/server/supplier/list'
 import { Supplier } from '@/lib/types';
 import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export const Route = createFileRoute('/admin/suppliers/')({
   component: RouteComponent,
@@ -68,6 +68,13 @@ function RouteComponent() {
   const deleteDialogRef = useRef<HTMLDialogElement>(null);
   const [deleting, setDeleting] = useState(false);
   const router = useRouter();
+
+  // Sync data when loader data changes (e.g., after router.invalidate())
+  useEffect(() => {
+    if (initialData.status === 'SUCCESS') {
+      setData(initialData.data);
+    }
+  }, [initialData]);
 
   const deleteSupplierById = async (supplierId: string) => {
     setDeleting(true);

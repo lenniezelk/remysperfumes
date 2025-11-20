@@ -4,11 +4,11 @@ import Heading from '@/components/Heading';
 import { Input } from '@/components/Input';
 import { NotificationsList, useNotifications } from '@/components/notifications/Notification';
 import { TextArea } from '@/components/TextArea';
-import { createManufacturer, CreateManufacturerInput } from '@/lib/server/manufacturer/create';
+import { createSupplier, CreateSupplierInput } from '@/lib/server/supplier/create';
 import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form';
 
-export const Route = createFileRoute('/admin/manufacturers/new')({
+export const Route = createFileRoute('/admin/suppliers/new')({
     component: RouteComponent,
 })
 
@@ -22,37 +22,37 @@ function RouteComponent() {
             contact_info: '',
         },
         validators: {
-            onChange: CreateManufacturerInput,
+            onChange: CreateSupplierInput,
         },
         onSubmit: async (values) => {
             const data = {
                 name: values.value.name,
                 contact_info: values.value.contact_info,
             }
-            createManufacturer({
+            createSupplier({
                 data,
             }).then(async (result) => {
                 notifications.clear();
 
                 if (result.status === 'SUCCESS') {
                     notifications.addNotification({
-                        message: 'Manufacturer created successfully.',
+                        message: 'Supplier created successfully.',
                         type: 'SUCCESS',
                     });
                     // Reset form
                     form.reset();
                     // Invalidate before navigating to ensure fresh data
                     await router.invalidate();
-                    navigate({ to: '/admin/manufacturers' });
+                    navigate({ to: '/admin/suppliers' });
                 } else {
                     notifications.addNotification({
-                        message: result.error || 'An error occurred while creating the manufacturer.',
+                        message: result.error || 'An error occurred while creating the supplier.',
                         type: 'ERROR',
                     });
                 }
             }).catch((error) => {
                 notifications.addNotification({
-                    message: error.message || 'An unexpected error occurred.',
+                    message: 'An unexpected error occurred.',
                     type: 'ERROR',
                 });
             });
@@ -62,7 +62,7 @@ function RouteComponent() {
     return (
         <>
             <NotificationsList />
-            <Heading level={2} className='mt-12'>Create New Manufacturer</Heading>
+            <Heading level={2} className='mt-12'>Create New Supplier</Heading>
             <form
                 className='mt-8 w-full max-w-md space-y-4'
                 onSubmit={(e) => {
@@ -116,7 +116,7 @@ function RouteComponent() {
                     <button
                         type='button'
                         className='btn btn-neutral'
-                        onClick={() => navigate({ to: '/admin/manufacturers' })}
+                        onClick={() => navigate({ to: '/admin/suppliers' })}
                     >
                         Cancel
                     </button>
@@ -127,7 +127,7 @@ function RouteComponent() {
                                 type='submit'
                                 disabled={!canSubmit || isSubmitting}
                             >
-                                {isSubmitting ? 'Creating...' : 'Create Manufacturer'}
+                                {isSubmitting ? 'Creating...' : 'Create Supplier'}
                             </Button>
                         )}
                     />

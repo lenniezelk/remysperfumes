@@ -78,13 +78,13 @@ export const modelsBlueprint: ModelBlueprint[] = [
   //     },
   //   ],
   // },
-  // {
-  //   key: 'supplier',
-  //   name: 'Suppliers',
-  //   description: 'Manage suppliers',
-  //   icon: Users,
-  //   route: '/admin/supplier',
-  // },
+  {
+    key: 'supplier',
+    name: 'Suppliers',
+    description: 'Manage suppliers',
+    icon: Users,
+    route: '/admin/suppliers',
+  },
   {
     key: 'manufacturer',
     name: 'Manufacturers',

@@ -1,0 +1,1 @@
+ALTER TABLE `Supplier` ADD `deleted_at` integer;

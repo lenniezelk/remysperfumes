@@ -63,3 +63,7 @@ export const canManageCategories = (roleKey: string | undefined): boolean => {
 export const canManageProducts = (roleKey: string | undefined): boolean => {
   return hasPermission(roleKey as RoleKey | undefined, roles.STAFF)
 }
+
+export const canManageSuppliers = (roleKey: string | undefined): boolean => {
+  return hasPermission(roleKey as RoleKey | undefined, roles.MANAGER)
+}

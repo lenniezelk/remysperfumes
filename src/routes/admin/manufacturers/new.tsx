@@ -31,7 +31,7 @@ function RouteComponent() {
             }
             createManufacturer({
                 data,
-            }).then((result) => {
+            }).then(async (result) => {
                 notifications.clear();
 
                 if (result.status === 'SUCCESS') {
@@ -41,8 +41,8 @@ function RouteComponent() {
                     });
                     // Reset form
                     form.reset();
-                    router.invalidate();
-                    notifications.clear();
+                    // Invalidate before navigating to ensure fresh data
+                    await router.invalidate();
                     navigate({ to: '/admin/manufacturers' });
                 } else {
                     notifications.addNotification({

@@ -14,6 +14,7 @@ export const manufacturerTable = sqliteTable("Manufacturer", {
     contact_info: text("contact_info"),
     created_at: int("created_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
     updated_at: int("updated_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
+    deleted_at: int("deleted_at", { mode: 'timestamp_ms' }),
 });
 
 export const productTable = sqliteTable("Product", {

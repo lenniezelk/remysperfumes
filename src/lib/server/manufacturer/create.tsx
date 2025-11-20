@@ -25,6 +25,7 @@ export const createManufacturer = createServerFn({ method: 'POST' })
             contact_info: data.contact_info,
             created_at: new Date(),
             updated_at: new Date(),
+            deleted_at: null,
         };
 
         await db.insert(manufacturerTable).values(newManufacturer);

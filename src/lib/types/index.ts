@@ -20,3 +20,6 @@ export {
 
 // Manufacturer types
 export type { Manufacturer, ManufacturerCreateData, ManufacturerUpdateData } from './manufacturer';
+
+// Supplier types
+export type { Supplier, SupplierCreateData, SupplierUpdateData } from './supplier';

@@ -17,13 +17,17 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminProfileRouteImport } from './routes/admin/profile'
 import { Route as AdminUsersRouteRouteImport } from './routes/admin/users/route'
+import { Route as AdminSuppliersRouteRouteImport } from './routes/admin/suppliers/route'
 import { Route as AdminManufacturersRouteRouteImport } from './routes/admin/manufacturers/route'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
+import { Route as AdminSuppliersIndexRouteImport } from './routes/admin/suppliers/index'
 import { Route as AdminProductsIndexRouteImport } from './routes/admin/products/index'
 import { Route as AdminManufacturersIndexRouteImport } from './routes/admin/manufacturers/index'
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
 import { Route as AdminUsersNewRouteImport } from './routes/admin/users/new'
 import { Route as AdminUsersUserIdRouteImport } from './routes/admin/users/$userId'
+import { Route as AdminSuppliersNewRouteImport } from './routes/admin/suppliers/new'
+import { Route as AdminSuppliersSupplierIdRouteImport } from './routes/admin/suppliers/$supplierId'
 import { Route as AdminProductsNewRouteImport } from './routes/admin/products/new'
 import { Route as AdminManufacturersNewRouteImport } from './routes/admin/manufacturers/new'
 import { Route as AdminManufacturersManufacturerIdRouteImport } from './routes/admin/manufacturers/$manufacturerId'
@@ -71,6 +75,11 @@ const AdminUsersRouteRoute = AdminUsersRouteRouteImport.update({
   path: '/users',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminSuppliersRouteRoute = AdminSuppliersRouteRouteImport.update({
+  id: '/suppliers',
+  path: '/suppliers',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminManufacturersRouteRoute = AdminManufacturersRouteRouteImport.update({
   id: '/manufacturers',
   path: '/manufacturers',
@@ -80,6 +89,11 @@ const AdminUsersIndexRoute = AdminUsersIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminUsersRouteRoute,
+} as any)
+const AdminSuppliersIndexRoute = AdminSuppliersIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminSuppliersRouteRoute,
 } as any)
 const AdminProductsIndexRoute = AdminProductsIndexRouteImport.update({
   id: '/products/',
@@ -106,6 +120,17 @@ const AdminUsersUserIdRoute = AdminUsersUserIdRouteImport.update({
   path: '/$userId',
   getParentRoute: () => AdminUsersRouteRoute,
 } as any)
+const AdminSuppliersNewRoute = AdminSuppliersNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AdminSuppliersRouteRoute,
+} as any)
+const AdminSuppliersSupplierIdRoute =
+  AdminSuppliersSupplierIdRouteImport.update({
+    id: '/$supplierId',
+    path: '/$supplierId',
+    getParentRoute: () => AdminSuppliersRouteRoute,
+  } as any)
 const AdminProductsNewRoute = AdminProductsNewRouteImport.update({
   id: '/products/new',
   path: '/products/new',
@@ -146,6 +171,7 @@ export interface FileRoutesByFullPath {
   '/admin-logout': typeof AdminLogoutRoute
   '/not-authorized': typeof NotAuthorizedRoute
   '/admin/manufacturers': typeof AdminManufacturersRouteRouteWithChildren
+  '/admin/suppliers': typeof AdminSuppliersRouteRouteWithChildren
   '/admin/users': typeof AdminUsersRouteRouteWithChildren
   '/admin/profile': typeof AdminProfileRoute
   '/admin/': typeof AdminIndexRoute
@@ -153,11 +179,14 @@ export interface FileRoutesByFullPath {
   '/admin/manufacturers/$manufacturerId': typeof AdminManufacturersManufacturerIdRoute
   '/admin/manufacturers/new': typeof AdminManufacturersNewRoute
   '/admin/products/new': typeof AdminProductsNewRoute
+  '/admin/suppliers/$supplierId': typeof AdminSuppliersSupplierIdRoute
+  '/admin/suppliers/new': typeof AdminSuppliersNewRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRoute
   '/admin/users/new': typeof AdminUsersNewRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/manufacturers/': typeof AdminManufacturersIndexRoute
   '/admin/products': typeof AdminProductsIndexRoute
+  '/admin/suppliers/': typeof AdminSuppliersIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
   '/admin/categories/category/$id': typeof AdminCategoriesCategoryIdRoute
   '/admin/products/product/$id': typeof AdminProductsProductIdRoute
@@ -173,11 +202,14 @@ export interface FileRoutesByTo {
   '/admin/manufacturers/$manufacturerId': typeof AdminManufacturersManufacturerIdRoute
   '/admin/manufacturers/new': typeof AdminManufacturersNewRoute
   '/admin/products/new': typeof AdminProductsNewRoute
+  '/admin/suppliers/$supplierId': typeof AdminSuppliersSupplierIdRoute
+  '/admin/suppliers/new': typeof AdminSuppliersNewRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRoute
   '/admin/users/new': typeof AdminUsersNewRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/manufacturers': typeof AdminManufacturersIndexRoute
   '/admin/products': typeof AdminProductsIndexRoute
+  '/admin/suppliers': typeof AdminSuppliersIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/admin/categories/category/$id': typeof AdminCategoriesCategoryIdRoute
   '/admin/products/product/$id': typeof AdminProductsProductIdRoute
@@ -190,6 +222,7 @@ export interface FileRoutesById {
   '/admin-logout': typeof AdminLogoutRoute
   '/not-authorized': typeof NotAuthorizedRoute
   '/admin/manufacturers': typeof AdminManufacturersRouteRouteWithChildren
+  '/admin/suppliers': typeof AdminSuppliersRouteRouteWithChildren
   '/admin/users': typeof AdminUsersRouteRouteWithChildren
   '/admin/profile': typeof AdminProfileRoute
   '/admin/': typeof AdminIndexRoute
@@ -197,11 +230,14 @@ export interface FileRoutesById {
   '/admin/manufacturers/$manufacturerId': typeof AdminManufacturersManufacturerIdRoute
   '/admin/manufacturers/new': typeof AdminManufacturersNewRoute
   '/admin/products/new': typeof AdminProductsNewRoute
+  '/admin/suppliers/$supplierId': typeof AdminSuppliersSupplierIdRoute
+  '/admin/suppliers/new': typeof AdminSuppliersNewRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRoute
   '/admin/users/new': typeof AdminUsersNewRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
   '/admin/manufacturers/': typeof AdminManufacturersIndexRoute
   '/admin/products/': typeof AdminProductsIndexRoute
+  '/admin/suppliers/': typeof AdminSuppliersIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
   '/admin/categories/category/$id': typeof AdminCategoriesCategoryIdRoute
   '/admin/products/product/$id': typeof AdminProductsProductIdRoute
@@ -215,6 +251,7 @@ export interface FileRouteTypes {
     | '/admin-logout'
     | '/not-authorized'
     | '/admin/manufacturers'
+    | '/admin/suppliers'
     | '/admin/users'
     | '/admin/profile'
     | '/admin/'
@@ -222,11 +259,14 @@ export interface FileRouteTypes {
     | '/admin/manufacturers/$manufacturerId'
     | '/admin/manufacturers/new'
     | '/admin/products/new'
+    | '/admin/suppliers/$supplierId'
+    | '/admin/suppliers/new'
     | '/admin/users/$userId'
     | '/admin/users/new'
     | '/admin/categories'
     | '/admin/manufacturers/'
     | '/admin/products'
+    | '/admin/suppliers/'
     | '/admin/users/'
     | '/admin/categories/category/$id'
     | '/admin/products/product/$id'
@@ -242,11 +282,14 @@ export interface FileRouteTypes {
     | '/admin/manufacturers/$manufacturerId'
     | '/admin/manufacturers/new'
     | '/admin/products/new'
+    | '/admin/suppliers/$supplierId'
+    | '/admin/suppliers/new'
     | '/admin/users/$userId'
     | '/admin/users/new'
     | '/admin/categories'
     | '/admin/manufacturers'
     | '/admin/products'
+    | '/admin/suppliers'
     | '/admin/users'
     | '/admin/categories/category/$id'
     | '/admin/products/product/$id'
@@ -258,6 +301,7 @@ export interface FileRouteTypes {
     | '/admin-logout'
     | '/not-authorized'
     | '/admin/manufacturers'
+    | '/admin/suppliers'
     | '/admin/users'
     | '/admin/profile'
     | '/admin/'
@@ -265,11 +309,14 @@ export interface FileRouteTypes {
     | '/admin/manufacturers/$manufacturerId'
     | '/admin/manufacturers/new'
     | '/admin/products/new'
+    | '/admin/suppliers/$supplierId'
+    | '/admin/suppliers/new'
     | '/admin/users/$userId'
     | '/admin/users/new'
     | '/admin/categories/'
     | '/admin/manufacturers/'
     | '/admin/products/'
+    | '/admin/suppliers/'
     | '/admin/users/'
     | '/admin/categories/category/$id'
     | '/admin/products/product/$id'
@@ -341,6 +388,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersRouteRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/suppliers': {
+      id: '/admin/suppliers'
+      path: '/suppliers'
+      fullPath: '/admin/suppliers'
+      preLoaderRoute: typeof AdminSuppliersRouteRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/manufacturers': {
       id: '/admin/manufacturers'
       path: '/manufacturers'
@@ -354,6 +408,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/users/'
       preLoaderRoute: typeof AdminUsersIndexRouteImport
       parentRoute: typeof AdminUsersRouteRoute
+    }
+    '/admin/suppliers/': {
+      id: '/admin/suppliers/'
+      path: '/'
+      fullPath: '/admin/suppliers/'
+      preLoaderRoute: typeof AdminSuppliersIndexRouteImport
+      parentRoute: typeof AdminSuppliersRouteRoute
     }
     '/admin/products/': {
       id: '/admin/products/'
@@ -389,6 +450,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/users/$userId'
       preLoaderRoute: typeof AdminUsersUserIdRouteImport
       parentRoute: typeof AdminUsersRouteRoute
+    }
+    '/admin/suppliers/new': {
+      id: '/admin/suppliers/new'
+      path: '/new'
+      fullPath: '/admin/suppliers/new'
+      preLoaderRoute: typeof AdminSuppliersNewRouteImport
+      parentRoute: typeof AdminSuppliersRouteRoute
+    }
+    '/admin/suppliers/$supplierId': {
+      id: '/admin/suppliers/$supplierId'
+      path: '/$supplierId'
+      fullPath: '/admin/suppliers/$supplierId'
+      preLoaderRoute: typeof AdminSuppliersSupplierIdRouteImport
+      parentRoute: typeof AdminSuppliersRouteRoute
     }
     '/admin/products/new': {
       id: '/admin/products/new'
@@ -454,6 +529,21 @@ const AdminManufacturersRouteRouteWithChildren =
     AdminManufacturersRouteRouteChildren,
   )
 
+interface AdminSuppliersRouteRouteChildren {
+  AdminSuppliersSupplierIdRoute: typeof AdminSuppliersSupplierIdRoute
+  AdminSuppliersNewRoute: typeof AdminSuppliersNewRoute
+  AdminSuppliersIndexRoute: typeof AdminSuppliersIndexRoute
+}
+
+const AdminSuppliersRouteRouteChildren: AdminSuppliersRouteRouteChildren = {
+  AdminSuppliersSupplierIdRoute: AdminSuppliersSupplierIdRoute,
+  AdminSuppliersNewRoute: AdminSuppliersNewRoute,
+  AdminSuppliersIndexRoute: AdminSuppliersIndexRoute,
+}
+
+const AdminSuppliersRouteRouteWithChildren =
+  AdminSuppliersRouteRoute._addFileChildren(AdminSuppliersRouteRouteChildren)
+
 interface AdminUsersRouteRouteChildren {
   AdminUsersUserIdRoute: typeof AdminUsersUserIdRoute
   AdminUsersNewRoute: typeof AdminUsersNewRoute
@@ -472,6 +562,7 @@ const AdminUsersRouteRouteWithChildren = AdminUsersRouteRoute._addFileChildren(
 
 interface AdminRouteRouteChildren {
   AdminManufacturersRouteRoute: typeof AdminManufacturersRouteRouteWithChildren
+  AdminSuppliersRouteRoute: typeof AdminSuppliersRouteRouteWithChildren
   AdminUsersRouteRoute: typeof AdminUsersRouteRouteWithChildren
   AdminProfileRoute: typeof AdminProfileRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -485,6 +576,7 @@ interface AdminRouteRouteChildren {
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminManufacturersRouteRoute: AdminManufacturersRouteRouteWithChildren,
+  AdminSuppliersRouteRoute: AdminSuppliersRouteRouteWithChildren,
   AdminUsersRouteRoute: AdminUsersRouteRouteWithChildren,
   AdminProfileRoute: AdminProfileRoute,
   AdminIndexRoute: AdminIndexRoute,

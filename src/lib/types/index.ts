@@ -23,3 +23,6 @@ export type { Manufacturer, ManufacturerCreateData, ManufacturerUpdateData } fro
 
 // Supplier types
 export type { Supplier, SupplierCreateData, SupplierUpdateData } from './supplier';
+
+// Stock Batch types
+export type { StockBatch, StockBatchCreateData, StockBatchUpdateData } from './stock-batch';

@@ -69,6 +69,7 @@ export const stockBatchTable = sqliteTable("StockBatch", {
     updated_at: int("updated_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
     supplier: text("supplier")
         .references(() => supplierTable.id),
+    deleted_at: int("deleted_at", { mode: 'timestamp_ms' }),
 });
 
 export const saleTable = sqliteTable("Sale", {

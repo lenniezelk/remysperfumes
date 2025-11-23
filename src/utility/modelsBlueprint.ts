@@ -93,6 +93,14 @@ export const modelsBlueprint: ModelBlueprint[] = [
     roles: [roles.MANAGER, roles.ADMIN, roles.SUPERADMIN],
   },
   {
+    key: 'stock-batch',
+    name: 'Stock Batches',
+    description: 'Manage stock batches',
+    icon: Boxes,
+    route: '/admin/stock-batches',
+    roles: [roles.MANAGER, roles.ADMIN, roles.SUPERADMIN],
+  },
+  {
     key: 'manufacturer',
     name: 'Manufacturers',
     description: 'Manage manufacturers',

@@ -1,13 +1,13 @@
+import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
+import { useForm } from '@tanstack/react-form';
 import Button from '@/components/Button';
 import { FieldInfo } from '@/components/FieldInfo';
 import Heading from '@/components/Heading';
 import { Input } from '@/components/Input';
 import { NotificationsList, useNotifications } from '@/components/notifications/Notification';
-import { createStockBatch, CreateStockBatchInput } from '@/lib/server/stock-batch/create';
+import { CreateStockBatchInput, createStockBatch } from '@/lib/server/stock-batch/create';
 import { listProductVariantsForDropdown } from '@/lib/server/stock-batch/list-variants';
 import { listSuppliers } from '@/lib/server/supplier/list';
-import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
-import { useForm } from '@tanstack/react-form';
 
 export const Route = createFileRoute('/admin/stock-batches/new')({
     component: RouteComponent,
@@ -52,7 +52,7 @@ function RouteComponent() {
                 min_sale_price_per_unit: values.value.min_sale_price_per_unit,
                 received_at: values.value.received_at,
             }
-            createStockBatch({
+            return createStockBatch({
                 data,
             }).then(async (result) => {
                 notifications.clear();

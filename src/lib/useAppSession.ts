@@ -1,5 +1,5 @@
 import { useSession } from "@tanstack/react-start/server"
-import { AdminAppSession } from "@/lib/types";
+import type { AdminAppSession } from "@/lib/types";
 
 export function useAdminAppSession() {
     return useSession<AdminAppSession>({

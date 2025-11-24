@@ -1,12 +1,12 @@
+import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
+import { useForm } from '@tanstack/react-form';
 import Button from '@/components/Button';
 import { FieldInfo } from '@/components/FieldInfo';
 import Heading from '@/components/Heading';
 import { Input } from '@/components/Input';
 import { NotificationsList, useNotifications } from '@/components/notifications/Notification';
 import { TextArea } from '@/components/TextArea';
-import { createSupplier, CreateSupplierInput } from '@/lib/server/supplier/create';
-import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
-import { useForm } from '@tanstack/react-form';
+import { CreateSupplierInput, createSupplier } from '@/lib/server/supplier/create';
 
 export const Route = createFileRoute('/admin/suppliers/new')({
     component: RouteComponent,
@@ -29,7 +29,7 @@ function RouteComponent() {
                 name: values.value.name,
                 contact_info: values.value.contact_info,
             }
-            createSupplier({
+            return createSupplier({
                 data,
             }).then(async (result) => {
                 notifications.clear();

@@ -1,17 +1,18 @@
 import { createServerFn } from '@tanstack/react-start'
-import dbClient from '@/lib/db/client'
-import { productTable, categoryTable, manufacturerTable } from '@/lib/db/schema'
-import { desc, sql, eq } from 'drizzle-orm'
-import {
-  paginationSchema,
-  createProductSchema,
-  uuidSchema,
-  updateProductSchema,
-  type UpdateProductInput,
-  type PaginationInput,
-  type CreateProductInput,
-} from './types'
+import { desc, eq, sql } from 'drizzle-orm'
 import { canManageProductsMiddleware } from '../middleware/canManageProducts'
+import {
+  
+  
+  
+  createProductSchema,
+  paginationSchema,
+  updateProductSchema,
+  uuidSchema
+} from './types'
+import type {CreateProductInput, PaginationInput, UpdateProductInput} from './types';
+import dbClient from '@/lib/db/client'
+import { categoryTable, manufacturerTable, productTable } from '@/lib/db/schema'
 
 const db = dbClient()
 

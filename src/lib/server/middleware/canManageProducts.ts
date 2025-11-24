@@ -1,7 +1,7 @@
 import { createMiddleware } from '@tanstack/react-start'
+import { redirect } from '@tanstack/react-router'
 import { isAdminMiddleware } from './isAdmin'
 import { canManageProducts } from '@/lib/permissions'
-import { redirect } from '@tanstack/react-router'
 
 export const canManageProductsMiddleware = createMiddleware({
   type: 'function',

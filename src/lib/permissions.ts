@@ -12,7 +12,7 @@ export function hasPermission(
   requiredRole: RoleKey,
 ): boolean {
   if (!userRole) return false
-  const roleHierarchy: RoleKey[] = [
+  const roleHierarchy: Array<RoleKey> = [
     roles.STAFF,
     roles.MANAGER,
     roles.ADMIN,
@@ -29,7 +29,7 @@ export const canManageUsers = (roleKey: string | undefined): boolean => {
 
 export const rolesUserCanCreateBasedOnRole = (
   roleKey: RoleKey | undefined,
-): RoleKey[] => {
+): Array<RoleKey> => {
   switch (roleKey) {
     case roles.SUPERADMIN:
       return [roles.SUPERADMIN, roles.ADMIN, roles.MANAGER, roles.STAFF]
@@ -52,7 +52,7 @@ export const canEditOrDeleteUser = (
 
 export const canViewDashboardCard = (
   roleKey: RoleKey | undefined,
-  rolesAllowed: RoleKey[],
+  rolesAllowed: Array<RoleKey>,
 ): boolean => {
   return roleKey ? rolesAllowed.includes(roleKey) : false
 }
@@ -76,5 +76,9 @@ export const canManageSuppliers = (roleKey: string | undefined): boolean => {
 }
 
 export const canManageStockBatches = (roleKey: string | undefined): boolean => {
+  return hasPermission(roleKey as RoleKey | undefined, roles.MANAGER)
+}
+
+export const canManageProductVariants = (roleKey: string | undefined): boolean => {
   return hasPermission(roleKey as RoleKey | undefined, roles.MANAGER)
 }

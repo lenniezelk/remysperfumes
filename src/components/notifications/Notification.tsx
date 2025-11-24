@@ -1,6 +1,7 @@
-import { createContext, ReactNode, useContext, useState } from "react";
-import NotificationIcon from "../NotificationIcon";
+import { createContext, useContext, useState } from "react";
 import { CircleX } from "lucide-react";
+import NotificationIcon from "../NotificationIcon";
+import type { ReactNode} from "react";
 
 export interface Notification {
     id: string;
@@ -14,7 +15,7 @@ export interface Notification {
 export type NotificationCreate = Omit<Notification, "id" | "createdAt" | "read">;
 
 interface NotificationContextType {
-    notifications: Notification[];
+    notifications: Array<Notification>;
     addNotification: (notification: NotificationCreate) => void;
     markAsRead: (id: string) => void;
     removeNotification: (id: string) => void;
@@ -32,7 +33,7 @@ export function useNotifications() {
 }
 
 export function NotificationProvider({ children }: { children: ReactNode }) {
-    const [notifications, setNotifications] = useState<Notification[]>([]);
+    const [notifications, setNotifications] = useState<Array<Notification>>([]);
 
     const addNotification = ({ message, type, keepForever = false }: NotificationCreate) => {
         setNotifications([

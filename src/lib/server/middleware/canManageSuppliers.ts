@@ -1,7 +1,7 @@
 import { createMiddleware } from "@tanstack/react-start";
+import { redirect } from "@tanstack/react-router";
 import { isAdminMiddleware } from "./isAdmin";
 import { canManageSuppliers } from "@/lib/permissions";
-import { redirect } from "@tanstack/react-router";
 
 export const canManageSuppliersMiddleware = createMiddleware({ type: 'function' })
     .middleware([isAdminMiddleware])

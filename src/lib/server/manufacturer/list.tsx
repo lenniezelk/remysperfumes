@@ -1,14 +1,14 @@
-import dbClient from "@/lib/db/client";
 import { createServerFn } from "@tanstack/react-start";
-import { manufacturerTable } from "@/lib/db/schema";
 import { asc } from "drizzle-orm";
-import { Result } from "@/lib/types";
-import { Manufacturer } from "@/lib/types/manufacturer";
 import { canManageManufacturersMiddleware } from "../middleware/canManageManufacturers";
+import type { Result } from "@/lib/types";
+import type { Manufacturer } from "@/lib/types/manufacturer";
+import dbClient from "@/lib/db/client";
+import { manufacturerTable } from "@/lib/db/schema";
 
 export const listManufacturers = createServerFn({ method: 'GET' })
     .middleware([canManageManufacturersMiddleware])
-    .handler(async (): Promise<Result<Manufacturer[]>> => {
+    .handler(async (): Promise<Result<Array<Manufacturer>>> => {
         const db = dbClient();
 
         const manufacturers = await db.select().from(manufacturerTable).orderBy(asc(manufacturerTable.name));

@@ -1,6 +1,6 @@
 import { createSelectSchema, createUpdateSchema } from "drizzle-zod";
+import type { z } from "zod";
 import { stockBatchTable } from "@/lib/db/schema";
-import { z } from "zod";
 
 const stockBatchDBSchema = createSelectSchema(stockBatchTable)
 export type StockBatchDB = z.infer<typeof stockBatchDBSchema>;

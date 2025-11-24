@@ -1,9 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
-import { canManageSuppliersMiddleware } from "../middleware/canManageSuppliers";
 import { z } from "zod";
+import { eq } from "drizzle-orm";
+import { canManageSuppliersMiddleware } from "../middleware/canManageSuppliers";
 import dbClient from "@/lib/db/client";
 import { supplierTable } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
 
 export const UpdateSupplierData = z.object({
     supplierId: z.uuid(),

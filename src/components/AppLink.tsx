@@ -1,5 +1,6 @@
-import { LinkComponentProps, Link } from "@tanstack/react-router";
-import { ReactNode } from "react";
+import { Link } from "@tanstack/react-router";
+import type { LinkComponentProps} from "@tanstack/react-router";
+import type { ReactNode } from "react";
 
 interface AppLinkProps extends LinkComponentProps {
     disabled?: boolean;

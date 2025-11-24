@@ -1,10 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
+import { z } from "zod";
+import type { Supplier } from "@/lib/types/supplier";
+import type { Result } from "@/lib/types";
 import { canManageSuppliersMiddleware } from "@/lib/server/middleware/canManageSuppliers";
 import dbClient from "@/lib/db/client";
 import { supplierTable } from "@/lib/db/schema";
-import { z } from "zod";
-import { Supplier } from "@/lib/types/supplier";
-import { Result } from "@/lib/types";
 
 export const CreateSupplierInput = z.object({
     name: z.string().min(1, "Name is required"),

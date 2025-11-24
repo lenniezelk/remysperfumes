@@ -1,14 +1,14 @@
+import { useForm } from '@tanstack/react-form';
+import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import Button from '@/components/Button';
 import { FieldInfo } from '@/components/FieldInfo';
 import Heading from '@/components/Heading';
 import { Input } from '@/components/Input';
 import { useNotifications } from '@/components/notifications/Notification';
 import { getStockBatchById } from '@/lib/server/stock-batch/get'
-import { updateStockBatch, UpdateStockBatchData } from '@/lib/server/stock-batch/update';
+import { UpdateStockBatchData, updateStockBatch } from '@/lib/server/stock-batch/update';
 import { listProductVariantsForDropdown } from '@/lib/server/stock-batch/list-variants';
 import { listSuppliers } from '@/lib/server/supplier/list';
-import { useForm } from '@tanstack/react-form';
-import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/admin/stock-batches/$stockBatchId')({
     component: RouteComponent,
@@ -61,7 +61,7 @@ function RouteComponent() {
 
             notifications.clear();
 
-            updateStockBatch({
+            return updateStockBatch({
                 data,
             }).then((result) => {
                 if (result.status === 'SUCCESS') {

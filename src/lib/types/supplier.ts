@@ -1,6 +1,6 @@
 import { createSelectSchema, createUpdateSchema } from "drizzle-zod";
+import type { z } from "zod";
 import { supplierTable } from "@/lib/db/schema";
-import { z } from "zod";
 
 const supplierDBSchema = createSelectSchema(supplierTable)
 export type SupplierDB = z.infer<typeof supplierDBSchema>;

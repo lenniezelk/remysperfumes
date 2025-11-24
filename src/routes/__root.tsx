@@ -1,14 +1,14 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
-import Logo from '@/assets/logo.svg';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Logo from '@/assets/logo.svg';
 
 import appCss from '@/styles.css?url'
 import { AdminAuthenticationProvider } from '@/lib/auth/admin-auth-context';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { getEnvVars } from '@/lib/env-vars';
-import { NotificationProvider, NotificationsList } from '@/components/notifications/Notification';
+import { NotificationProvider } from '@/components/notifications/Notification';
 import { EnvVarsProvider } from '@/components/EnvVars';
 
 export const Route = createRootRoute({
@@ -113,7 +113,6 @@ const App = ({ children }: { children: React.ReactNode }) => {
           <QueryClientProvider client={queryClient}>
             <AdminAuthenticationProvider>
               {children}
-              <NotificationsList />
             </AdminAuthenticationProvider>
           </QueryClientProvider>
         </GoogleOAuthProvider>

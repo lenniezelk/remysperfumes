@@ -26,3 +26,6 @@ export type { Supplier, SupplierCreateData, SupplierUpdateData } from './supplie
 
 // Stock Batch types
 export type { StockBatch, StockBatchCreateData, StockBatchUpdateData } from './stock-batch';
+
+// Product Variant types
+export type { ProductVariant, ProductVariantCreateData, ProductVariantUpdateData } from './product-variant';

@@ -1,8 +1,7 @@
-import { listUsers } from '@/lib/server/users/users'
 import {
   createFileRoute,
-  useNavigate,
   useLocation,
+  useNavigate,
 } from '@tanstack/react-router'
 import {
   createColumnHelper,
@@ -10,8 +9,9 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { type UserWithPermissions } from '@/lib/types'
 import { useState } from 'react'
+import type {UserWithPermissions} from '@/lib/types';
+import { listUsers } from '@/lib/server/users/users'
 import AppLink from '@/components/AppLink'
 import Button from '@/components/Button'
 import AdminLayout from '@/components/dashboard/AdminLayout'
@@ -67,7 +67,7 @@ const columns = [
 
 function RouteComponent() {
   const initialData = Route.useLoaderData()
-  const [data] = useState<UserWithPermissions[]>(() =>
+  const [data] = useState<Array<UserWithPermissions>>(() =>
     initialData.status === 'SUCCESS' ? initialData.data : [],
   )
   const table = useReactTable({

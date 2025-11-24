@@ -7,6 +7,7 @@ import Button from '@/components/Button';
 import { NotificationsList, useNotifications } from '@/components/notifications/Notification';
 import { deleteProductVariant } from '@/lib/server/product-variant/delete';
 import { listProductVariants } from '@/lib/server/product-variant/list'
+import Heading from '@/components/Heading';
 
 export const Route = createFileRoute('/admin/product-variants/')({
     component: RouteComponent,
@@ -134,7 +135,8 @@ function RouteComponent() {
     return (
         <div className='w-full overflow-x-auto'>
             <NotificationsList />
-            <div className="flex justify-end my-8">
+            <div className="flex justify-between items-center mb-4">
+                <Heading level={4}>Product Variants</Heading>
                 <Button variant="primary" onClick={() => {
                     notifications.clear();
                     navigate({ to: '/admin/product-variants/new' })

@@ -7,6 +7,7 @@ import Button from '@/components/Button';
 import { useNotifications } from '@/components/notifications/Notification';
 import { deleteSupplier } from '@/lib/server/supplier/delete';
 import { listSuppliers } from '@/lib/server/supplier/list'
+import Heading from '@/components/Heading';
 
 export const Route = createFileRoute('/admin/suppliers/')({
   component: RouteComponent,
@@ -118,7 +119,8 @@ function RouteComponent() {
 
   return (
     <div className='w-full overflow-x-auto'>
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-between items-center mb-4">
+        <Heading level={4}>Suppliers</Heading>
         <Button variant="primary" onClick={() => navigate({ to: '/admin/suppliers/new' })}>
           Create New Supplier
         </Button>

@@ -16,11 +16,6 @@ import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminProfileRouteImport } from './routes/admin/profile'
-import { Route as AdminUsersRouteRouteImport } from './routes/admin/users/route'
-import { Route as AdminSuppliersRouteRouteImport } from './routes/admin/suppliers/route'
-import { Route as AdminStockBatchesRouteRouteImport } from './routes/admin/stock-batches/route'
-import { Route as AdminProductVariantsRouteRouteImport } from './routes/admin/product-variants/route'
-import { Route as AdminManufacturersRouteRouteImport } from './routes/admin/manufacturers/route'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as AdminSuppliersIndexRouteImport } from './routes/admin/suppliers/index'
 import { Route as AdminStockBatchesIndexRouteImport } from './routes/admin/stock-batches/index'
@@ -78,46 +73,20 @@ const AdminProfileRoute = AdminProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AdminRouteRoute,
 } as any)
-const AdminUsersRouteRoute = AdminUsersRouteRouteImport.update({
-  id: '/users',
-  path: '/users',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminSuppliersRouteRoute = AdminSuppliersRouteRouteImport.update({
-  id: '/suppliers',
-  path: '/suppliers',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminStockBatchesRouteRoute = AdminStockBatchesRouteRouteImport.update({
-  id: '/stock-batches',
-  path: '/stock-batches',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminProductVariantsRouteRoute =
-  AdminProductVariantsRouteRouteImport.update({
-    id: '/product-variants',
-    path: '/product-variants',
-    getParentRoute: () => AdminRouteRoute,
-  } as any)
-const AdminManufacturersRouteRoute = AdminManufacturersRouteRouteImport.update({
-  id: '/manufacturers',
-  path: '/manufacturers',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
 const AdminUsersIndexRoute = AdminUsersIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AdminUsersRouteRoute,
+  id: '/users/',
+  path: '/users/',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminSuppliersIndexRoute = AdminSuppliersIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AdminSuppliersRouteRoute,
+  id: '/suppliers/',
+  path: '/suppliers/',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminStockBatchesIndexRoute = AdminStockBatchesIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AdminStockBatchesRouteRoute,
+  id: '/stock-batches/',
+  path: '/stock-batches/',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminProductsIndexRoute = AdminProductsIndexRouteImport.update({
   id: '/products/',
@@ -126,14 +95,14 @@ const AdminProductsIndexRoute = AdminProductsIndexRouteImport.update({
 } as any)
 const AdminProductVariantsIndexRoute =
   AdminProductVariantsIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AdminProductVariantsRouteRoute,
+    id: '/product-variants/',
+    path: '/product-variants/',
+    getParentRoute: () => AdminRouteRoute,
   } as any)
 const AdminManufacturersIndexRoute = AdminManufacturersIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AdminManufacturersRouteRoute,
+  id: '/manufacturers/',
+  path: '/manufacturers/',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminCategoriesIndexRoute = AdminCategoriesIndexRouteImport.update({
   id: '/categories/',
@@ -141,36 +110,36 @@ const AdminCategoriesIndexRoute = AdminCategoriesIndexRouteImport.update({
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminUsersNewRoute = AdminUsersNewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => AdminUsersRouteRoute,
+  id: '/users/new',
+  path: '/users/new',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminUsersUserIdRoute = AdminUsersUserIdRouteImport.update({
-  id: '/$userId',
-  path: '/$userId',
-  getParentRoute: () => AdminUsersRouteRoute,
+  id: '/users/$userId',
+  path: '/users/$userId',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminSuppliersNewRoute = AdminSuppliersNewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => AdminSuppliersRouteRoute,
+  id: '/suppliers/new',
+  path: '/suppliers/new',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminSuppliersSupplierIdRoute =
   AdminSuppliersSupplierIdRouteImport.update({
-    id: '/$supplierId',
-    path: '/$supplierId',
-    getParentRoute: () => AdminSuppliersRouteRoute,
+    id: '/suppliers/$supplierId',
+    path: '/suppliers/$supplierId',
+    getParentRoute: () => AdminRouteRoute,
   } as any)
 const AdminStockBatchesNewRoute = AdminStockBatchesNewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => AdminStockBatchesRouteRoute,
+  id: '/stock-batches/new',
+  path: '/stock-batches/new',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminStockBatchesStockBatchIdRoute =
   AdminStockBatchesStockBatchIdRouteImport.update({
-    id: '/$stockBatchId',
-    path: '/$stockBatchId',
-    getParentRoute: () => AdminStockBatchesRouteRoute,
+    id: '/stock-batches/$stockBatchId',
+    path: '/stock-batches/$stockBatchId',
+    getParentRoute: () => AdminRouteRoute,
   } as any)
 const AdminProductsNewRoute = AdminProductsNewRouteImport.update({
   id: '/products/new',
@@ -178,26 +147,26 @@ const AdminProductsNewRoute = AdminProductsNewRouteImport.update({
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminProductVariantsNewRoute = AdminProductVariantsNewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => AdminProductVariantsRouteRoute,
+  id: '/product-variants/new',
+  path: '/product-variants/new',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminProductVariantsProductVariantIdRoute =
   AdminProductVariantsProductVariantIdRouteImport.update({
-    id: '/$productVariantId',
-    path: '/$productVariantId',
-    getParentRoute: () => AdminProductVariantsRouteRoute,
+    id: '/product-variants/$productVariantId',
+    path: '/product-variants/$productVariantId',
+    getParentRoute: () => AdminRouteRoute,
   } as any)
 const AdminManufacturersNewRoute = AdminManufacturersNewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => AdminManufacturersRouteRoute,
+  id: '/manufacturers/new',
+  path: '/manufacturers/new',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminManufacturersManufacturerIdRoute =
   AdminManufacturersManufacturerIdRouteImport.update({
-    id: '/$manufacturerId',
-    path: '/$manufacturerId',
-    getParentRoute: () => AdminManufacturersRouteRoute,
+    id: '/manufacturers/$manufacturerId',
+    path: '/manufacturers/$manufacturerId',
+    getParentRoute: () => AdminRouteRoute,
   } as any)
 const AdminCategoriesNewRoute = AdminCategoriesNewRouteImport.update({
   id: '/categories/new',
@@ -222,11 +191,6 @@ export interface FileRoutesByFullPath {
   '/admin-login': typeof AdminLoginRoute
   '/admin-logout': typeof AdminLogoutRoute
   '/not-authorized': typeof NotAuthorizedRoute
-  '/admin/manufacturers': typeof AdminManufacturersRouteRouteWithChildren
-  '/admin/product-variants': typeof AdminProductVariantsRouteRouteWithChildren
-  '/admin/stock-batches': typeof AdminStockBatchesRouteRouteWithChildren
-  '/admin/suppliers': typeof AdminSuppliersRouteRouteWithChildren
-  '/admin/users': typeof AdminUsersRouteRouteWithChildren
   '/admin/profile': typeof AdminProfileRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/categories/new': typeof AdminCategoriesNewRoute
@@ -242,12 +206,12 @@ export interface FileRoutesByFullPath {
   '/admin/users/$userId': typeof AdminUsersUserIdRoute
   '/admin/users/new': typeof AdminUsersNewRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
-  '/admin/manufacturers/': typeof AdminManufacturersIndexRoute
-  '/admin/product-variants/': typeof AdminProductVariantsIndexRoute
+  '/admin/manufacturers': typeof AdminManufacturersIndexRoute
+  '/admin/product-variants': typeof AdminProductVariantsIndexRoute
   '/admin/products': typeof AdminProductsIndexRoute
-  '/admin/stock-batches/': typeof AdminStockBatchesIndexRoute
-  '/admin/suppliers/': typeof AdminSuppliersIndexRoute
-  '/admin/users/': typeof AdminUsersIndexRoute
+  '/admin/stock-batches': typeof AdminStockBatchesIndexRoute
+  '/admin/suppliers': typeof AdminSuppliersIndexRoute
+  '/admin/users': typeof AdminUsersIndexRoute
   '/admin/categories/category/$id': typeof AdminCategoriesCategoryIdRoute
   '/admin/products/product/$id': typeof AdminProductsProductIdRoute
 }
@@ -287,11 +251,6 @@ export interface FileRoutesById {
   '/admin-login': typeof AdminLoginRoute
   '/admin-logout': typeof AdminLogoutRoute
   '/not-authorized': typeof NotAuthorizedRoute
-  '/admin/manufacturers': typeof AdminManufacturersRouteRouteWithChildren
-  '/admin/product-variants': typeof AdminProductVariantsRouteRouteWithChildren
-  '/admin/stock-batches': typeof AdminStockBatchesRouteRouteWithChildren
-  '/admin/suppliers': typeof AdminSuppliersRouteRouteWithChildren
-  '/admin/users': typeof AdminUsersRouteRouteWithChildren
   '/admin/profile': typeof AdminProfileRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/categories/new': typeof AdminCategoriesNewRoute
@@ -324,11 +283,6 @@ export interface FileRouteTypes {
     | '/admin-login'
     | '/admin-logout'
     | '/not-authorized'
-    | '/admin/manufacturers'
-    | '/admin/product-variants'
-    | '/admin/stock-batches'
-    | '/admin/suppliers'
-    | '/admin/users'
     | '/admin/profile'
     | '/admin/'
     | '/admin/categories/new'
@@ -344,12 +298,12 @@ export interface FileRouteTypes {
     | '/admin/users/$userId'
     | '/admin/users/new'
     | '/admin/categories'
-    | '/admin/manufacturers/'
-    | '/admin/product-variants/'
+    | '/admin/manufacturers'
+    | '/admin/product-variants'
     | '/admin/products'
-    | '/admin/stock-batches/'
-    | '/admin/suppliers/'
-    | '/admin/users/'
+    | '/admin/stock-batches'
+    | '/admin/suppliers'
+    | '/admin/users'
     | '/admin/categories/category/$id'
     | '/admin/products/product/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -388,11 +342,6 @@ export interface FileRouteTypes {
     | '/admin-login'
     | '/admin-logout'
     | '/not-authorized'
-    | '/admin/manufacturers'
-    | '/admin/product-variants'
-    | '/admin/stock-batches'
-    | '/admin/suppliers'
-    | '/admin/users'
     | '/admin/profile'
     | '/admin/'
     | '/admin/categories/new'
@@ -477,61 +426,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProfileRouteImport
       parentRoute: typeof AdminRouteRoute
     }
-    '/admin/users': {
-      id: '/admin/users'
-      path: '/users'
-      fullPath: '/admin/users'
-      preLoaderRoute: typeof AdminUsersRouteRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/suppliers': {
-      id: '/admin/suppliers'
-      path: '/suppliers'
-      fullPath: '/admin/suppliers'
-      preLoaderRoute: typeof AdminSuppliersRouteRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/stock-batches': {
-      id: '/admin/stock-batches'
-      path: '/stock-batches'
-      fullPath: '/admin/stock-batches'
-      preLoaderRoute: typeof AdminStockBatchesRouteRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/product-variants': {
-      id: '/admin/product-variants'
-      path: '/product-variants'
-      fullPath: '/admin/product-variants'
-      preLoaderRoute: typeof AdminProductVariantsRouteRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/manufacturers': {
-      id: '/admin/manufacturers'
-      path: '/manufacturers'
-      fullPath: '/admin/manufacturers'
-      preLoaderRoute: typeof AdminManufacturersRouteRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
     '/admin/users/': {
       id: '/admin/users/'
-      path: '/'
-      fullPath: '/admin/users/'
+      path: '/users'
+      fullPath: '/admin/users'
       preLoaderRoute: typeof AdminUsersIndexRouteImport
-      parentRoute: typeof AdminUsersRouteRoute
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/suppliers/': {
       id: '/admin/suppliers/'
-      path: '/'
-      fullPath: '/admin/suppliers/'
+      path: '/suppliers'
+      fullPath: '/admin/suppliers'
       preLoaderRoute: typeof AdminSuppliersIndexRouteImport
-      parentRoute: typeof AdminSuppliersRouteRoute
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/stock-batches/': {
       id: '/admin/stock-batches/'
-      path: '/'
-      fullPath: '/admin/stock-batches/'
+      path: '/stock-batches'
+      fullPath: '/admin/stock-batches'
       preLoaderRoute: typeof AdminStockBatchesIndexRouteImport
-      parentRoute: typeof AdminStockBatchesRouteRoute
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/products/': {
       id: '/admin/products/'
@@ -542,17 +456,17 @@ declare module '@tanstack/react-router' {
     }
     '/admin/product-variants/': {
       id: '/admin/product-variants/'
-      path: '/'
-      fullPath: '/admin/product-variants/'
+      path: '/product-variants'
+      fullPath: '/admin/product-variants'
       preLoaderRoute: typeof AdminProductVariantsIndexRouteImport
-      parentRoute: typeof AdminProductVariantsRouteRoute
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/manufacturers/': {
       id: '/admin/manufacturers/'
-      path: '/'
-      fullPath: '/admin/manufacturers/'
+      path: '/manufacturers'
+      fullPath: '/admin/manufacturers'
       preLoaderRoute: typeof AdminManufacturersIndexRouteImport
-      parentRoute: typeof AdminManufacturersRouteRoute
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/categories/': {
       id: '/admin/categories/'
@@ -563,45 +477,45 @@ declare module '@tanstack/react-router' {
     }
     '/admin/users/new': {
       id: '/admin/users/new'
-      path: '/new'
+      path: '/users/new'
       fullPath: '/admin/users/new'
       preLoaderRoute: typeof AdminUsersNewRouteImport
-      parentRoute: typeof AdminUsersRouteRoute
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/users/$userId': {
       id: '/admin/users/$userId'
-      path: '/$userId'
+      path: '/users/$userId'
       fullPath: '/admin/users/$userId'
       preLoaderRoute: typeof AdminUsersUserIdRouteImport
-      parentRoute: typeof AdminUsersRouteRoute
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/suppliers/new': {
       id: '/admin/suppliers/new'
-      path: '/new'
+      path: '/suppliers/new'
       fullPath: '/admin/suppliers/new'
       preLoaderRoute: typeof AdminSuppliersNewRouteImport
-      parentRoute: typeof AdminSuppliersRouteRoute
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/suppliers/$supplierId': {
       id: '/admin/suppliers/$supplierId'
-      path: '/$supplierId'
+      path: '/suppliers/$supplierId'
       fullPath: '/admin/suppliers/$supplierId'
       preLoaderRoute: typeof AdminSuppliersSupplierIdRouteImport
-      parentRoute: typeof AdminSuppliersRouteRoute
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/stock-batches/new': {
       id: '/admin/stock-batches/new'
-      path: '/new'
+      path: '/stock-batches/new'
       fullPath: '/admin/stock-batches/new'
       preLoaderRoute: typeof AdminStockBatchesNewRouteImport
-      parentRoute: typeof AdminStockBatchesRouteRoute
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/stock-batches/$stockBatchId': {
       id: '/admin/stock-batches/$stockBatchId'
-      path: '/$stockBatchId'
+      path: '/stock-batches/$stockBatchId'
       fullPath: '/admin/stock-batches/$stockBatchId'
       preLoaderRoute: typeof AdminStockBatchesStockBatchIdRouteImport
-      parentRoute: typeof AdminStockBatchesRouteRoute
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/products/new': {
       id: '/admin/products/new'
@@ -612,31 +526,31 @@ declare module '@tanstack/react-router' {
     }
     '/admin/product-variants/new': {
       id: '/admin/product-variants/new'
-      path: '/new'
+      path: '/product-variants/new'
       fullPath: '/admin/product-variants/new'
       preLoaderRoute: typeof AdminProductVariantsNewRouteImport
-      parentRoute: typeof AdminProductVariantsRouteRoute
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/product-variants/$productVariantId': {
       id: '/admin/product-variants/$productVariantId'
-      path: '/$productVariantId'
+      path: '/product-variants/$productVariantId'
       fullPath: '/admin/product-variants/$productVariantId'
       preLoaderRoute: typeof AdminProductVariantsProductVariantIdRouteImport
-      parentRoute: typeof AdminProductVariantsRouteRoute
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/manufacturers/new': {
       id: '/admin/manufacturers/new'
-      path: '/new'
+      path: '/manufacturers/new'
       fullPath: '/admin/manufacturers/new'
       preLoaderRoute: typeof AdminManufacturersNewRouteImport
-      parentRoute: typeof AdminManufacturersRouteRoute
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/manufacturers/$manufacturerId': {
       id: '/admin/manufacturers/$manufacturerId'
-      path: '/$manufacturerId'
+      path: '/manufacturers/$manufacturerId'
       fullPath: '/admin/manufacturers/$manufacturerId'
       preLoaderRoute: typeof AdminManufacturersManufacturerIdRouteImport
-      parentRoute: typeof AdminManufacturersRouteRoute
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/categories/new': {
       id: '/admin/categories/new'
@@ -662,121 +576,55 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AdminManufacturersRouteRouteChildren {
-  AdminManufacturersManufacturerIdRoute: typeof AdminManufacturersManufacturerIdRoute
-  AdminManufacturersNewRoute: typeof AdminManufacturersNewRoute
-  AdminManufacturersIndexRoute: typeof AdminManufacturersIndexRoute
-}
-
-const AdminManufacturersRouteRouteChildren: AdminManufacturersRouteRouteChildren =
-  {
-    AdminManufacturersManufacturerIdRoute:
-      AdminManufacturersManufacturerIdRoute,
-    AdminManufacturersNewRoute: AdminManufacturersNewRoute,
-    AdminManufacturersIndexRoute: AdminManufacturersIndexRoute,
-  }
-
-const AdminManufacturersRouteRouteWithChildren =
-  AdminManufacturersRouteRoute._addFileChildren(
-    AdminManufacturersRouteRouteChildren,
-  )
-
-interface AdminProductVariantsRouteRouteChildren {
-  AdminProductVariantsProductVariantIdRoute: typeof AdminProductVariantsProductVariantIdRoute
-  AdminProductVariantsNewRoute: typeof AdminProductVariantsNewRoute
-  AdminProductVariantsIndexRoute: typeof AdminProductVariantsIndexRoute
-}
-
-const AdminProductVariantsRouteRouteChildren: AdminProductVariantsRouteRouteChildren =
-  {
-    AdminProductVariantsProductVariantIdRoute:
-      AdminProductVariantsProductVariantIdRoute,
-    AdminProductVariantsNewRoute: AdminProductVariantsNewRoute,
-    AdminProductVariantsIndexRoute: AdminProductVariantsIndexRoute,
-  }
-
-const AdminProductVariantsRouteRouteWithChildren =
-  AdminProductVariantsRouteRoute._addFileChildren(
-    AdminProductVariantsRouteRouteChildren,
-  )
-
-interface AdminStockBatchesRouteRouteChildren {
-  AdminStockBatchesStockBatchIdRoute: typeof AdminStockBatchesStockBatchIdRoute
-  AdminStockBatchesNewRoute: typeof AdminStockBatchesNewRoute
-  AdminStockBatchesIndexRoute: typeof AdminStockBatchesIndexRoute
-}
-
-const AdminStockBatchesRouteRouteChildren: AdminStockBatchesRouteRouteChildren =
-  {
-    AdminStockBatchesStockBatchIdRoute: AdminStockBatchesStockBatchIdRoute,
-    AdminStockBatchesNewRoute: AdminStockBatchesNewRoute,
-    AdminStockBatchesIndexRoute: AdminStockBatchesIndexRoute,
-  }
-
-const AdminStockBatchesRouteRouteWithChildren =
-  AdminStockBatchesRouteRoute._addFileChildren(
-    AdminStockBatchesRouteRouteChildren,
-  )
-
-interface AdminSuppliersRouteRouteChildren {
-  AdminSuppliersSupplierIdRoute: typeof AdminSuppliersSupplierIdRoute
-  AdminSuppliersNewRoute: typeof AdminSuppliersNewRoute
-  AdminSuppliersIndexRoute: typeof AdminSuppliersIndexRoute
-}
-
-const AdminSuppliersRouteRouteChildren: AdminSuppliersRouteRouteChildren = {
-  AdminSuppliersSupplierIdRoute: AdminSuppliersSupplierIdRoute,
-  AdminSuppliersNewRoute: AdminSuppliersNewRoute,
-  AdminSuppliersIndexRoute: AdminSuppliersIndexRoute,
-}
-
-const AdminSuppliersRouteRouteWithChildren =
-  AdminSuppliersRouteRoute._addFileChildren(AdminSuppliersRouteRouteChildren)
-
-interface AdminUsersRouteRouteChildren {
-  AdminUsersUserIdRoute: typeof AdminUsersUserIdRoute
-  AdminUsersNewRoute: typeof AdminUsersNewRoute
-  AdminUsersIndexRoute: typeof AdminUsersIndexRoute
-}
-
-const AdminUsersRouteRouteChildren: AdminUsersRouteRouteChildren = {
-  AdminUsersUserIdRoute: AdminUsersUserIdRoute,
-  AdminUsersNewRoute: AdminUsersNewRoute,
-  AdminUsersIndexRoute: AdminUsersIndexRoute,
-}
-
-const AdminUsersRouteRouteWithChildren = AdminUsersRouteRoute._addFileChildren(
-  AdminUsersRouteRouteChildren,
-)
-
 interface AdminRouteRouteChildren {
-  AdminManufacturersRouteRoute: typeof AdminManufacturersRouteRouteWithChildren
-  AdminProductVariantsRouteRoute: typeof AdminProductVariantsRouteRouteWithChildren
-  AdminStockBatchesRouteRoute: typeof AdminStockBatchesRouteRouteWithChildren
-  AdminSuppliersRouteRoute: typeof AdminSuppliersRouteRouteWithChildren
-  AdminUsersRouteRoute: typeof AdminUsersRouteRouteWithChildren
   AdminProfileRoute: typeof AdminProfileRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminCategoriesNewRoute: typeof AdminCategoriesNewRoute
+  AdminManufacturersManufacturerIdRoute: typeof AdminManufacturersManufacturerIdRoute
+  AdminManufacturersNewRoute: typeof AdminManufacturersNewRoute
+  AdminProductVariantsProductVariantIdRoute: typeof AdminProductVariantsProductVariantIdRoute
+  AdminProductVariantsNewRoute: typeof AdminProductVariantsNewRoute
   AdminProductsNewRoute: typeof AdminProductsNewRoute
+  AdminStockBatchesStockBatchIdRoute: typeof AdminStockBatchesStockBatchIdRoute
+  AdminStockBatchesNewRoute: typeof AdminStockBatchesNewRoute
+  AdminSuppliersSupplierIdRoute: typeof AdminSuppliersSupplierIdRoute
+  AdminSuppliersNewRoute: typeof AdminSuppliersNewRoute
+  AdminUsersUserIdRoute: typeof AdminUsersUserIdRoute
+  AdminUsersNewRoute: typeof AdminUsersNewRoute
   AdminCategoriesIndexRoute: typeof AdminCategoriesIndexRoute
+  AdminManufacturersIndexRoute: typeof AdminManufacturersIndexRoute
+  AdminProductVariantsIndexRoute: typeof AdminProductVariantsIndexRoute
   AdminProductsIndexRoute: typeof AdminProductsIndexRoute
+  AdminStockBatchesIndexRoute: typeof AdminStockBatchesIndexRoute
+  AdminSuppliersIndexRoute: typeof AdminSuppliersIndexRoute
+  AdminUsersIndexRoute: typeof AdminUsersIndexRoute
   AdminCategoriesCategoryIdRoute: typeof AdminCategoriesCategoryIdRoute
   AdminProductsProductIdRoute: typeof AdminProductsProductIdRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
-  AdminManufacturersRouteRoute: AdminManufacturersRouteRouteWithChildren,
-  AdminProductVariantsRouteRoute: AdminProductVariantsRouteRouteWithChildren,
-  AdminStockBatchesRouteRoute: AdminStockBatchesRouteRouteWithChildren,
-  AdminSuppliersRouteRoute: AdminSuppliersRouteRouteWithChildren,
-  AdminUsersRouteRoute: AdminUsersRouteRouteWithChildren,
   AdminProfileRoute: AdminProfileRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminCategoriesNewRoute: AdminCategoriesNewRoute,
+  AdminManufacturersManufacturerIdRoute: AdminManufacturersManufacturerIdRoute,
+  AdminManufacturersNewRoute: AdminManufacturersNewRoute,
+  AdminProductVariantsProductVariantIdRoute:
+    AdminProductVariantsProductVariantIdRoute,
+  AdminProductVariantsNewRoute: AdminProductVariantsNewRoute,
   AdminProductsNewRoute: AdminProductsNewRoute,
+  AdminStockBatchesStockBatchIdRoute: AdminStockBatchesStockBatchIdRoute,
+  AdminStockBatchesNewRoute: AdminStockBatchesNewRoute,
+  AdminSuppliersSupplierIdRoute: AdminSuppliersSupplierIdRoute,
+  AdminSuppliersNewRoute: AdminSuppliersNewRoute,
+  AdminUsersUserIdRoute: AdminUsersUserIdRoute,
+  AdminUsersNewRoute: AdminUsersNewRoute,
   AdminCategoriesIndexRoute: AdminCategoriesIndexRoute,
+  AdminManufacturersIndexRoute: AdminManufacturersIndexRoute,
+  AdminProductVariantsIndexRoute: AdminProductVariantsIndexRoute,
   AdminProductsIndexRoute: AdminProductsIndexRoute,
+  AdminStockBatchesIndexRoute: AdminStockBatchesIndexRoute,
+  AdminSuppliersIndexRoute: AdminSuppliersIndexRoute,
+  AdminUsersIndexRoute: AdminUsersIndexRoute,
   AdminCategoriesCategoryIdRoute: AdminCategoriesCategoryIdRoute,
   AdminProductsProductIdRoute: AdminProductsProductIdRoute,
 }

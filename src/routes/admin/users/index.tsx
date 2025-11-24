@@ -1,6 +1,5 @@
 import {
   createFileRoute,
-  useLocation,
   useNavigate,
 } from '@tanstack/react-router'
 import {
@@ -10,11 +9,11 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { useState } from 'react'
-import type {UserWithPermissions} from '@/lib/types';
+import type { UserWithPermissions } from '@/lib/types';
 import { listUsers } from '@/lib/server/users/users'
 import AppLink from '@/components/AppLink'
 import Button from '@/components/Button'
-import AdminLayout from '@/components/dashboard/AdminLayout'
+import Heading from '@/components/Heading';
 
 export const Route = createFileRoute('/admin/users/')({
   component: RouteComponent,
@@ -76,55 +75,55 @@ function RouteComponent() {
     getCoreRowModel: getCoreRowModel(),
   })
   const navigate = useNavigate()
-  const location = useLocation()
 
   return (
-    <AdminLayout currentPath={location.pathname}>
-      <div className="w-full overflow-x-auto p-6">
-        <div className="flex justify-end mb-4">
-          <Button
-            variant="primary"
-            onClick={() => navigate({ to: '/admin/users/new' })}
-          >
-            Create New User
-          </Button>
-        </div>
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="w-full overflow-x-auto">
+      <div className="flex justify-between mb-4 items-center">
+        <Heading level={4}>
+          Users
+        </Heading>
+        <Button
+          variant="primary"
+          onClick={() => navigate({ to: '/admin/users/new' })}
+        >
+          Create New User
+        </Button>
       </div>
-    </AdminLayout>
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-50">
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th
+                  key={header.id}
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <td
+                  key={cell.id}
+                  className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }

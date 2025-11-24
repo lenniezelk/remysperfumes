@@ -7,6 +7,7 @@ import Button from '@/components/Button';
 import { useNotifications } from '@/components/notifications/Notification';
 import { deleteStockBatch } from '@/lib/server/stock-batch/delete';
 import { listStockBatches } from '@/lib/server/stock-batch/list'
+import Heading from '@/components/Heading';
 
 export const Route = createFileRoute('/admin/stock-batches/')({
     component: RouteComponent,
@@ -138,7 +139,8 @@ function RouteComponent() {
 
     return (
         <div className='w-full overflow-x-auto'>
-            <div className="flex justify-end mb-4">
+            <div className="flex justify-between items-center mb-4">
+                <Heading level={4}>Stock Batches</Heading>
                 <Button variant="primary" onClick={() => navigate({ to: '/admin/stock-batches/new' })}>
                     Create New Stock Batch
                 </Button>

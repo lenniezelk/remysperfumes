@@ -1,17 +1,18 @@
 import { createServerFn } from '@tanstack/react-start'
-import db from '@/lib/db/client'
-import { categoryTable } from '@/lib/db/schema'
-import { desc, sql, eq } from 'drizzle-orm'
+import { desc, eq, sql } from 'drizzle-orm'
+import { canManageCategoriesMiddleware } from '../middleware/canManageCategories'
 import {
-  paginationSchema,
+  
+  
+  
   categorySchema,
   individualCategorySchema,
-  updateCategorySchema,
-  type UpdateCategoryInput,
-  type PaginationInput,
-  type CreateCategoryInput,
+  paginationSchema,
+  updateCategorySchema
 } from './types'
-import { canManageCategoriesMiddleware } from '../middleware/canManageCategories'
+import type {CreateCategoryInput, PaginationInput, UpdateCategoryInput} from './types';
+import db from '@/lib/db/client'
+import { categoryTable } from '@/lib/db/schema'
 
 // server function to get all categories without pagination
 export const getAllCategories = createServerFn({ method: 'GET' })
@@ -97,7 +98,7 @@ export const createCategory = createServerFn({
 
     if (!parsed.success) {
       // Map issues into a key-based object
-      const fieldErrors: Record<string, string[]> = {}
+      const fieldErrors: Record<string, Array<string>> = {}
       parsed.error.issues.forEach((issue) => {
         const pathKey = String(issue.path[0] ?? '_')
         if (!fieldErrors[pathKey]) fieldErrors[pathKey] = []
@@ -135,7 +136,7 @@ export const updateCategory = createServerFn({
 
     if (!parsed.success) {
       // Map issues into a key-based object
-      const fieldErrors: Record<string, string[]> = {}
+      const fieldErrors: Record<string, Array<string>> = {}
       parsed.error.issues.forEach((issue) => {
         const pathKey = String(issue.path[0] ?? '_')
         if (!fieldErrors[pathKey]) fieldErrors[pathKey] = []

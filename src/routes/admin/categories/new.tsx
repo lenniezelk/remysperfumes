@@ -1,14 +1,15 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
+import type {CreateCategoryInput} from '@/lib/server/categories/types';
 import { Input } from '@/components/Input'
 import { FieldInfo } from '@/components/FieldInfo'
 import Heading from '@/components/Heading'
 import Container from '@/components/Container'
 import { createCategory } from '@/lib/server/categories/server-fns'
 import {
-  categorySchema,
-  type CreateCategoryInput,
+  
+  categorySchema
 } from '@/lib/server/categories/types'
 import Button from '@/components/Button'
 

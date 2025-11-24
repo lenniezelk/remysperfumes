@@ -1,12 +1,12 @@
+import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
+import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { useEffect, useRef, useState } from 'react';
+import type { Supplier } from '@/lib/types';
 import AppLink from '@/components/AppLink';
 import Button from '@/components/Button';
 import { useNotifications } from '@/components/notifications/Notification';
 import { deleteSupplier } from '@/lib/server/supplier/delete';
 import { listSuppliers } from '@/lib/server/supplier/list'
-import { Supplier } from '@/lib/types';
-import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { useEffect, useRef, useState } from 'react';
 
 export const Route = createFileRoute('/admin/suppliers/')({
   component: RouteComponent,
@@ -61,7 +61,7 @@ function getColumns(onOpenDeleteDialog: (supplierId: string) => void) {
 
 function RouteComponent() {
   const initialData = Route.useLoaderData()
-  const [data, setData] = useState<Supplier[]>(() => initialData.status === 'SUCCESS' ? initialData.data : []);
+  const [data, setData] = useState<Array<Supplier>>(() => initialData.status === 'SUCCESS' ? initialData.data : []);
   const [selectedSupplierId, setSelectedSupplierId] = useState<string | null>(null);
   const navigate = useNavigate();
   const notifications = useNotifications();

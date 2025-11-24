@@ -1,8 +1,8 @@
-import dbClient from "@/lib/db/client";
 import { createServerFn } from "@tanstack/react-start";
-import { productVariantTable, productTable } from "@/lib/db/schema";
 import { asc, eq } from "drizzle-orm";
 import { canManageStockBatchesMiddleware } from "../middleware/canManageStockBatches";
+import { productTable, productVariantTable } from "@/lib/db/schema";
+import dbClient from "@/lib/db/client";
 
 export const listProductVariantsForDropdown = createServerFn({ method: 'GET' })
     .middleware([canManageStockBatchesMiddleware])

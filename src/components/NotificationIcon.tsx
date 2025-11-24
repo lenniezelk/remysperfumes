@@ -1,5 +1,5 @@
-import { NotificationType } from "@/lib/types";
 import { CircleCheckBig, CircleX, Info, OctagonAlert } from "lucide-react";
+import type { NotificationType } from "@/lib/types";
 
 interface NotificationIconProps {
     type: NotificationType;

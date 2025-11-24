@@ -1,5 +1,5 @@
-import { EnvVars } from "@/lib/types";
 import React from "react";
+import type { EnvVars } from "@/lib/types";
 
 export const EnvVarsContext = React.createContext<EnvVars | undefined>(undefined);
 

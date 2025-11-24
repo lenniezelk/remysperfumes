@@ -1,5 +1,5 @@
-import Heading from '@/components/Heading';
 import { Outlet, createFileRoute } from '@tanstack/react-router';
+import Heading from '@/components/Heading';
 
 export const Route = createFileRoute('/admin/stock-batches')({
     component: RouteComponent,

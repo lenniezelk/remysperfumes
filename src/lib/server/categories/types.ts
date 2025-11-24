@@ -1,5 +1,5 @@
-import { categoryTable } from '@/lib/db/schema'
 import { z } from 'zod'
+import type { categoryTable } from '@/lib/db/schema'
 
 // Category Type
 export type Category = typeof categoryTable.$inferSelect

@@ -1,16 +1,16 @@
+import {
+  Boxes,
+  Database,
+  Factory,
+  Layers,
+  Package,
+  ShoppingCart,
+  Tags,
+  Users,
+} from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import type { FileRouteTypes } from '@/routeTree.gen'
-import {
-  Tags,
-  Factory,
-  Package,
-  Layers,
-  Users,
-  Boxes,
-  ShoppingCart,
-  Database,
-} from 'lucide-react'
-import { type RoleKey } from '@/lib/permissions'
+import type { RoleKey } from '@/lib/permissions';
 import { roles } from '@/lib/permissions'
 
 export interface ModelBlueprint {
@@ -19,11 +19,11 @@ export interface ModelBlueprint {
   description: string
   icon: LucideIcon
   route: FileRouteTypes['to']
-  roles: RoleKey[]
-  children?: ModelBlueprint[]
+  roles: Array<RoleKey>
+  children?: Array<ModelBlueprint>
 }
 
-export const modelsBlueprint: ModelBlueprint[] = [
+export const modelsBlueprint: Array<ModelBlueprint> = [
   {
     key: 'category',
     name: 'Categories',
@@ -49,24 +49,14 @@ export const modelsBlueprint: ModelBlueprint[] = [
     icon: Package,
     route: '/admin/products',
     roles: [roles.MANAGER, roles.ADMIN, roles.SUPERADMIN],
-    // children: [
-    //   {
-    //     key: 'product-variant',
-    //     name: 'Product Variants',
-    //     description: 'Manage product variants',
-    //     icon: Layers,
-    //     route: '/admin/product-variant',
-    //     children: [
-    //       {
-    //         key: 'stock-batch',
-    //         name: 'Stock Batches',
-    //         description: 'Manage stock batches',
-    //         icon: Boxes,
-    //         route: '/admin/stock-batch',
-    //       },
-    //     ],
-    //   },
-    // ],
+  },
+  {
+    key: 'product-variant',
+    name: 'Product Variants',
+    description: 'Manage product variants',
+    icon: Boxes,
+    route: '/admin/product-variants',
+    roles: [roles.MANAGER, roles.ADMIN, roles.SUPERADMIN],
   },
   // {
   //   key: 'sale',

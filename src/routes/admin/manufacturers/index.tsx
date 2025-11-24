@@ -1,12 +1,12 @@
+import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
+import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { useEffect, useRef, useState } from 'react';
+import type { Manufacturer } from '@/lib/types';
 import AppLink from '@/components/AppLink';
 import Button from '@/components/Button';
 import { useNotifications } from '@/components/notifications/Notification';
 import { deleteManufacturer } from '@/lib/server/manufacturer/delete';
 import { listManufacturers } from '@/lib/server/manufacturer/list'
-import { Manufacturer } from '@/lib/types';
-import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { useEffect, useRef, useState } from 'react';
 
 export const Route = createFileRoute('/admin/manufacturers/')({
     component: RouteComponent,
@@ -61,7 +61,7 @@ function getColumns(onOpenDeleteDialog: (manufacturerId: string) => void) {
 
 function RouteComponent() {
     const initialData = Route.useLoaderData()
-    const [data, setData] = useState<Manufacturer[]>(() => initialData.status === 'SUCCESS' ? initialData.data : []);
+    const [data, setData] = useState<Array<Manufacturer>>(() => initialData.status === 'SUCCESS' ? initialData.data : []);
     const [selectedManufacturerId, setSelectedManufacturerId] = useState<string | null>(null);
     const navigate = useNavigate();
     const notifications = useNotifications();

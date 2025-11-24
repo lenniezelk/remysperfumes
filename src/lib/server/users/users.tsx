@@ -1,16 +1,17 @@
 import { createServerFn } from "@tanstack/react-start";
-import { getCurrentAdminUser } from "@/lib/auth/auth";
 import { redirect } from "@tanstack/react-router";
-import dbClient from "@/lib/db/client";
-import { userTable, roleTable } from "@/lib/db/schema";
 import { desc, eq } from "drizzle-orm";
-import { Role, type Result, type User, type UserWithPermissions, type UserUpdateData } from "@/lib/types";
-import { canEditOrDeleteUser, canManageUsers, rolesUserCanCreateBasedOnRole, type RoleKey } from "@/lib/permissions";
-import { createRandomPassword, hashPassword } from "@/lib/auth/utils";
 import { z } from "zod";
+import type { Result, Role, User, UserUpdateData, UserWithPermissions } from "@/lib/types";
+import type { RoleKey } from "@/lib/permissions";
+import { getCurrentAdminUser } from "@/lib/auth/auth";
+import dbClient from "@/lib/db/client";
+import { roleTable, userTable } from "@/lib/db/schema";
+import { canEditOrDeleteUser, canManageUsers, rolesUserCanCreateBasedOnRole } from "@/lib/permissions";
+import { createRandomPassword, hashPassword } from "@/lib/auth/utils";
 
 
-export const listUsers = createServerFn({ method: "GET" }).handler(async (): Promise<Result<UserWithPermissions[]>> => {
+export const listUsers = createServerFn({ method: "GET" }).handler(async (): Promise<Result<Array<UserWithPermissions>>> => {
     const session = await getCurrentAdminUser();
 
     if (session.status !== "SUCCESS") {
@@ -123,7 +124,7 @@ export const createAdminUser = createServerFn({ method: 'POST' }).inputValidator
     };
 });
 
-export const fetchCreateUserInitialData = createServerFn({ method: 'GET' }).handler(async (): Promise<{ roles: Role[] }> => {
+export const fetchCreateUserInitialData = createServerFn({ method: 'GET' }).handler(async (): Promise<{ roles: Array<Role> }> => {
     const session = await getCurrentAdminUser();
 
     if (session.status !== "SUCCESS") {
@@ -155,7 +156,7 @@ export const FetchUserByIdInput = z.object({
     userId: z.uuid(),
 });
 
-export const fetchEditUserInitialData = createServerFn({ method: 'GET' }).inputValidator(FetchUserByIdInput).handler(async (ctx): Promise<Result<{ user: User; roles: Role[] }>> => {
+export const fetchEditUserInitialData = createServerFn({ method: 'GET' }).inputValidator(FetchUserByIdInput).handler(async (ctx): Promise<Result<{ user: User; roles: Array<Role> }>> => {
     const userId = ctx.data.userId;
     const session = await getCurrentAdminUser();
 

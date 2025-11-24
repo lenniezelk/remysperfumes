@@ -1,9 +1,9 @@
 import 'dotenv/config';
+import { execSync } from 'node:child_process';
+import * as readline from 'node:readline/promises';
+import { stdin as input, stdout as output } from 'node:process';
 import { z } from 'zod';
-import { execSync } from 'child_process';
 import { hashPassword } from '@/lib/auth/utils';
-import * as readline from 'readline/promises';
-import { stdin as input, stdout as output } from 'process';
 
 interface DBRole {
     id: string;
@@ -67,7 +67,7 @@ async function addSuperAdminUser() {
         }
 
         // Check if user with email already exists
-        const userCheckCommand = `wrangler d1 execute DB --json --local --command "SELECT * FROM User WHERE email = '${email!}';"`;
+        const userCheckCommand = `wrangler d1 execute DB --json --local --command "SELECT * FROM User WHERE email = '${email}';"`;
         const userCheckOutput = execSync(userCheckCommand, { encoding: 'utf-8' });
         const userCheckResults = JSON.parse(userCheckOutput);
         if (userCheckResults.length > 0 && userCheckResults[0].results.length > 0) {
@@ -75,12 +75,12 @@ async function addSuperAdminUser() {
             process.exit(1);
         }
 
-        const passwordHash = await hashPassword(password!);
+        const passwordHash = await hashPassword(password);
 
         const user: DBUser = {
             id: crypto.randomUUID(),
-            name: name!,
-            email: email!,
+            name: name,
+            email: email,
             password_hash: passwordHash,
             role_id: roleCheckResults[0].results[0].id,
             is_active: true,
@@ -151,7 +151,7 @@ function addRoles() {
             return;
         }
 
-        const roles: DBRole[] = [
+        const roles: Array<DBRole> = [
             { id: crypto.randomUUID(), name: 'Admin', description: 'Administrator with limited access', key: 'admin', created_at: Date.now(), updated_at: Date.now() },
             { id: crypto.randomUUID(), name: 'Manager', description: 'Manager with limited access', key: 'manager', created_at: Date.now(), updated_at: Date.now() },
             { id: crypto.randomUUID(), name: 'Staff', description: 'Staff member with basic access', key: 'staff', created_at: Date.now(), updated_at: Date.now() },

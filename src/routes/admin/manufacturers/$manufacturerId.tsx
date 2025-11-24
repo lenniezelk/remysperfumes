@@ -1,3 +1,5 @@
+import { useForm } from '@tanstack/react-form';
+import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import Button from '@/components/Button';
 import { FieldInfo } from '@/components/FieldInfo';
 import Heading from '@/components/Heading';
@@ -5,9 +7,7 @@ import { Input } from '@/components/Input';
 import { useNotifications } from '@/components/notifications/Notification';
 import { TextArea } from '@/components/TextArea';
 import { getManufacturerById } from '@/lib/server/manufacturer/get'
-import { updateManufacturer, UpdateManufacturerData } from '@/lib/server/manufacturer/update';
-import { useForm } from '@tanstack/react-form';
-import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
+import { UpdateManufacturerData, updateManufacturer } from '@/lib/server/manufacturer/update';
 
 export const Route = createFileRoute('/admin/manufacturers/$manufacturerId')({
   component: RouteComponent,
@@ -40,7 +40,7 @@ function RouteComponent() {
 
       notifications.clear();
 
-      updateManufacturer({
+      return updateManufacturer({
         data,
       }).then((result) => {
         if (result.status === 'SUCCESS') {

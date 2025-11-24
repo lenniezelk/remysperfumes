@@ -19,11 +19,13 @@ import { Route as AdminProfileRouteImport } from './routes/admin/profile'
 import { Route as AdminUsersRouteRouteImport } from './routes/admin/users/route'
 import { Route as AdminSuppliersRouteRouteImport } from './routes/admin/suppliers/route'
 import { Route as AdminStockBatchesRouteRouteImport } from './routes/admin/stock-batches/route'
+import { Route as AdminProductVariantsRouteRouteImport } from './routes/admin/product-variants/route'
 import { Route as AdminManufacturersRouteRouteImport } from './routes/admin/manufacturers/route'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as AdminSuppliersIndexRouteImport } from './routes/admin/suppliers/index'
 import { Route as AdminStockBatchesIndexRouteImport } from './routes/admin/stock-batches/index'
 import { Route as AdminProductsIndexRouteImport } from './routes/admin/products/index'
+import { Route as AdminProductVariantsIndexRouteImport } from './routes/admin/product-variants/index'
 import { Route as AdminManufacturersIndexRouteImport } from './routes/admin/manufacturers/index'
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
 import { Route as AdminUsersNewRouteImport } from './routes/admin/users/new'
@@ -33,6 +35,8 @@ import { Route as AdminSuppliersSupplierIdRouteImport } from './routes/admin/sup
 import { Route as AdminStockBatchesNewRouteImport } from './routes/admin/stock-batches/new'
 import { Route as AdminStockBatchesStockBatchIdRouteImport } from './routes/admin/stock-batches/$stockBatchId'
 import { Route as AdminProductsNewRouteImport } from './routes/admin/products/new'
+import { Route as AdminProductVariantsNewRouteImport } from './routes/admin/product-variants/new'
+import { Route as AdminProductVariantsProductVariantIdRouteImport } from './routes/admin/product-variants/$productVariantId'
 import { Route as AdminManufacturersNewRouteImport } from './routes/admin/manufacturers/new'
 import { Route as AdminManufacturersManufacturerIdRouteImport } from './routes/admin/manufacturers/$manufacturerId'
 import { Route as AdminCategoriesNewRouteImport } from './routes/admin/categories/new'
@@ -89,6 +93,12 @@ const AdminStockBatchesRouteRoute = AdminStockBatchesRouteRouteImport.update({
   path: '/stock-batches',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminProductVariantsRouteRoute =
+  AdminProductVariantsRouteRouteImport.update({
+    id: '/product-variants',
+    path: '/product-variants',
+    getParentRoute: () => AdminRouteRoute,
+  } as any)
 const AdminManufacturersRouteRoute = AdminManufacturersRouteRouteImport.update({
   id: '/manufacturers',
   path: '/manufacturers',
@@ -114,6 +124,12 @@ const AdminProductsIndexRoute = AdminProductsIndexRouteImport.update({
   path: '/products/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminProductVariantsIndexRoute =
+  AdminProductVariantsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AdminProductVariantsRouteRoute,
+  } as any)
 const AdminManufacturersIndexRoute = AdminManufacturersIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -161,6 +177,17 @@ const AdminProductsNewRoute = AdminProductsNewRouteImport.update({
   path: '/products/new',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminProductVariantsNewRoute = AdminProductVariantsNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AdminProductVariantsRouteRoute,
+} as any)
+const AdminProductVariantsProductVariantIdRoute =
+  AdminProductVariantsProductVariantIdRouteImport.update({
+    id: '/$productVariantId',
+    path: '/$productVariantId',
+    getParentRoute: () => AdminProductVariantsRouteRoute,
+  } as any)
 const AdminManufacturersNewRoute = AdminManufacturersNewRouteImport.update({
   id: '/new',
   path: '/new',
@@ -196,6 +223,7 @@ export interface FileRoutesByFullPath {
   '/admin-logout': typeof AdminLogoutRoute
   '/not-authorized': typeof NotAuthorizedRoute
   '/admin/manufacturers': typeof AdminManufacturersRouteRouteWithChildren
+  '/admin/product-variants': typeof AdminProductVariantsRouteRouteWithChildren
   '/admin/stock-batches': typeof AdminStockBatchesRouteRouteWithChildren
   '/admin/suppliers': typeof AdminSuppliersRouteRouteWithChildren
   '/admin/users': typeof AdminUsersRouteRouteWithChildren
@@ -204,6 +232,8 @@ export interface FileRoutesByFullPath {
   '/admin/categories/new': typeof AdminCategoriesNewRoute
   '/admin/manufacturers/$manufacturerId': typeof AdminManufacturersManufacturerIdRoute
   '/admin/manufacturers/new': typeof AdminManufacturersNewRoute
+  '/admin/product-variants/$productVariantId': typeof AdminProductVariantsProductVariantIdRoute
+  '/admin/product-variants/new': typeof AdminProductVariantsNewRoute
   '/admin/products/new': typeof AdminProductsNewRoute
   '/admin/stock-batches/$stockBatchId': typeof AdminStockBatchesStockBatchIdRoute
   '/admin/stock-batches/new': typeof AdminStockBatchesNewRoute
@@ -213,6 +243,7 @@ export interface FileRoutesByFullPath {
   '/admin/users/new': typeof AdminUsersNewRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/manufacturers/': typeof AdminManufacturersIndexRoute
+  '/admin/product-variants/': typeof AdminProductVariantsIndexRoute
   '/admin/products': typeof AdminProductsIndexRoute
   '/admin/stock-batches/': typeof AdminStockBatchesIndexRoute
   '/admin/suppliers/': typeof AdminSuppliersIndexRoute
@@ -230,6 +261,8 @@ export interface FileRoutesByTo {
   '/admin/categories/new': typeof AdminCategoriesNewRoute
   '/admin/manufacturers/$manufacturerId': typeof AdminManufacturersManufacturerIdRoute
   '/admin/manufacturers/new': typeof AdminManufacturersNewRoute
+  '/admin/product-variants/$productVariantId': typeof AdminProductVariantsProductVariantIdRoute
+  '/admin/product-variants/new': typeof AdminProductVariantsNewRoute
   '/admin/products/new': typeof AdminProductsNewRoute
   '/admin/stock-batches/$stockBatchId': typeof AdminStockBatchesStockBatchIdRoute
   '/admin/stock-batches/new': typeof AdminStockBatchesNewRoute
@@ -239,6 +272,7 @@ export interface FileRoutesByTo {
   '/admin/users/new': typeof AdminUsersNewRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/manufacturers': typeof AdminManufacturersIndexRoute
+  '/admin/product-variants': typeof AdminProductVariantsIndexRoute
   '/admin/products': typeof AdminProductsIndexRoute
   '/admin/stock-batches': typeof AdminStockBatchesIndexRoute
   '/admin/suppliers': typeof AdminSuppliersIndexRoute
@@ -254,6 +288,7 @@ export interface FileRoutesById {
   '/admin-logout': typeof AdminLogoutRoute
   '/not-authorized': typeof NotAuthorizedRoute
   '/admin/manufacturers': typeof AdminManufacturersRouteRouteWithChildren
+  '/admin/product-variants': typeof AdminProductVariantsRouteRouteWithChildren
   '/admin/stock-batches': typeof AdminStockBatchesRouteRouteWithChildren
   '/admin/suppliers': typeof AdminSuppliersRouteRouteWithChildren
   '/admin/users': typeof AdminUsersRouteRouteWithChildren
@@ -262,6 +297,8 @@ export interface FileRoutesById {
   '/admin/categories/new': typeof AdminCategoriesNewRoute
   '/admin/manufacturers/$manufacturerId': typeof AdminManufacturersManufacturerIdRoute
   '/admin/manufacturers/new': typeof AdminManufacturersNewRoute
+  '/admin/product-variants/$productVariantId': typeof AdminProductVariantsProductVariantIdRoute
+  '/admin/product-variants/new': typeof AdminProductVariantsNewRoute
   '/admin/products/new': typeof AdminProductsNewRoute
   '/admin/stock-batches/$stockBatchId': typeof AdminStockBatchesStockBatchIdRoute
   '/admin/stock-batches/new': typeof AdminStockBatchesNewRoute
@@ -271,6 +308,7 @@ export interface FileRoutesById {
   '/admin/users/new': typeof AdminUsersNewRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
   '/admin/manufacturers/': typeof AdminManufacturersIndexRoute
+  '/admin/product-variants/': typeof AdminProductVariantsIndexRoute
   '/admin/products/': typeof AdminProductsIndexRoute
   '/admin/stock-batches/': typeof AdminStockBatchesIndexRoute
   '/admin/suppliers/': typeof AdminSuppliersIndexRoute
@@ -287,6 +325,7 @@ export interface FileRouteTypes {
     | '/admin-logout'
     | '/not-authorized'
     | '/admin/manufacturers'
+    | '/admin/product-variants'
     | '/admin/stock-batches'
     | '/admin/suppliers'
     | '/admin/users'
@@ -295,6 +334,8 @@ export interface FileRouteTypes {
     | '/admin/categories/new'
     | '/admin/manufacturers/$manufacturerId'
     | '/admin/manufacturers/new'
+    | '/admin/product-variants/$productVariantId'
+    | '/admin/product-variants/new'
     | '/admin/products/new'
     | '/admin/stock-batches/$stockBatchId'
     | '/admin/stock-batches/new'
@@ -304,6 +345,7 @@ export interface FileRouteTypes {
     | '/admin/users/new'
     | '/admin/categories'
     | '/admin/manufacturers/'
+    | '/admin/product-variants/'
     | '/admin/products'
     | '/admin/stock-batches/'
     | '/admin/suppliers/'
@@ -321,6 +363,8 @@ export interface FileRouteTypes {
     | '/admin/categories/new'
     | '/admin/manufacturers/$manufacturerId'
     | '/admin/manufacturers/new'
+    | '/admin/product-variants/$productVariantId'
+    | '/admin/product-variants/new'
     | '/admin/products/new'
     | '/admin/stock-batches/$stockBatchId'
     | '/admin/stock-batches/new'
@@ -330,6 +374,7 @@ export interface FileRouteTypes {
     | '/admin/users/new'
     | '/admin/categories'
     | '/admin/manufacturers'
+    | '/admin/product-variants'
     | '/admin/products'
     | '/admin/stock-batches'
     | '/admin/suppliers'
@@ -344,6 +389,7 @@ export interface FileRouteTypes {
     | '/admin-logout'
     | '/not-authorized'
     | '/admin/manufacturers'
+    | '/admin/product-variants'
     | '/admin/stock-batches'
     | '/admin/suppliers'
     | '/admin/users'
@@ -352,6 +398,8 @@ export interface FileRouteTypes {
     | '/admin/categories/new'
     | '/admin/manufacturers/$manufacturerId'
     | '/admin/manufacturers/new'
+    | '/admin/product-variants/$productVariantId'
+    | '/admin/product-variants/new'
     | '/admin/products/new'
     | '/admin/stock-batches/$stockBatchId'
     | '/admin/stock-batches/new'
@@ -361,6 +409,7 @@ export interface FileRouteTypes {
     | '/admin/users/new'
     | '/admin/categories/'
     | '/admin/manufacturers/'
+    | '/admin/product-variants/'
     | '/admin/products/'
     | '/admin/stock-batches/'
     | '/admin/suppliers/'
@@ -449,6 +498,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminStockBatchesRouteRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/product-variants': {
+      id: '/admin/product-variants'
+      path: '/product-variants'
+      fullPath: '/admin/product-variants'
+      preLoaderRoute: typeof AdminProductVariantsRouteRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/manufacturers': {
       id: '/admin/manufacturers'
       path: '/manufacturers'
@@ -483,6 +539,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/products'
       preLoaderRoute: typeof AdminProductsIndexRouteImport
       parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/product-variants/': {
+      id: '/admin/product-variants/'
+      path: '/'
+      fullPath: '/admin/product-variants/'
+      preLoaderRoute: typeof AdminProductVariantsIndexRouteImport
+      parentRoute: typeof AdminProductVariantsRouteRoute
     }
     '/admin/manufacturers/': {
       id: '/admin/manufacturers/'
@@ -547,6 +610,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProductsNewRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/product-variants/new': {
+      id: '/admin/product-variants/new'
+      path: '/new'
+      fullPath: '/admin/product-variants/new'
+      preLoaderRoute: typeof AdminProductVariantsNewRouteImport
+      parentRoute: typeof AdminProductVariantsRouteRoute
+    }
+    '/admin/product-variants/$productVariantId': {
+      id: '/admin/product-variants/$productVariantId'
+      path: '/$productVariantId'
+      fullPath: '/admin/product-variants/$productVariantId'
+      preLoaderRoute: typeof AdminProductVariantsProductVariantIdRouteImport
+      parentRoute: typeof AdminProductVariantsRouteRoute
+    }
     '/admin/manufacturers/new': {
       id: '/admin/manufacturers/new'
       path: '/new'
@@ -604,6 +681,25 @@ const AdminManufacturersRouteRouteWithChildren =
     AdminManufacturersRouteRouteChildren,
   )
 
+interface AdminProductVariantsRouteRouteChildren {
+  AdminProductVariantsProductVariantIdRoute: typeof AdminProductVariantsProductVariantIdRoute
+  AdminProductVariantsNewRoute: typeof AdminProductVariantsNewRoute
+  AdminProductVariantsIndexRoute: typeof AdminProductVariantsIndexRoute
+}
+
+const AdminProductVariantsRouteRouteChildren: AdminProductVariantsRouteRouteChildren =
+  {
+    AdminProductVariantsProductVariantIdRoute:
+      AdminProductVariantsProductVariantIdRoute,
+    AdminProductVariantsNewRoute: AdminProductVariantsNewRoute,
+    AdminProductVariantsIndexRoute: AdminProductVariantsIndexRoute,
+  }
+
+const AdminProductVariantsRouteRouteWithChildren =
+  AdminProductVariantsRouteRoute._addFileChildren(
+    AdminProductVariantsRouteRouteChildren,
+  )
+
 interface AdminStockBatchesRouteRouteChildren {
   AdminStockBatchesStockBatchIdRoute: typeof AdminStockBatchesStockBatchIdRoute
   AdminStockBatchesNewRoute: typeof AdminStockBatchesNewRoute
@@ -655,6 +751,7 @@ const AdminUsersRouteRouteWithChildren = AdminUsersRouteRoute._addFileChildren(
 
 interface AdminRouteRouteChildren {
   AdminManufacturersRouteRoute: typeof AdminManufacturersRouteRouteWithChildren
+  AdminProductVariantsRouteRoute: typeof AdminProductVariantsRouteRouteWithChildren
   AdminStockBatchesRouteRoute: typeof AdminStockBatchesRouteRouteWithChildren
   AdminSuppliersRouteRoute: typeof AdminSuppliersRouteRouteWithChildren
   AdminUsersRouteRoute: typeof AdminUsersRouteRouteWithChildren
@@ -670,6 +767,7 @@ interface AdminRouteRouteChildren {
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminManufacturersRouteRoute: AdminManufacturersRouteRouteWithChildren,
+  AdminProductVariantsRouteRoute: AdminProductVariantsRouteRouteWithChildren,
   AdminStockBatchesRouteRoute: AdminStockBatchesRouteRouteWithChildren,
   AdminSuppliersRouteRoute: AdminSuppliersRouteRouteWithChildren,
   AdminUsersRouteRoute: AdminUsersRouteRouteWithChildren,

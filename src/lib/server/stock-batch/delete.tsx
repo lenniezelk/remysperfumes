@@ -1,9 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
-import { canManageStockBatchesMiddleware } from "@/lib/server/middleware/canManageStockBatches";
 import { z } from "zod";
+import { eq } from "drizzle-orm";
+import { canManageStockBatchesMiddleware } from "@/lib/server/middleware/canManageStockBatches";
 import dbClient from "@/lib/db/client";
 import { stockBatchTable } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
 
 export const DeleteStockBatchInput = z.object({
     stockBatchId: z.string(),

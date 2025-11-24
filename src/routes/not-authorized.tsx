@@ -1,6 +1,6 @@
+import { createFileRoute } from '@tanstack/react-router'
 import Container from '@/components/Container'
 import Heading from '@/components/Heading'
-import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/not-authorized')({
     component: RouteComponent,

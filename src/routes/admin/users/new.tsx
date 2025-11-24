@@ -1,11 +1,11 @@
 import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
-import { NotificationsList, useNotifications } from '@/components/notifications/Notification';
 import { useForm } from '@tanstack/react-form';
+import { NotificationsList, useNotifications } from '@/components/notifications/Notification';
 import { Input } from '@/components/Input';
 import Heading from '@/components/Heading';
 import { FieldInfo } from '@/components/FieldInfo';
 import Button from '@/components/Button';
-import { createAdminUser, fetchCreateUserInitialData, CreateUserData } from '@/lib/server/users/users';
+import { CreateUserData, createAdminUser, fetchCreateUserInitialData } from '@/lib/server/users/users';
 
 export const Route = createFileRoute('/admin/users/new')({
   component: RouteComponent,
@@ -34,7 +34,7 @@ function RouteComponent() {
         role_id: values.value.role_id || '',
         is_active: values.value.is_active,
       }
-      createAdminUser({
+      return createAdminUser({
         data,
       }).then((result) => {
         notifications.clear();

@@ -1,9 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
-import { canManageManufacturersMiddleware } from "../middleware/canManageManufacturers";
 import { z } from "zod";
+import { eq } from "drizzle-orm";
+import { canManageManufacturersMiddleware } from "../middleware/canManageManufacturers";
 import dbClient from "@/lib/db/client";
 import { manufacturerTable } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
 
 export const GetManufacturerInput = z.object({
     manufacturerId: z.uuid(),

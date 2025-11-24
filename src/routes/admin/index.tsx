@@ -1,7 +1,7 @@
+import { createFileRoute } from '@tanstack/react-router'
 import AppLink from '@/components/AppLink'
 import Heading from '@/components/Heading'
 import { modelsBlueprint } from '@/utility/modelsBlueprint'
-import { createFileRoute } from '@tanstack/react-router'
 import { getCurrentAdminUser } from '@/lib/auth/auth'
 import { canViewDashboardCard } from '@/lib/permissions'
 

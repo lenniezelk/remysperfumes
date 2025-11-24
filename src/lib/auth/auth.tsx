@@ -1,12 +1,13 @@
 import { createServerFn } from "@tanstack/react-start";
+import { eq } from "drizzle-orm";
+import { redirect } from "@tanstack/react-router";
+import { verifyPassword } from "./utils";
+import type { Result, User} from "@/lib/types";
+import type { RoleKey } from "@/lib/permissions";
 import { useAdminAppSession } from "@/lib/useAppSession";
-import { Result, User, LoginAdminUserInput } from "@/lib/types";
-import { RoleKey } from "@/lib/permissions";
+import { LoginAdminUserInput } from "@/lib/types";
 import dbClient from "@/lib/db/client";
 import { roleTable, userTable } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
-import { verifyPassword } from "./utils";
-import { redirect } from "@tanstack/react-router";
 
 export const getCurrentAdminUser = createServerFn({ method: 'GET' }).handler(async (): Promise<Result<User>> => {
     const session = await useAdminAppSession();
@@ -28,7 +29,7 @@ export const loginAdminUser = createServerFn({ method: 'POST' }).inputValidator(
 
     const errorMessage = "Invalid email or password or user is not active or has been deleted";
 
-    let dbUser = await db.select().from(userTable).where(eq(userTable.email, data.email)).limit(1);
+    const dbUser = await db.select().from(userTable).where(eq(userTable.email, data.email)).limit(1);
     if (dbUser.length === 0) {
         return {
             status: "ERROR",

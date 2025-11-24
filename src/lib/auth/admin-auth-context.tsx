@@ -1,8 +1,8 @@
-import { User } from "@/lib/types";
 import { useServerFn } from "@tanstack/react-start";
 import { createContext, useContext } from "react";
-import { getCurrentAdminUser } from "@/lib/auth/auth";
 import { useQuery } from '@tanstack/react-query'
+import type { User } from "@/lib/types";
+import { getCurrentAdminUser } from "@/lib/auth/auth";
 
 interface AdminAuthContext {
     user: User | null;

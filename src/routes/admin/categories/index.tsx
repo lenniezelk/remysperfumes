@@ -3,18 +3,19 @@ import {
   useLocation,
   useNavigate,
 } from '@tanstack/react-router'
-import { useState, useMemo } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Loader, Edit, Trash } from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Edit, Loader, Trash } from 'lucide-react'
 import {
-  useReactTable,
-  getCoreRowModel,
-  ColumnDef,
   flexRender,
+  getCoreRowModel,
+  useReactTable,
 } from '@tanstack/react-table'
+import type {
+  ColumnDef} from '@tanstack/react-table';
 import {
-  listCategoriesPaginated,
   deleteCategory,
+  listCategoriesPaginated,
 } from '@/lib/server/categories/server-fns'
 import Heading from '@/components/Heading'
 import Button from '@/components/Button'
@@ -58,7 +59,7 @@ function CategoriesPage() {
   }
 
   // Define columns
-  const columns = useMemo<ColumnDef<any>[]>(
+  const columns = useMemo<Array<ColumnDef<any>>>(
     () => [
       { accessorKey: 'name', header: 'Name' },
       { accessorKey: 'description', header: 'Description' },
@@ -119,7 +120,7 @@ function CategoriesPage() {
     return (
       <AdminLayout currentPath={location.pathname}>
         <ContainerNoOverflow>
-          <div>Error: {(error as Error).message}</div>
+          <div>Error: {(error).message}</div>
         </ContainerNoOverflow>
       </AdminLayout>
     )

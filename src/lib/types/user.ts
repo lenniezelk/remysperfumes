@@ -1,7 +1,7 @@
-import { z } from "zod";
 import { createSelectSchema, createUpdateSchema } from 'drizzle-zod';
-import { userTable } from "@/lib/db/schema";
+import type { z } from "zod";
 import type { Role } from "./role";
+import { userTable } from "@/lib/db/schema";
 
 const userSelectSchema = createSelectSchema(userTable);
 export type UserDB = z.infer<typeof userSelectSchema>;

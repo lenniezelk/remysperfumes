@@ -1,7 +1,7 @@
-import { z } from "zod";
 import { createSelectSchema } from 'drizzle-zod';
-import { roleTable } from "@/lib/db/schema";
+import type { z } from "zod";
 import type { RoleKey } from "@/lib/permissions";
+import { roleTable } from "@/lib/db/schema";
 
 const roleSelectSchema = createSelectSchema(roleTable);
 export type RoleDB = z.infer<typeof roleSelectSchema>;

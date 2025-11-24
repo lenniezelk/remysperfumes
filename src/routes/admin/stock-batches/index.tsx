@@ -1,12 +1,12 @@
+import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
+import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { useEffect, useRef, useState } from 'react';
+import type { StockBatch } from '@/lib/types';
 import AppLink from '@/components/AppLink';
 import Button from '@/components/Button';
 import { useNotifications } from '@/components/notifications/Notification';
 import { deleteStockBatch } from '@/lib/server/stock-batch/delete';
 import { listStockBatches } from '@/lib/server/stock-batch/list'
-import { StockBatch } from '@/lib/types';
-import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { useEffect, useRef, useState } from 'react';
 
 export const Route = createFileRoute('/admin/stock-batches/')({
     component: RouteComponent,
@@ -81,7 +81,7 @@ function getColumns(onOpenDeleteDialog: (stockBatchId: string) => void) {
 
 function RouteComponent() {
     const initialData = Route.useLoaderData()
-    const [data, setData] = useState<StockBatch[]>(() => initialData.status === 'SUCCESS' ? initialData.data : []);
+    const [data, setData] = useState<Array<StockBatch>>(() => initialData.status === 'SUCCESS' ? initialData.data : []);
     const [selectedStockBatchId, setSelectedStockBatchId] = useState<string | null>(null);
     const navigate = useNavigate();
     const notifications = useNotifications();

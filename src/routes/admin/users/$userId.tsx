@@ -1,12 +1,12 @@
+import { useForm } from '@tanstack/react-form'
+import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import Container from '@/components/Container'
 import { FieldInfo } from '@/components/FieldInfo'
 import Heading from '@/components/Heading'
 import { Input } from '@/components/Input'
 import Button from '@/components/Button'
 import { useNotifications } from '@/components/notifications/Notification'
-import { fetchEditUserInitialData, updateAdminUser, UpdateUserData } from '@/lib/server/users/users'
-import { useForm } from '@tanstack/react-form'
-import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
+import { UpdateUserData, fetchEditUserInitialData, updateAdminUser } from '@/lib/server/users/users'
 
 export const Route = createFileRoute('/admin/users/$userId')({
   component: RouteComponent,
@@ -45,7 +45,7 @@ function RouteComponent() {
         delete_user: values.value.delete_user,
         restore_user: values.value.restore_user,
       }
-      updateAdminUser({
+      return updateAdminUser({
         data,
       }).then((result) => {
         notifications.clear();

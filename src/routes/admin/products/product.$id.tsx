@@ -2,18 +2,19 @@ import { useState } from 'react'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
+import type { Manufacturer } from '@/lib/types'
+import type {UpdateProductInput} from '@/lib/server/products/types';
 import { Input } from '@/components/Input'
 import { FieldInfo } from '@/components/FieldInfo'
 import Heading from '@/components/Heading'
 import Container from '@/components/Container'
-import { updateProduct, getProductById } from '@/lib/server/products/server-fns'
+import { getProductById, updateProduct } from '@/lib/server/products/server-fns'
 import { getAllCategories } from '@/lib/server/categories/server-fns'
 import {
-  updateProductSchema,
-  type UpdateProductInput,
+  
+  updateProductSchema
 } from '@/lib/server/products/types'
 import { listManufacturers } from '@/lib/server/manufacturer/list'
-import { Manufacturer } from '@/lib/types'
 import Button from '@/components/Button'
 
 export const Route = createFileRoute('/admin/products/product/$id')({
@@ -31,7 +32,7 @@ export const Route = createFileRoute('/admin/products/product/$id')({
 
 function RouteComponent() {
   const { categories, data, manufacturers } = Route.useLoaderData()
-  const [manufacturerData] = useState<Manufacturer[]>(() =>
+  const [manufacturerData] = useState<Array<Manufacturer>>(() =>
     manufacturers.status === 'SUCCESS' ? manufacturers.data : [],
   )
   const navigate = useNavigate()

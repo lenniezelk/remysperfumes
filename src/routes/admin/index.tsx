@@ -17,21 +17,16 @@ export const Route = createFileRoute('/admin/')({
 })
 
 function RouteComponent() {
-  const context = Route.useRouteContext()
   const { user } = Route.useLoaderData()
   const userRoleKey = user?.role?.key
 
   return (
-    <div className="p-8">
-      <Heading level={1} className="mb-4 flex justify-between items-baseline">
-        <span className="text-brand">Dashboard</span>
-        <span className="text-accent text-sm">
-          {' '}
-          Welcome {context.user?.name}
-        </span>
+    <div className="p-2">
+      <Heading level={1} className="mb-8">
+        Dashboard
       </Heading>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {modelsBlueprint
           .filter((bluePrint) =>
             canViewDashboardCard(userRoleKey, bluePrint.roles),
@@ -40,26 +35,33 @@ function RouteComponent() {
             const Icon = model.icon
 
             return (
-              <AppLink
-                key={model.key}
-                to={model.route}
-                className="block p-6 bg-white shadow hover:shadow-lg transition rounded-xl border border-gray-100 no-underline hover:no-underline"
-              >
-                <div className="flex items-center gap-4">
-                  <Icon className="w-10 h-10 text-brand" />
-                  <div>
-                    <Heading
-                      level={4}
-                      className="text-4xl text-accent font-semibold no-underline hover:no-underline"
+
+              <div className="card card-side bg-white shadow-sm">
+                <figure>
+                  <div className="flex items-center justify-center ml-4">
+                    <Icon className="w-10 h-10 text-brand" />
+                  </div>
+                </figure>
+                <div className="card-body">
+                  <div className="flex flex-col gap-2">
+                    <AppLink
+                      key={model.key}
+                      to={model.route}
+                      className='no-underline hover:underline'
                     >
-                      {model.name}
-                    </Heading>
-                    <p className="text-gray-600 text-sm no-underline hover:no-underline">
+                      <Heading
+                        level={4}
+                        className='card-title'
+                      >
+                        {model.name}
+                      </Heading>
+                    </AppLink>
+                    <p className="text-gray-600 text-sm">
                       {model.description}
                     </p>
                   </div>
                 </div>
-              </AppLink>
+              </div>
             )
           })}
       </div>

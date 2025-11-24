@@ -54,7 +54,7 @@ export const modelsBlueprint: Array<ModelBlueprint> = [
     key: 'product-variant',
     name: 'Product Variants',
     description: 'Manage product variants',
-    icon: Boxes,
+    icon: Layers,
     route: '/admin/product-variants',
     roles: [roles.MANAGER, roles.ADMIN, roles.SUPERADMIN],
   },

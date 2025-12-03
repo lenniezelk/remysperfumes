@@ -58,22 +58,6 @@ export const modelsBlueprint: Array<ModelBlueprint> = [
     route: '/admin/product-variants',
     roles: [roles.MANAGER, roles.ADMIN, roles.SUPERADMIN],
   },
-  // {
-  //   key: 'sale',
-  //   name: 'Sales',
-  //   description: 'View all sales',
-  //   icon: ShoppingCart,
-  //   route: '/admin/sale',
-  //   children: [
-  //     {
-  //       key: 'sale-item',
-  //       name: 'Sale Items',
-  //       description: 'View sale items',
-  //       icon: ShoppingCart,
-  //       route: '/admin/sale-item',
-  //     },
-  //   ],
-  // },
   {
     key: 'supplier',
     name: 'Suppliers',
@@ -97,6 +81,14 @@ export const modelsBlueprint: Array<ModelBlueprint> = [
     icon: Factory,
     route: '/admin/manufacturers',
     roles: [roles.MANAGER, roles.ADMIN, roles.SUPERADMIN],
+  },
+  {
+    key: 'sale',
+    name: 'Sales',
+    description: 'View all sales',
+    icon: ShoppingCart,
+    route: '/admin/sales',
+    roles: [roles.STAFF,roles.MANAGER, roles.ADMIN, roles.SUPERADMIN],
   },
   // {
   //   key: 'role',

@@ -88,6 +88,7 @@ export const createProductVariant = createServerFn({ method: 'POST' })
             image: null,
             created_at: new Date(),
             updated_at: new Date(),
+            deleted_at: null,
         };
 
         const insertedProductVariant = await db.insert(productVariantTable).values(newProductVariant).returning();

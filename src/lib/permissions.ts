@@ -82,3 +82,7 @@ export const canManageStockBatches = (roleKey: string | undefined): boolean => {
 export const canManageProductVariants = (roleKey: string | undefined): boolean => {
   return hasPermission(roleKey as RoleKey | undefined, roles.MANAGER)
 }
+
+export const canManageSales = (roleKey: string | undefined): boolean => {
+  return hasPermission(roleKey as RoleKey | undefined, roles.STAFF)
+}

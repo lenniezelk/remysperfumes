@@ -5,7 +5,9 @@ import { productVariantTable } from "@/lib/db/schema";
 const productVariantDBSchema = createSelectSchema(productVariantTable)
 export type ProductVariantDB = z.infer<typeof productVariantDBSchema>;
 
-export interface ProductVariant extends ProductVariantDB { }
+export interface ProductVariant extends ProductVariantDB {
+    product_name?: string | null;
+}
 
 export const productVariantCreateSchema = createUpdateSchema(productVariantTable);
 export type ProductVariantCreateData = Omit<z.infer<typeof productVariantCreateSchema>, 'id' | 'created_at' | 'updated_at'>;

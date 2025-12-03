@@ -56,15 +56,10 @@ function ProductsPage() {
   const columns = useMemo<Array<ColumnDef<any>>>(
     () => [
       { accessorKey: 'name', header: 'Name' },
-      { accessorKey: 'description', header: 'Description' },
       { accessorKey: 'category_name', header: 'Category' },
       { accessorKey: 'brand', header: 'Brand' },
       { accessorKey: 'manufacturer_name', header: 'Manufacturer' },
-      {
-        accessorKey: 'created_at',
-        header: 'Created At',
-        cell: (info) => new Date(info.getValue<number>()).toLocaleString(),
-      },
+      { accessorKey: 'default_sell_price', header: 'Default Sell Price' },
       {
         accessorKey: 'updated_at',
         header: 'Updated At',

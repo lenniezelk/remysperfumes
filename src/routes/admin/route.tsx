@@ -2,7 +2,7 @@ import { Outlet, createFileRoute, redirect, useLocation } from '@tanstack/react-
 import { CircleUserRound, HomeIcon, MenuIcon } from 'lucide-react'
 import Container from '@/components/Container'
 import Logo from '@/assets/logo.svg';
-import { getCurrentAdminUser } from '@/lib/auth/auth';
+import { getCurrentAdminUser } from '@/lib/server/auth/auth';
 import AppLink from '@/components/AppLink';
 import { modelsBlueprint } from '@/utility/modelsBlueprint';
 import { canViewDashboardCard } from '@/lib/permissions';

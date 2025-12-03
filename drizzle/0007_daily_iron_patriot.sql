@@ -1,0 +1,1 @@
+ALTER TABLE `StockBatch` ADD `deleted_at` integer;

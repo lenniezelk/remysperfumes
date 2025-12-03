@@ -6,10 +6,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Logo from '@/assets/logo.svg';
 
 import appCss from '@/styles.css?url'
-import { AdminAuthenticationProvider } from '@/lib/auth/admin-auth-context';
+import { AdminAuthenticationProvider } from '@/lib/context/admin-auth-context';
 import { getEnvVars } from '@/lib/env-vars';
 import { NotificationProvider } from '@/components/notifications/Notification';
-import { EnvVarsProvider } from '@/components/EnvVars';
 
 export const Route = createRootRoute({
   head: () => ({
@@ -84,51 +83,42 @@ export const Route = createRootRoute({
 
   shellComponent: RootDocument,
   notFoundComponent: () => <div>404 - Not Found</div>,
-  loader: async () => {
+  beforeLoad: async () => {
     const envVars = await getEnvVars();
 
     if (envVars.status === 'SUCCESS') {
       return {
         GOOGLE_OAUTH_CLIENT_ID: envVars?.data?.GOOGLE_OAUTH_CLIENT_ID || '',
-        CLOUDFLARE_TURNSTILE_SECRET: envVars?.data?.CLOUDFLARE_TURNSTILE_SECRET || '',
-      }
+        CLOUDFLARE_TURNSTILE_SITEKEY: envVars?.data?.CLOUDFLARE_TURNSTILE_SITEKEY || '',
+      };
     }
 
     return {
       GOOGLE_OAUTH_CLIENT_ID: '',
-      CLOUDFLARE_TURNSTILE_SECRET: '',
+      CLOUDFLARE_TURNSTILE_SITEKEY: '',
     }
   }
 })
 
 const queryClient = new QueryClient();
 
-const App = ({ children }: { children: React.ReactNode }) => {
-  const { GOOGLE_OAUTH_CLIENT_ID, CLOUDFLARE_TURNSTILE_SECRET } = Route.useLoaderData();
-
-  return (
-    <EnvVarsProvider envVars={{ GOOGLE_OAUTH_CLIENT_ID, CLOUDFLARE_TURNSTILE_SECRET }}>
-      <NotificationProvider>
-        <GoogleOAuthProvider clientId={GOOGLE_OAUTH_CLIENT_ID}>
-          <QueryClientProvider client={queryClient}>
-            <AdminAuthenticationProvider>
-              {children}
-            </AdminAuthenticationProvider>
-          </QueryClientProvider>
-        </GoogleOAuthProvider>
-      </NotificationProvider>
-    </EnvVarsProvider>
-  )
-}
-
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const context = Route.useRouteContext();
+  const { GOOGLE_OAUTH_CLIENT_ID } = context;
+
   return (
     <html lang="en" data-theme="valentine">
       <body className='font-primary text-neutral-text'>
         <HeadContent />
-        <App>
-          {children}
-        </App>
+        <NotificationProvider>
+          <GoogleOAuthProvider clientId={GOOGLE_OAUTH_CLIENT_ID}>
+            <QueryClientProvider client={queryClient}>
+              <AdminAuthenticationProvider>
+                {children}
+              </AdminAuthenticationProvider>
+            </QueryClientProvider>
+          </GoogleOAuthProvider>
+        </NotificationProvider>
         {import.meta.env.DEV && <TanStackDevtools
           config={{
             position: 'bottom-right',

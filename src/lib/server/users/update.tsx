@@ -15,8 +15,6 @@ export const UpdateUserData = z.object({
     role_id: z.uuid({ message: "Invalid role ID" }),
     is_active: z.boolean(),
     createNewPassword: z.boolean(),
-    delete_user: z.boolean(),
-    restore_user: z.boolean(),
 });
 
 export const updateAdminUser = createServerFn({ method: 'POST' })
@@ -64,7 +62,6 @@ export const updateAdminUser = createServerFn({ method: 'POST' })
             role_id: data.role_id,
             is_active: data.is_active,
             updated_at: new Date(),
-            deleted_at: data.delete_user ? new Date() : (data.restore_user ? null : existingUser[0].deleted_at),
         };
 
         if (data.createNewPassword) {
@@ -88,9 +85,9 @@ export const updateAdminUser = createServerFn({ method: 'POST' })
             },
             created_at: existingUser[0].created_at,
             updated_at: updatedUserData.updated_at!,
-            is_active: updatedUserData.deleted_at ? false : updatedUserData.is_active!,
+            is_active: updatedUserData.is_active!,
             last_login_at: existingUser[0].last_login_at,
-            deleted_at: updatedUserData.deleted_at || null,
+            deleted_at: existingUser[0].deleted_at,
         };
 
         return {
@@ -98,3 +95,4 @@ export const updateAdminUser = createServerFn({ method: 'POST' })
             data: updatedUser,
         }
     });
+

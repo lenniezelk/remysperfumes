@@ -29,8 +29,6 @@ function RouteComponent() {
       role_id: user ? user?.role?.id || '' : '',
       createNewPassword: false,
       is_active: user ? user.is_active : true,
-      delete_user: user ? user.deleted_at !== null : false,
-      restore_user: user ? user.deleted_at === null : false,
     },
     validators: {
       onChange: UpdateUserData,
@@ -43,8 +41,6 @@ function RouteComponent() {
         role_id: values.value.role_id || '',
         is_active: values.value.is_active,
         createNewPassword: values.value.createNewPassword,
-        delete_user: values.value.delete_user,
-        restore_user: values.value.restore_user,
       }
       return updateAdminUser({
         data,
@@ -87,7 +83,7 @@ function RouteComponent() {
   return (
     <>
       <Heading level={2} className='mt-12 mb-4'>
-        Edit/Delete User
+        Edit User
       </Heading>
       <form
         className='mt-8 w-full max-w-md space-y-4'
@@ -199,50 +195,6 @@ function RouteComponent() {
                       className='checkbox'
                     />
                     <span>Is Active</span>
-                  </label>
-                )
-              }
-            }
-          />
-        </div>
-        <div className='mt-2'>
-          <form.Field
-            name="delete_user"
-            children={
-              (field) => {
-                return (
-                  <label className='flex items-center space-x-2'>
-                    <input
-                      type='checkbox'
-                      name={field.name}
-                      checked={field.state.value}
-                      onChange={(e) => field.handleChange(e.target.checked)}
-                      className='checkbox'
-                      disabled={user?.deleted_at ? true : false}
-                    />
-                    <span>{user?.deleted_at ? `User was deleted at ${new Date(user.deleted_at).toLocaleString()}` : "Delete User?"}</span>
-                  </label>
-                )
-              }
-            }
-          />
-        </div>
-        <div className='mt-2'>
-          <form.Field
-            name="restore_user"
-            children={
-              (field) => {
-                return (
-                  <label className='flex items-center space-x-2'>
-                    <input
-                      type='checkbox'
-                      name={field.name}
-                      checked={field.state.value}
-                      onChange={(e) => field.handleChange(e.target.checked)}
-                      className='checkbox'
-                      disabled={user?.deleted_at ? false : true}
-                    />
-                    <span>{user?.deleted_at ? "Restore User?" : "User is not deleted"}</span>
                   </label>
                 )
               }

@@ -4,11 +4,11 @@ import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 import type { Result, Role, User, UserUpdateData, UserWithPermissions } from "@/lib/types";
 import type { RoleKey } from "@/lib/permissions";
-import { getCurrentAdminUser } from "@/lib/auth/auth";
+import { getCurrentAdminUser } from "@/lib/server/auth/auth";
 import dbClient from "@/lib/db/client";
 import { roleTable, userTable } from "@/lib/db/schema";
 import { canEditOrDeleteUser, canManageUsers, rolesUserCanCreateBasedOnRole } from "@/lib/permissions";
-import { createRandomPassword, hashPassword } from "@/lib/auth/utils";
+import { createRandomPassword, hashPassword } from "@/lib/server/auth/utils";
 
 
 export const listUsers = createServerFn({ method: "GET" }).handler(async (): Promise<Result<Array<UserWithPermissions>>> => {

@@ -1,14 +1,12 @@
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form';
-import { useEffect, useRef, useState } from 'react';
 import { z } from 'zod';
-import { getCurrentAdminUser, loginAdminUser } from '@/lib/auth/auth';
-import { useNotifications } from '@/components/notifications/Notification';
+import { getCurrentAdminUser, loginAdminUser } from '@/lib/server/auth/auth';
+import { NotificationsList, useNotifications } from '@/components/notifications/Notification';
 import { LoginAdminUserInput } from '@/lib/types';
 import Heading from '@/components/Heading';
 import { Input } from '@/components/Input';
 import { FieldInfo } from '@/components/FieldInfo';
-import { useEnvVars } from '@/components/EnvVars';
 import Container from '@/components/Container';
 
 
@@ -17,11 +15,11 @@ export const Route = createFileRoute('/admin-login')({
     redirect: z.url().optional()
   }),
   component: RouteComponent,
-  beforeLoad: async ({ search }) => {
+  beforeLoad: async () => {
     const user = await getCurrentAdminUser();
 
     if (user.status === 'SUCCESS') {
-      throw redirect({ to: search.redirect || '/admin', replace: true });
+      throw redirect({ to: '/admin', replace: true });
     }
 
     return {}
@@ -29,19 +27,8 @@ export const Route = createFileRoute('/admin-login')({
 })
 
 function RouteComponent() {
-  const [isTurnstileReady, setIsTurnstileReady] = useState(import.meta.env.DEV);
-  const turnstileRef = useRef<HTMLDivElement>(null);
   const notifications = useNotifications();
   const navigate = useNavigate();
-  const { CLOUDFLARE_TURNSTILE_SECRET } = useEnvVars();
-  const search = Route.useSearch();
-
-  useEffect(() => {
-    // Define callback functions in the global scope for Turnstile
-    (window as any).onTurnstileCallback = () => setIsTurnstileReady(true);
-    (window as any).onTurnstileError = () => setIsTurnstileReady(false);
-    (window as any).onTurnstileExpired = () => setIsTurnstileReady(false);
-  }, []);
 
   const form = useForm({
     defaultValues: {
@@ -52,16 +39,16 @@ function RouteComponent() {
       onChange: LoginAdminUserInput,
     },
     onSubmit: async (values) => {
-      loginAdminUser({ data: values.value }).then((res) => {
+      return loginAdminUser({ data: values.value }).then((res) => {
         if (res.status === 'SUCCESS') {
-          navigate({ to: search.redirect || '/admin', replace: true });
+          navigate({ to: '/admin', replace: true });
         } else {
           notifications.addNotification({
             type: 'ERROR',
             message: res.error || 'Login failed. Please try again.',
           });
         }
-      }).catch((err) => {
+      }).catch(() => {
         notifications.addNotification({
           type: 'ERROR',
           message: 'Login failed. Please try again.',
@@ -72,6 +59,7 @@ function RouteComponent() {
 
   return (
     <Container>
+      <NotificationsList />
       <Heading level={1} className='mt-12'>Admin Login</Heading>
       <form
         className='mt-8 w-full max-w-md space-y-4'
@@ -124,23 +112,23 @@ function RouteComponent() {
             }
           />
         </div>
-        {!import.meta.env.DEV && <div className='mt-4'>
+        {/* {!import.meta.env.DEV && <div className='mt-4'>
           <div
             ref={turnstileRef}
             className="cf-turnstile"
-            data-sitekey={CLOUDFLARE_TURNSTILE_SECRET}
+            data-sitekey={CLOUDFLARE_TURNSTILE_SITEKEY}
             data-callback="onTurnstileCallback"
             data-error-callback="onTurnstileError"
             data-expired-callback="onTurnstileExpired"
           />
-        </div>}
+        </div>} */}
         <div className='mt-4'>
           <form.Subscribe
             selector={(state) => [state.canSubmit, state.isSubmitting]}
             children={([canSubmit, isSubmitting]) => (
               <button
                 type='submit'
-                disabled={!canSubmit || isSubmitting || !isTurnstileReady}
+                disabled={!canSubmit || isSubmitting}
                 className={`btn bg-primary text-white rounded px-4 py-2 hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50`}
               >
                 {isSubmitting ? 'Submitting...' : 'Submit'}

@@ -1,6 +1,6 @@
 import { createMiddleware } from "@tanstack/react-start";
 import { redirect } from "@tanstack/react-router";
-import { getCurrentAdminUser } from "@/lib/auth/auth";
+import { getCurrentAdminUser } from "@/lib/server/auth/auth";
 
 export const isAdminMiddleware = createMiddleware({ type: 'function' }).server(async ({ next }) => {
     const signedInUser = await getCurrentAdminUser();

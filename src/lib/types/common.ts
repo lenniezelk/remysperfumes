@@ -10,5 +10,5 @@ export type NotificationType = 'INFO' | 'SUCCESS' | 'ERROR' | 'WARNING';
 
 export interface EnvVars {
     GOOGLE_OAUTH_CLIENT_ID: string;
-    CLOUDFLARE_TURNSTILE_SECRET: string;
+    CLOUDFLARE_TURNSTILE_SITEKEY: string;
 }

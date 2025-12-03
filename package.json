@@ -17,7 +17,13 @@
     "db:local:query": "wrangler d1 execute DB --local --command",
     "db:local:execute": "wrangler d1 execute DB --local --file",
     "seed:local:roles": "tsx src/lib/db/seed.ts --add-roles",
-    "seed:local:superadmin": "tsx src/lib/db/seed.ts --add-superadmin"
+    "seed:local:superadmin": "tsx src/lib/db/seed.ts --add-superadmin",
+    "db:prod:migrate": "wrangler d1 migrations apply DB --remote",
+    "db:prod:query": "wrangler d1 execute DB --remote --command",
+    "db:prod:execute": "wrangler d1 execute DB --remote --file",
+    "seed:prod:roles": "tsx src/lib/db/seed.ts --add-roles --remote",
+    "seed:prod:superadmin": "tsx src/lib/db/seed.ts --add-superadmin --remote",
+    "kv:create": "wrangler kv namespace create --binding"
   },
   "dependencies": {
     "@react-oauth/google": "^0.12.2",

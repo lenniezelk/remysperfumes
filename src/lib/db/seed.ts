@@ -3,7 +3,7 @@ import { execSync } from 'node:child_process';
 import * as readline from 'node:readline/promises';
 import { stdin as input, stdout as output } from 'node:process';
 import { z } from 'zod';
-import { hashPassword } from '@/lib/auth/utils';
+import { hashPassword } from '@/lib/server/auth/utils';
 
 interface DBRole {
     id: string;
@@ -31,13 +31,22 @@ const CreateUserData = z.object({
     password: z.string().min(8).regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&+\-_=.,;:'"\[\]{}()])[\w@$!%*?&+\-_=.,;:'"\[\]{}()]+$/, 'Password must be at least 8 characters long and contain at least one letter, one number, and one special character'),
 });
 
+// Check if --remote flag is present to determine environment
+const isRemote = process.argv.includes('--remote');
+const envFlag = isRemote ? '--remote' : '--local';
+const envName = isRemote ? 'PRODUCTION' : 'LOCAL';
+
 function main() {
+    console.log(`\n🌍 Environment: ${envName}`);
+    console.log(`📍 Using database flag: ${envFlag}\n`);
+
     if (process.argv.includes('--add-roles')) {
         addRoles();
     } else if (process.argv.includes('--add-superadmin')) {
         addSuperAdminUser();
     } else {
         console.log('No valid arguments provided. Use --add-roles or --add-superadmin');
+        console.log('Add --remote flag to run against production database');
     }
 }
 
@@ -58,16 +67,17 @@ async function addSuperAdminUser() {
         }
 
         // check for super admin role in db
-        const roleCheckCommand = `wrangler d1 execute DB --json --local --command "SELECT * FROM Role WHERE key = 'superadmin';"`;
+        const roleCheckCommand = `wrangler d1 execute DB --json ${envFlag} --command "SELECT * FROM Role WHERE key = 'superadmin';"`;
         const roleCheckOutput = execSync(roleCheckCommand, { encoding: 'utf-8' });
         const roleCheckResults = JSON.parse(roleCheckOutput);
         if (roleCheckResults.length === 0 || roleCheckResults[0].results.length === 0) {
             console.error('Super Admin role does not exist in the database.');
+            console.error(`Please run: pnpm seed:${isRemote ? 'prod' : 'local'}:roles first`);
             process.exit(1);
         }
 
         // Check if user with email already exists
-        const userCheckCommand = `wrangler d1 execute DB --json --local --command "SELECT * FROM User WHERE email = '${email}';"`;
+        const userCheckCommand = `wrangler d1 execute DB --json ${envFlag} --command "SELECT * FROM User WHERE email = '${email}';"`;
         const userCheckOutput = execSync(userCheckCommand, { encoding: 'utf-8' });
         const userCheckResults = JSON.parse(userCheckOutput);
         if (userCheckResults.length > 0 && userCheckResults[0].results.length > 0) {
@@ -88,7 +98,7 @@ async function addSuperAdminUser() {
             updated_at: Date.now(),
         };
 
-        const insertCommand = `wrangler d1 execute DB --json --local --command "INSERT INTO User (id, name, email, password_hash, role_id, is_active, created_at, updated_at) VALUES ('${user.id}', '${user.name}', '${user.email}', '${user.password_hash}', '${user.role_id}', ${user.is_active}, ${user.created_at}, ${user.updated_at});"`;
+        const insertCommand = `wrangler d1 execute DB --json ${envFlag} --command "INSERT INTO User (id, name, email, password_hash, role_id, is_active, created_at, updated_at) VALUES ('${user.id}', '${user.name}', '${user.email}', '${user.password_hash}', '${user.role_id}', ${user.is_active}, ${user.created_at}, ${user.updated_at});"`;
 
         let insertOutput: string;
         try {
@@ -136,11 +146,11 @@ async function addSuperAdminUser() {
 }
 
 function addRoles() {
-    console.log('Seeding DB with roles admin, manager and staff');
+    console.log(`Seeding ${envName} DB with roles: admin, manager, staff, and superadmin`);
     // Implementation for adding roles goes here
 
     // check if roles exist before adding
-    const selectCommand = 'wrangler d1 execute DB --json --local --command "SELECT * FROM Role;"';
+    const selectCommand = `wrangler d1 execute DB --json ${envFlag} --command "SELECT * FROM Role;"`;
 
     try {
         const selectOutput = execSync(selectCommand, { encoding: 'utf-8' });
@@ -160,10 +170,10 @@ function addRoles() {
 
         const values = roles.map(role => `('${role.id}', '${role.name}', '${role.description.replace(/'/g, "''")}', '${role.key}', ${role.created_at}, ${role.updated_at})`).join(', ');
         const sqlQuery = `INSERT INTO Role (id, name, description, key, created_at, updated_at) VALUES ${values};`;
-        const insertCommand = `wrangler d1 execute DB --json --local --command "${sqlQuery.replace(/"/g, '\\"')}"`;
+        const insertCommand = `wrangler d1 execute DB --json ${envFlag} --command "${sqlQuery.replace(/"/g, '\\"')}"`;
         const insertOutput = execSync(insertCommand, { encoding: 'utf-8' });
         const insertResults = JSON.parse(insertOutput);
-        console.log('Inserted roles:', insertResults);
+        console.log('✅ Roles inserted successfully:', insertResults);
 
     } catch (error) {
         console.error('Error checking roles:', error instanceof Error ? error.message : String(error));

@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { logoutAdminUser } from '@/lib/auth/auth'
+import { logoutAdminUser } from '@/lib/server/auth/auth'
 
 export const Route = createFileRoute('/admin-logout')({
     component: RouteComponent,

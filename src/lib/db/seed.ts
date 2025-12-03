@@ -3,7 +3,7 @@ import { execSync } from 'node:child_process';
 import * as readline from 'node:readline/promises';
 import { stdin as input, stdout as output } from 'node:process';
 import { z } from 'zod';
-import { hashPassword } from '@/lib/server/auth/utils';
+import { hashPassword, strongPasswordRegex } from '@/lib/server/auth/utils';
 
 interface DBRole {
     id: string;
@@ -28,7 +28,7 @@ interface DBUser {
 const CreateUserData = z.object({
     name: z.string().min(2, 'Name must be at least 2 characters long').max(100, 'Name must be at most 100 characters long'),
     email: z.email(),
-    password: z.string().min(8).regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&+\-_=.,;:'"\[\]{}()])[\w@$!%*?&+\-_=.,;:'"\[\]{}()]+$/, 'Password must be at least 8 characters long and contain at least one letter, one number, and one special character'),
+    password: z.string().min(8).regex(strongPasswordRegex, 'Password must be at least 8 characters long and contain at least one letter, one number, and one special character'),
 });
 
 // Check if --remote flag is present to determine environment

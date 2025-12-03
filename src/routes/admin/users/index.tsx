@@ -10,7 +10,7 @@ import {
 } from '@tanstack/react-table'
 import { useState } from 'react'
 import type { UserWithPermissions } from '@/lib/types';
-import { listUsers } from '@/lib/server/users/users'
+import { listUsers } from '@/lib/server/users/list'
 import AppLink from '@/components/AppLink'
 import Button from '@/components/Button'
 import Heading from '@/components/Heading';

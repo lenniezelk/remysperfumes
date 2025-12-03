@@ -5,7 +5,7 @@ import { Input } from '@/components/Input';
 import Heading from '@/components/Heading';
 import { FieldInfo } from '@/components/FieldInfo';
 import Button from '@/components/Button';
-import { CreateUserData, createAdminUser, fetchCreateUserInitialData } from '@/lib/server/users/users';
+import { CreateUserData, createAdminUser, fetchCreateUserInitialData } from '@/lib/server/users/create';
 
 export const Route = createFileRoute('/admin/users/new')({
   component: RouteComponent,

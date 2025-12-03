@@ -6,7 +6,8 @@ import Heading from '@/components/Heading'
 import { Input } from '@/components/Input'
 import Button from '@/components/Button'
 import { useNotifications } from '@/components/notifications/Notification'
-import { UpdateUserData, fetchEditUserInitialData, updateAdminUser } from '@/lib/server/users/users'
+import { fetchEditUserInitialData } from '@/lib/server/users/get'
+import { UpdateUserData, updateAdminUser } from '@/lib/server/users/update'
 
 export const Route = createFileRoute('/admin/users/$userId')({
   component: RouteComponent,

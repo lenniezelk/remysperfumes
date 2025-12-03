@@ -84,3 +84,5 @@ export function createRandomPassword(length: number = 8): string {
     }
     return password;
 }
+
+export const strongPasswordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&+\-_=.,;:'"\[\]{}()])[\w@$!%*?&+\-_=.,;:'"\[\]{}()]+$/;

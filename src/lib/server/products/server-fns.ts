@@ -2,15 +2,15 @@ import { createServerFn } from '@tanstack/react-start'
 import { desc, eq, sql } from 'drizzle-orm'
 import { canManageProductsMiddleware } from '../middleware/canManageProducts'
 import {
-  
-  
-  
+
+
+
   createProductSchema,
   paginationSchema,
   updateProductSchema,
   uuidSchema
 } from './types'
-import type {CreateProductInput, PaginationInput, UpdateProductInput} from './types';
+import type { CreateProductInput, PaginationInput, UpdateProductInput } from './types';
 import dbClient from '@/lib/db/client'
 import { categoryTable, manufacturerTable, productTable } from '@/lib/db/schema'
 
@@ -44,14 +44,16 @@ export const listProductsPaginated = createServerFn({ method: 'GET' })
           manufacturerTable,
           eq(productTable.manufacturer, manufacturerTable.id),
         )
+        .where(sql`${productTable.deleted_at} IS NULL`)
         .orderBy(desc(productTable.created_at))
         .limit(pageSize)
         .offset(offset)
 
-      // Get total count for pagination info
+      // Get total count for pagination info (excluding deleted)
       const totalResult = await db
         .select({ count: sql<number>`count(*)` })
         .from(productTable)
+        .where(sql`${productTable.deleted_at} IS NULL`)
       const total = totalResult[0]?.count || 0
       const totalPages = Math.ceil(total / pageSize)
 
@@ -178,7 +180,7 @@ export const getProductById = createServerFn({ method: 'GET' })
     }
   })
 
-// DELETE function to delete a product by ID
+// DELETE function to delete a product by ID (soft delete)
 export const deleteProduct = createServerFn({
   method: 'POST',
 })
@@ -186,10 +188,15 @@ export const deleteProduct = createServerFn({
   .inputValidator(uuidSchema)
   .handler(async ({ data }: { data: { id: string } }) => {
     try {
-      await db.delete(productTable).where(eq(productTable.id, data.id))
+      // Soft delete: set deleted_at to current timestamp
+      await db
+        .update(productTable)
+        .set({ deleted_at: new Date() })
+        .where(eq(productTable.id, data.id))
+
       return { success: true, message: 'Product deleted successfully' }
     } catch (error) {
-      console.error('Error deleting category:', error)
-      return { success: false, message: 'Failed to delete category' }
+      console.error('Error deleting product:', error)
+      return { success: false, message: 'Failed to delete product' }
     }
   })

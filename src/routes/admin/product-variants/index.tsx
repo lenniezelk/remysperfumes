@@ -18,11 +18,11 @@ const columnHelper = createColumnHelper<ProductVariant>();
 
 function getColumns(onOpenDeleteDialog: (productVariantId: string) => void) {
     return [
-        columnHelper.accessor('product_id', {
-            header: 'Product ID',
+        columnHelper.accessor('product_name', {
+            header: 'Product Name',
             cell: info => {
                 const value = info.getValue();
-                return value ? value.substring(0, 8) + '...' : 'N/A';
+                return value || 'N/A';
             },
         }),
         columnHelper.accessor('name', {
@@ -44,8 +44,8 @@ function getColumns(onOpenDeleteDialog: (productVariantId: string) => void) {
             header: 'Image',
             cell: info => info.getValue() ? 'Yes' : 'No',
         }),
-        columnHelper.accessor('created_at', {
-            header: 'Created Date',
+        columnHelper.accessor('updated_at', {
+            header: 'Updated Date',
             cell: info => new Date(info.getValue()).toLocaleDateString(),
         }),
         columnHelper.display({

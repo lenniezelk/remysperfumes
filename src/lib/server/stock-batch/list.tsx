@@ -1,13 +1,13 @@
 import { createServerFn } from "@tanstack/react-start";
 import { desc } from "drizzle-orm";
-import { canManageStockBatchesMiddleware } from "../middleware/canManageStockBatches";
 import type { Result } from "@/lib/types";
 import type { StockBatch } from "@/lib/types/stock-batch";
 import dbClient from "@/lib/db/client";
 import { stockBatchTable } from "@/lib/db/schema";
+import { canManageSalesMiddleware } from "../middleware/canManageSales";
 
 export const listStockBatches = createServerFn({ method: 'GET' })
-    .middleware([canManageStockBatchesMiddleware])
+    .middleware([canManageSalesMiddleware])
     .handler(async (): Promise<Result<Array<StockBatch>>> => {
         const db = dbClient();
 

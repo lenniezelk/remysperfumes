@@ -1,13 +1,13 @@
 import { createServerFn } from "@tanstack/react-start";
-import { desc, eq, isNull } from "drizzle-orm";
-import { canManageProductVariantsMiddleware } from "../middleware/canManageProductVariants";
+import { desc, eq,isNull } from "drizzle-orm";
 import type { Result } from "@/lib/types";
 import type { ProductVariant } from "@/lib/types/product-variant";
 import dbClient from "@/lib/db/client";
-import { productTable, productVariantTable } from "@/lib/db/schema";
+import { productVariantTable, productTable } from "@/lib/db/schema";
+import { canManageSalesMiddleware } from "../middleware/canManageSales";
 
 export const listProductVariants = createServerFn({ method: 'GET' })
-    .middleware([canManageProductVariantsMiddleware])
+    .middleware([canManageSalesMiddleware])
     .handler(async (): Promise<Result<Array<ProductVariant>>> => {
         const db = dbClient();
 

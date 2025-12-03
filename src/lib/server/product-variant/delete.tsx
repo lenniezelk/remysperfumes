@@ -26,8 +26,9 @@ export const deleteProductVariant = createServerFn({ method: 'POST' })
             };
         }
 
-        // Hard delete (since productVariantTable doesn't have deleted_at)
-        await db.delete(productVariantTable)
+        // Soft delete: set deleted_at to current timestamp
+        await db.update(productVariantTable)
+            .set({ deleted_at: new Date() })
             .where(eq(productVariantTable.id, productVariantId));
 
         return {

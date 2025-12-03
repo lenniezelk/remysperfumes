@@ -30,6 +30,7 @@ export const productTable = sqliteTable("Product", {
     updated_at: int("updated_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
     manufacturer: text("manufacturer")
         .references(() => manufacturerTable.id),
+    deleted_at: int("deleted_at", { mode: 'timestamp_ms' }),
 });
 
 export const productVariantTable = sqliteTable("ProductVariant", {
@@ -43,6 +44,7 @@ export const productVariantTable = sqliteTable("ProductVariant", {
     image: text("image"),
     created_at: int("created_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
     updated_at: int("updated_at", { mode: 'timestamp_ms' }).notNull().$defaultFn(() => new Date()),
+    deleted_at: int("deleted_at", { mode: 'timestamp_ms' }),
 });
 
 export const supplierTable = sqliteTable("Supplier", {

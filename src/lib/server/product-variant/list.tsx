@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { desc } from "drizzle-orm";
+import { desc, isNull } from "drizzle-orm";
 import { canManageProductVariantsMiddleware } from "../middleware/canManageProductVariants";
 import type { Result } from "@/lib/types";
 import type { ProductVariant } from "@/lib/types/product-variant";
@@ -11,7 +11,11 @@ export const listProductVariants = createServerFn({ method: 'GET' })
     .handler(async (): Promise<Result<Array<ProductVariant>>> => {
         const db = dbClient();
 
-        const productVariants = await db.select().from(productVariantTable).orderBy(desc(productVariantTable.created_at));
+        const productVariants = await db
+            .select()
+            .from(productVariantTable)
+            .where(isNull(productVariantTable.deleted_at))
+            .orderBy(desc(productVariantTable.created_at));
 
         return {
             status: "SUCCESS",

@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { isNull } from "drizzle-orm";
 import type { Result } from "@/lib/types";
 import { canManageProductVariantsMiddleware } from "@/lib/server/middleware/canManageProductVariants";
 import dbClient from "@/lib/db/client";
@@ -20,6 +21,7 @@ export const listProductsForDropdown = createServerFn({ method: 'GET' })
                 name: productTable.name,
             })
             .from(productTable)
+            .where(isNull(productTable.deleted_at))
             .orderBy(productTable.name);
 
         return {

@@ -58,11 +58,11 @@ function getSaleItemColumns(
     }),
     columnHelper.accessor('price_at_sale', {
       header: 'Price',
-      cell: info => `$${(info.getValue() / 100).toFixed(2)}`,
+      cell: info => `${(info.getValue()).toFixed(2)}`,
     }),
     columnHelper.accessor('cost_at_sale', {
       header: 'Cost',
-      cell: info => `$${(info.getValue() / 100).toFixed(2)}`,
+      cell: info => `${(info.getValue()).toFixed(2)}`,
     }),
     columnHelper.display({
       id: 'subtotal',
@@ -70,7 +70,7 @@ function getSaleItemColumns(
       cell: info => {
         const quantity = info.row.original.quantity_sold;
         const price = info.row.original.price_at_sale;
-        return `$${((quantity * price) / 100).toFixed(2)}`;
+        return `${((quantity * price)).toFixed(2)}`;
       },
     }),
     columnHelper.display({
@@ -501,7 +501,7 @@ function RouteComponent() {
             <tfoot className="bg-gray-50">
               <tr>
                 <td colSpan={4} className="px-6 py-4 text-right font-bold">Total:</td>
-                <td className="px-6 py-4 font-bold">${(calculateTotal() / 100).toFixed(2)}</td>
+                <td className="px-6 py-4 font-bold">{(calculateTotal()).toFixed(2)}</td>
                 <td></td>
               </tr>
             </tfoot>
@@ -586,7 +586,7 @@ function RouteComponent() {
               name="price_at_sale"
               children={(field) => (
                 <>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Price (cents)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Price</label>
                   <Input
                     type="number"
                     min="0"
@@ -602,7 +602,7 @@ function RouteComponent() {
               name="cost_at_sale"
               children={(field) => (
                 <>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Cost (cents)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Cost</label>
                   <Input
                     type="number"
                     min="0"
@@ -716,7 +716,7 @@ function RouteComponent() {
               name="price_at_sale"
               children={(field) => (
                 <>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Price (cents)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Price</label>
                   <Input
                     type="number"
                     min="0"
@@ -732,7 +732,7 @@ function RouteComponent() {
               name="cost_at_sale"
               children={(field) => (
                 <>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Cost (cents)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Cost</label>
                   <Input
                     type="number"
                     min="0"

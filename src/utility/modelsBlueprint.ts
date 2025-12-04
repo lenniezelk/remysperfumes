@@ -51,14 +51,6 @@ export const modelsBlueprint: Array<ModelBlueprint> = [
     roles: [roles.MANAGER, roles.ADMIN, roles.SUPERADMIN],
   },
   {
-    key: 'product-variant',
-    name: 'Product Variants',
-    description: 'Manage product variants',
-    icon: Layers,
-    route: '/admin/product-variants',
-    roles: [roles.MANAGER, roles.ADMIN, roles.SUPERADMIN],
-  },
-  {
     key: 'supplier',
     name: 'Suppliers',
     description: 'Manage suppliers',
@@ -88,7 +80,7 @@ export const modelsBlueprint: Array<ModelBlueprint> = [
     description: 'View all sales',
     icon: ShoppingCart,
     route: '/admin/sales',
-    roles: [roles.STAFF,roles.MANAGER, roles.ADMIN, roles.SUPERADMIN],
+    roles: [roles.STAFF, roles.MANAGER, roles.ADMIN, roles.SUPERADMIN],
   },
   // {
   //   key: 'role',

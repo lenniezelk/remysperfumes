@@ -45,7 +45,7 @@ function ProductsPage() {
   })
 
   const handleEdit = (id: string) => {
-    navigate({ to: `/admin/products/product/${id}` })
+    navigate({ to: `/admin/products/${id}` })
   }
 
   const handleDelete = (id: string) => {

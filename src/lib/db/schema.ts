@@ -1,4 +1,4 @@
-import { int, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { index, int, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const categoryTable = sqliteTable("Category", {
     id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
@@ -126,4 +126,15 @@ export const userTable = sqliteTable("User", {
     password_hash: text("password_hash"),
     last_login_at: int("last_login_at", { mode: 'timestamp_ms' }),
     deleted_at: int("deleted_at", { mode: 'timestamp_ms' }),
-});
+},
+    (table) => [
+        index("name_idx").on(table.name),
+        index("email_idx").on(table.email),
+        index("role_id_idx").on(table.role_id),
+        index("is_active_idx").on(table.is_active),
+        index("created_at_idx").on(table.created_at),
+        index("deleted_at_idx").on(table.deleted_at),
+        index("last_login_at_idx").on(table.last_login_at),
+        // Composite index for filtering active non-deleted users
+        index("active_not_deleted_idx").on(table.is_active, table.deleted_at),
+    ]);

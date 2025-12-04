@@ -14,6 +14,9 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.0.6
         version: 4.1.16(vite@7.1.12(@types/node@22.18.12)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.20.6))
+      '@tanstack/pacer':
+        specifier: ^0.16.3
+        version: 0.16.3
       '@tanstack/react-devtools':
         specifier: ^0.7.0
         version: 0.7.7(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(csstype@3.1.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(solid-js@1.9.9)
@@ -41,6 +44,9 @@ importers:
       '@tanstack/router-plugin':
         specifier: ^1.132.0
         version: 1.133.25(@tanstack/react-router@1.133.25(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(vite@7.1.12(@types/node@22.18.12)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.20.6))
+      '@tanstack/zod-adapter':
+        specifier: ^1.139.14
+        version: 1.139.14(@tanstack/react-router@1.133.25(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(zod@4.1.12)
       dotenv:
         specifier: ^17.2.3
         version: 17.2.3
@@ -1334,6 +1340,10 @@ packages:
     resolution: {integrity: sha512-RfV+OPV/M3CGryYqTue684u10jUt55PEqeBOnOtCe6tAmHI9Iqyc8nHeDhWPEV9715gShuauFVaMc9RiUVNdwg==}
     engines: {node: '>=18'}
 
+  '@tanstack/devtools-event-client@0.3.5':
+    resolution: {integrity: sha512-RL1f5ZlfZMpghrCIdzl6mLOFLTuhqmPNblZgBaeKfdtk5rfbjykurv+VfYydOFXj0vxVIoA2d/zT7xfD7Ph8fw==}
+    engines: {node: '>=18'}
+
   '@tanstack/devtools-ui@0.4.3':
     resolution: {integrity: sha512-7QshnQIHifURyMwl/qmYm4KDpsf8UJrJ8BUu+YvPx35RJBe2EO5qHPsefzWh6MlG/dUdVMBxP9nPqchESyuNFg==}
     engines: {node: '>=18'}
@@ -1365,6 +1375,10 @@ packages:
 
   '@tanstack/pacer@0.15.4':
     resolution: {integrity: sha512-vGY+CWsFZeac3dELgB6UZ4c7OacwsLb8hvL2gLS6hTgy8Fl0Bm/aLokHaeDIP+q9F9HUZTnp360z9uv78eg8pg==}
+    engines: {node: '>=18'}
+
+  '@tanstack/pacer@0.16.3':
+    resolution: {integrity: sha512-hJGPODkjuUEncwHsFacLY6W5E7lmEU2FMf4Mh0kuxqUx3UsuneQX6ctRpoHBLlgdb7sqDieIaslQnivG3OAZ+A==}
     engines: {node: '>=18'}
 
   '@tanstack/query-core@5.90.6':
@@ -1530,6 +1544,9 @@ packages:
   '@tanstack/store@0.7.7':
     resolution: {integrity: sha512-xa6pTan1bcaqYDS9BDpSiS63qa6EoDkPN9RsRaxHuDdVDNntzq3xNwR5YKTU/V3SkSyC9T4YVOPh2zRQN0nhIQ==}
 
+  '@tanstack/store@0.8.0':
+    resolution: {integrity: sha512-Om+BO0YfMZe//X2z0uLF2j+75nQga6TpTJgLJQBiq85aOyZNIhkCgleNcud2KQg4k4v9Y9l+Uhru3qWMPGTOzQ==}
+
   '@tanstack/table-core@8.21.3':
     resolution: {integrity: sha512-ldZXEhOBb8Is7xLs01fR3YEc3DERiz5silj8tnGkFZytt1abEvl/GhUmCE0PMLaMPTa3Jk4HbKmRlHmu+gCftg==}
     engines: {node: '>=12'}
@@ -1537,6 +1554,13 @@ packages:
   '@tanstack/virtual-file-routes@1.133.19':
     resolution: {integrity: sha512-IKwZENsK7owmW1Lm5FhuHegY/SyQ8KqtL/7mTSnzoKJgfzhrrf9qwKB1rmkKkt+svUuy/Zw3uVEpZtUzQruWtA==}
     engines: {node: '>=12'}
+
+  '@tanstack/zod-adapter@1.139.14':
+    resolution: {integrity: sha512-FsoFOV5OeHU26QnMubEgBnPNn/Lc2XVILBT6bFnjZ4fxUOAarbVyrhg+xGbWFKhL1YbCPQKQsGcNi7MJ7mAvAg==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      '@tanstack/react-router': '>=1.43.2'
+      zod: ^3.23.8
 
   '@testing-library/dom@10.4.1':
     resolution: {integrity: sha512-o4PXJQidqJl82ckFaXUeoAW+XysPLauYI43Abki5hABd853iMhitooc6znOnczgbTYmEP6U6/y1ZyKAIsvMKGg==}
@@ -4286,6 +4310,8 @@ snapshots:
 
   '@tanstack/devtools-event-client@0.3.3': {}
 
+  '@tanstack/devtools-event-client@0.3.5': {}
+
   '@tanstack/devtools-ui@0.4.3(csstype@3.1.3)(solid-js@1.9.9)':
     dependencies:
       clsx: 2.1.1
@@ -4352,6 +4378,11 @@ snapshots:
     dependencies:
       '@tanstack/devtools-event-client': 0.3.3
       '@tanstack/store': 0.7.7
+
+  '@tanstack/pacer@0.16.3':
+    dependencies:
+      '@tanstack/devtools-event-client': 0.3.5
+      '@tanstack/store': 0.8.0
 
   '@tanstack/query-core@5.90.6': {}
 
@@ -4646,9 +4677,16 @@ snapshots:
 
   '@tanstack/store@0.7.7': {}
 
+  '@tanstack/store@0.8.0': {}
+
   '@tanstack/table-core@8.21.3': {}
 
   '@tanstack/virtual-file-routes@1.133.19': {}
+
+  '@tanstack/zod-adapter@1.139.14(@tanstack/react-router@1.133.25(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(zod@4.1.12)':
+    dependencies:
+      '@tanstack/react-router': 1.133.25(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      zod: 4.1.12
 
   '@testing-library/dom@10.4.1':
     dependencies:

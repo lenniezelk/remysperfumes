@@ -75,6 +75,13 @@
     {
       "idx": 10,
       "version": "6",
+      "when": 1764842087807,
+      "tag": "0010_short_gladiator",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
       "when": 1764871600669,
       "tag": "0010_dapper_barracuda",
       "breakpoints": true

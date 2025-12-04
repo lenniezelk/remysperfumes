@@ -9,18 +9,40 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import type { UserWithPermissions } from '@/lib/types';
-import { listUsers } from '@/lib/server/users/list'
+import { listUsers, ListUsersParams } from '@/lib/server/users/list'
 import { deleteAdminUser, restoreAdminUser } from '@/lib/server/users/delete'
 import AppLink from '@/components/AppLink'
 import Button from '@/components/Button'
 import Heading from '@/components/Heading';
 import { NotificationsList, useNotifications } from '@/components/notifications/Notification';
+import { z } from 'zod'
+import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
+import { zodValidator } from '@tanstack/zod-adapter'
+import { debounce } from '@tanstack/pacer'
+import { SearchInput } from '@/components/SearchInput';
+import { Select } from '@/components/Select';
+
+type ListQueryOptions = z.infer<typeof ListUsersParams>;
+
+const listQueryOptions = (params: ListQueryOptions) => queryOptions({
+  queryKey: ['users', params],
+  queryFn: () => listUsers({ data: params }),
+})
+
+
 
 export const Route = createFileRoute('/admin/users/')({
   component: RouteComponent,
-  loader: () => listUsers(),
+  head: () => ({
+    meta: [
+      { title: "Users | Remi's Perfumes" },
+    ]
+  }),
+  loaderDeps: ({ search: { searchQuery, role, is_active, sort, order, page, limit, showDeleted } }) => ({ searchQuery, role, is_active, sort, order, page, limit, showDeleted }),
+  loader: async ({ context, deps: { searchQuery, role, is_active, sort, order, page, limit, showDeleted } }) => await context.queryClient.ensureQueryData(listQueryOptions({ searchQuery, role, is_active, sort, order, page, limit, showDeleted })),
+  validateSearch: zodValidator(ListUsersParams),
 })
 
 const columnHelper = createColumnHelper<UserWithPermissions>()
@@ -102,34 +124,33 @@ function getColumns(
 }
 
 function RouteComponent() {
-  const initialData = Route.useLoaderData()
-  const [data, setData] = useState<Array<UserWithPermissions>>(() =>
-    initialData.status === 'SUCCESS' ? initialData.data : [],
-  )
+  const search = Route.useSearch()
+  const usersQuery = useSuspenseQuery(listQueryOptions(search))
+  const data = usersQuery.data.status === 'SUCCESS' ? usersQuery.data.data.items : [];
+  const total = usersQuery.data.status === 'SUCCESS' ? usersQuery.data.data.total : 0;
+  const page = usersQuery.data.status === 'SUCCESS' ? usersQuery.data.data.page : 1;
+  const limit = usersQuery.data.status === 'SUCCESS' ? usersQuery.data.data.limit : 10;
+  const offset = usersQuery.data.status === 'SUCCESS' ? usersQuery.data.data.offset : 0;
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate({ from: Route.fullPath })
   const notifications = useNotifications();
   const deleteDialogRef = useRef<HTMLDialogElement>(null);
   const restoreDialogRef = useRef<HTMLDialogElement>(null);
   const [deleting, setDeleting] = useState(false);
   const [restoring, setRestoring] = useState(false);
   const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState(search.searchQuery);
 
-  // Sync data when loader data changes (e.g., after router.invalidate())
-  useEffect(() => {
-    if (initialData.status === 'SUCCESS') {
-      setData(initialData.data);
-    }
-  }, [initialData]);
+
+  const debouncedSearch = debounce((searchQuery: string) => {
+    navigate({ search: (prev) => ({ ...prev, searchQuery }) })
+  }, { wait: 500 })
 
   const deleteUserById = async (userId: string) => {
     setDeleting(true);
     notifications.clear();
     deleteAdminUser({ data: { userId } }).then((result) => {
       if (result.status === 'SUCCESS') {
-        setData(data.map(user =>
-          user.id === userId ? { ...user, deleted_at: new Date() } : user
-        ));
         notifications.addNotification({
           message: 'User deleted successfully.',
           type: 'SUCCESS',
@@ -157,9 +178,6 @@ function RouteComponent() {
     notifications.clear();
     restoreAdminUser({ data: { userId } }).then((result) => {
       if (result.status === 'SUCCESS') {
-        setData(data.map(user =>
-          user.id === userId ? { ...user, deleted_at: null } : user
-        ));
         notifications.addNotification({
           message: 'User restored successfully.',
           type: 'SUCCESS',
@@ -202,19 +220,72 @@ function RouteComponent() {
   return (
     <div className="w-full overflow-x-auto">
       <NotificationsList />
-      <div className="flex justify-between mb-4 items-center">
+      <div className="flex justify-between mb-4 items-center py-4">
         <Heading level={4}>
           Users
         </Heading>
-        <Button
-          variant="primary"
-          onClick={() => {
-            notifications.clear();
-            navigate({ to: '/admin/users/new' });
-          }}
-        >
-          Create New User
-        </Button>
+        <div className="flex gap-4">
+          <SearchInput
+            name="searchQuery"
+            placeholder="Search users..."
+            className="min-w-64"
+            value={searchQuery}
+            onChange={(e) => { setSearchQuery(e.target.value); debouncedSearch(e.target.value) }}
+          />
+          <Select
+            name="sort"
+            value={search.sort}
+            onChange={(e) => navigate({ search: (prev) => ({ ...prev, sort: e.target.value as "name" | "created_at" }) })}
+          >
+            <option value="created_at">Sort by: Date Created</option>
+            <option value="name">Sort by: Name</option>
+          </Select>
+          <Select
+            name="order"
+            value={search.order}
+            onChange={(e) => navigate({ search: (prev) => ({ ...prev, order: e.target.value as "asc" | "desc" }) })}
+          >
+            <option value="desc">Descending</option>
+            <option value="asc">Ascending</option>
+          </Select>
+          <Select
+            name="limit"
+            value={search.limit.toString()}
+            onChange={(e) => navigate({ search: (prev) => ({ ...prev, limit: parseInt(e.target.value), page: 1 }) })}
+          >
+            <option value="10">10 per page</option>
+            <option value="25">25 per page</option>
+            <option value="50">50 per page</option>
+            <option value="100">100 per page</option>
+          </Select>
+          <Button
+            variant="neutral"
+            onClick={() => {
+              setSearchQuery("");
+              navigate({
+                search: {
+                  searchQuery: "",
+                  sort: "created_at",
+                  order: "desc",
+                  page: 1,
+                  limit: 10,
+                  showDeleted: false
+                }
+              });
+            }}
+          >
+            Clear Filters
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => {
+              notifications.clear();
+              navigate({ to: '/admin/users/new' });
+            }}
+          >
+            Create New User
+          </Button>
+        </div>
       </div>
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
@@ -250,6 +321,27 @@ function RouteComponent() {
             </tr>
           ))}
         </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan={table.getAllColumns().length} className="h-10">
+              <div className="flex justify-end pr-4 mt-4">
+                <div className="flex items-center gap-3">
+                  <AppLink
+                    disabled={page <= 1}
+                    from={Route.fullPath}
+                    search={(prev) => ({ ...prev, page: Math.max((prev.page || 1) - 1, 1) })}
+                  >Previous</AppLink>
+                  <span className="text-sm text-gray-500">Showing {offset + 1} to {offset + table.getFilteredRowModel().rows.length} of {total} users</span>
+                  <AppLink
+                    disabled={offset + limit >= total}
+                    from={Route.fullPath}
+                    search={(prev) => ({ ...prev, page: (prev.page || 1) + 1 })}
+                  >Next</AppLink>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tfoot>
       </table>
 
       {/* Delete Confirmation Dialog */}

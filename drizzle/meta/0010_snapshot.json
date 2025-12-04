@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "6fa7be3c-93d0-464d-b992-4ef0af8d1367",
+  "id": "fc0ee7a8-4b7b-4044-8d79-40feb5ca6b74",
   "prevId": "eebbf7c4-e394-46fa-a8c2-98e4c304caf4",
   "tables": {
     "Category": {
@@ -40,13 +40,6 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
-        },
-        "deleted_at": {
-          "name": "deleted_at",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
           "autoincrement": false
         }
       },
@@ -817,6 +810,63 @@
             "email"
           ],
           "isUnique": true
+        },
+        "name_idx": {
+          "name": "name_idx",
+          "columns": [
+            "name"
+          ],
+          "isUnique": false
+        },
+        "email_idx": {
+          "name": "email_idx",
+          "columns": [
+            "email"
+          ],
+          "isUnique": false
+        },
+        "role_id_idx": {
+          "name": "role_id_idx",
+          "columns": [
+            "role_id"
+          ],
+          "isUnique": false
+        },
+        "is_active_idx": {
+          "name": "is_active_idx",
+          "columns": [
+            "is_active"
+          ],
+          "isUnique": false
+        },
+        "created_at_idx": {
+          "name": "created_at_idx",
+          "columns": [
+            "created_at"
+          ],
+          "isUnique": false
+        },
+        "deleted_at_idx": {
+          "name": "deleted_at_idx",
+          "columns": [
+            "deleted_at"
+          ],
+          "isUnique": false
+        },
+        "last_login_at_idx": {
+          "name": "last_login_at_idx",
+          "columns": [
+            "last_login_at"
+          ],
+          "isUnique": false
+        },
+        "active_not_deleted_idx": {
+          "name": "active_not_deleted_idx",
+          "columns": [
+            "is_active",
+            "deleted_at"
+          ],
+          "isUnique": false
         }
       },
       "foreignKeys": {

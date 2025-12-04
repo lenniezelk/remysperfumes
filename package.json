@@ -28,6 +28,7 @@
   "dependencies": {
     "@react-oauth/google": "^0.12.2",
     "@tailwindcss/vite": "^4.0.6",
+    "@tanstack/pacer": "^0.16.3",
     "@tanstack/react-devtools": "^0.7.0",
     "@tanstack/react-form": "^1.23.8",
     "@tanstack/react-query": "^5.90.6",
@@ -37,6 +38,7 @@
     "@tanstack/react-start": "^1.132.0",
     "@tanstack/react-table": "^8.21.3",
     "@tanstack/router-plugin": "^1.132.0",
+    "@tanstack/zod-adapter": "^1.139.14",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.44.7",
     "drizzle-seed": "^0.3.1",

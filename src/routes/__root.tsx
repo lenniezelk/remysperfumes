@@ -1,8 +1,8 @@
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
+import { HeadContent, Scripts, createRootRouteWithContext } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { type QueryClient } from '@tanstack/react-query';
 import Logo from '@/assets/logo.svg';
 
 import appCss from '@/styles.css?url'
@@ -10,7 +10,8 @@ import { AdminAuthenticationProvider } from '@/lib/context/admin-auth-context';
 import { getEnvVars } from '@/lib/env-vars';
 import { NotificationProvider } from '@/components/notifications/Notification';
 
-export const Route = createRootRoute({
+
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
       {
@@ -100,7 +101,6 @@ export const Route = createRootRoute({
   }
 })
 
-const queryClient = new QueryClient();
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   const context = Route.useRouteContext();
@@ -112,11 +112,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
         <NotificationProvider>
           <GoogleOAuthProvider clientId={GOOGLE_OAUTH_CLIENT_ID}>
-            <QueryClientProvider client={queryClient}>
-              <AdminAuthenticationProvider>
-                {children}
-              </AdminAuthenticationProvider>
-            </QueryClientProvider>
+            <AdminAuthenticationProvider>
+              {children}
+            </AdminAuthenticationProvider>
           </GoogleOAuthProvider>
         </NotificationProvider>
         {import.meta.env.DEV && <TanStackDevtools

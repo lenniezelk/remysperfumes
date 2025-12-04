@@ -1,18 +1,19 @@
 import { createServerFn } from '@tanstack/react-start'
-import { desc, eq, sql } from 'drizzle-orm'
+import { desc, eq, isNull, sql } from 'drizzle-orm'
 import { canManageCategoriesMiddleware } from '../middleware/canManageCategories'
 import {
-  
-  
-  
   categorySchema,
   individualCategorySchema,
   paginationSchema,
-  updateCategorySchema
+  updateCategorySchema,
 } from './types'
-import type {CreateCategoryInput, PaginationInput, UpdateCategoryInput} from './types';
+import type {
+  CreateCategoryInput,
+  PaginationInput,
+  UpdateCategoryInput,
+} from './types'
 import db from '@/lib/db/client'
-import { categoryTable } from '@/lib/db/schema'
+import { categoryTable, productTable } from '@/lib/db/schema'
 
 // server function to get all categories without pagination
 export const getAllCategories = createServerFn({ method: 'GET' })
@@ -22,6 +23,7 @@ export const getAllCategories = createServerFn({ method: 'GET' })
       const categories = await db()
         .select()
         .from(categoryTable)
+        .where(isNull(categoryTable.deleted_at))
         .orderBy(desc(categoryTable.created_at))
 
       return {
@@ -51,6 +53,7 @@ export const listCategoriesPaginated = createServerFn({ method: 'GET' })
       const categories = await db()
         .select()
         .from(categoryTable)
+        .where(isNull(categoryTable.deleted_at))
         .orderBy(desc(categoryTable.created_at))
         .limit(pageSize)
         .offset(offset)
@@ -59,6 +62,7 @@ export const listCategoriesPaginated = createServerFn({ method: 'GET' })
       const totalResult = await db()
         .select({ count: sql<number>`count(*)` })
         .from(categoryTable)
+        .where(isNull(categoryTable.deleted_at))
       const total = totalResult[0]?.count || 0
       const totalPages = Math.ceil(total / pageSize)
 
@@ -200,12 +204,38 @@ export const deleteCategory = createServerFn({
   .handler(async ({ data }: { data: { id: string } }) => {
     const { id } = data
 
-    try {
-      await db().delete(categoryTable).where(eq(categoryTable.id, id))
+    const category = db()
+      .select()
+      .from(categoryTable)
+      .where(eq(categoryTable.id, id))
+    if (!category) {
+      return {
+        status: 'ERROR',
+        error: 'Category not found',
+      }
+    }
 
-      return { success: true }
-    } catch (error) {
-      console.error('Error deleting category:', error)
-      return { success: false, message: 'Failed to delete category' }
+    const products = await db()
+      .select()
+      .from(productTable)
+      .where(eq(productTable.category_id, id))
+      .limit(1)
+
+    if (products.length > 0) {
+      return {
+        status: 'ERROR',
+        error: 'Cannot delete category. Category has products',
+      }
+    }
+
+    // Soft delete: set deleted_at to current timestamp
+    await db()
+      .update(categoryTable)
+      .set({ deleted_at: new Date() })
+      .where(eq(categoryTable.id, id))
+
+    return {
+      status: 'SUCCESS',
+      data: null,
     }
   })

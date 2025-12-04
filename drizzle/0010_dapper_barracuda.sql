@@ -1,0 +1,1 @@
+ALTER TABLE `Category` ADD `deleted_at` integer;

@@ -4,9 +4,15 @@ import type { productTable } from '@/lib/db/schema'
 // Category Type
 export type Product = typeof productTable.$inferSelect
 
-export const paginationSchema = z.object({
-  page: z.number().int().positive().default(1),
-  pageSize: z.number().int().positive().min(1).max(100).default(10),
+export const ListProductsParams = z.object({
+  searchQuery: z.string().default(""),
+  sort: z.enum(["name", "created_at", "default_sell_price"]).default("created_at"),
+  order: z.enum(["asc", "desc"]).default("desc"),
+  page: z.coerce.number().int().positive().default(1),
+  limit: z.coerce.number().int().positive().min(1).max(100).default(10),
+  showDeleted: z.boolean().default(false),
+  category_id: z.string().uuid().optional(),
+  manufacturer_id: z.string().uuid().optional(),
 })
 
 // Zod Schema for Product
@@ -26,7 +32,7 @@ export const createProductSchema = z.object({
   manufacturer: z.string(),
 })
 
-export type PaginationInput = z.infer<typeof paginationSchema>
+export type PaginationInput = z.infer<typeof ListProductsParams>
 
 // zod validation for updating product
 export const updateProductSchema = z.object({

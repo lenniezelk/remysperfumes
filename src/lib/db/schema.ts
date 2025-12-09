@@ -100,7 +100,12 @@ export const supplierTable = sqliteTable('Supplier', {
         .notNull()
         .$defaultFn(() => new Date()),
     deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
-})
+}, (table) => [
+    index('supplier_name_idx').on(table.name),
+    index('supplier_contact_info_idx').on(table.contact_info),
+    index('supplier_created_at_idx').on(table.created_at),
+    index('supplier_deleted_at_idx').on(table.deleted_at),
+])
 
 export const stockBatchTable = sqliteTable('StockBatch', {
     id: text('id')

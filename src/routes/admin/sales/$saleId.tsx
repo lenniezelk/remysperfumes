@@ -11,7 +11,10 @@ import Button from '@/components/Button'
 import { FieldInfo } from '@/components/FieldInfo'
 import Heading from '@/components/Heading'
 import { Input } from '@/components/Input'
-import { useNotifications } from '@/components/notifications/Notification'
+import {
+  NotificationsList,
+  useNotifications,
+} from '@/components/notifications/Notification'
 import { getSale } from '@/lib/server/sales/get'
 import { updateSaleData, updateSale } from '@/lib/server/sales/update'
 import { listSaleItemsBySale } from '@/lib/server/sale-item/list-by-sale'
@@ -399,6 +402,7 @@ function RouteComponent() {
 
   return (
     <div className="w-full max-w-6xl mx-auto">
+      <NotificationsList />
       <Heading level={2} className="mt-12 mb-4">
         Edit Sale
       </Heading>
@@ -476,6 +480,28 @@ function RouteComponent() {
             )}
           />
         </div>
+        <div className="mt-2">
+          <saleForm.Field
+            name="total_amount"
+            children={(field) => (
+              <>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Total Amount
+                </label>
+                <Input
+                  type="number"
+                  name={field.name}
+                  value={calculateTotal()}
+                  disabled
+                  hasError={
+                    field.state.meta.isTouched && !field.state.meta.isValid
+                  }
+                />
+                <FieldInfo field={field} />
+              </>
+            )}
+          />
+        </div>
         {sale?.deleted_at !== null && (
           <div className="mt-2">
             <saleForm.Field
@@ -521,15 +547,26 @@ function RouteComponent() {
       <div className="mt-12">
         <div className="flex justify-between items-center mb-4">
           <Heading level={3}>Sale Items</Heading>
-          <Button
-            variant="primary"
-            onClick={() => {
-              notifications.clear()
-              addDialogRef.current?.showModal()
-            }}
-          >
-            Add Sale Item
-          </Button>
+          {sale?.deleted_at ? (
+            <div
+              className="tooltip tooltip-left"
+              data-tip="Cannot add sale items to a deleted sale. Please restore the sale first."
+            >
+              <Button variant="primary" disabled>
+                Add Sale Item
+              </Button>
+            </div>
+          ) : (
+            <Button
+              variant="primary"
+              onClick={() => {
+                notifications.clear()
+                addDialogRef.current?.showModal()
+              }}
+            >
+              Add Sale Item
+            </Button>
+          )}
         </div>
 
         {/* Sale Items Table */}

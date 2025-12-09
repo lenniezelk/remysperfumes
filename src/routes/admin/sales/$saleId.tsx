@@ -39,7 +39,7 @@ export const Route = createFileRoute('/admin/sales/$saleId')({
         ? await listSaleItemsBySale({ data: { sale_id: ctx.params.saleId } })
         : { status: 'ERROR' as const, error: 'Sale not found' }
     const productVariantsResult = await listProductVariants()
-    const stockBatchesResult = await listStockBatches()
+    const stockBatchesResult = await listStockBatches({ data: {} })
 
     return {
       sale: saleResult,

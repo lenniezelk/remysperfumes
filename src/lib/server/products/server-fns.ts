@@ -1,5 +1,5 @@
 import { createServerFn } from '@tanstack/react-start'
-import { desc, eq, sql, like, asc, and, isNull, isNotNull } from 'drizzle-orm'
+import { desc, eq, sql, like, asc, and, isNull, isNotNull, or } from 'drizzle-orm'
 import { canManageProductsMiddleware } from '../middleware/canManageProducts'
 import {
   createProductSchema,
@@ -31,7 +31,7 @@ export const listProductsPaginated = createServerFn({ method: 'GET' })
       }
 
       if (searchQuery) {
-        filters.push(like(productTable.name, `%${searchQuery}%`))
+        filters.push(or(like(productTable.name, `%${searchQuery}%`), like(productTable.brand, `%${searchQuery}%`)))
       }
 
       if (category_id) {

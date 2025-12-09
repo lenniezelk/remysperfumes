@@ -1,12 +1,9 @@
 import { createServerFn } from '@tanstack/react-start'
-import { desc, eq, sql } from 'drizzle-orm'
+import { desc, eq, sql, like, asc, and, isNull, isNotNull } from 'drizzle-orm'
 import { canManageProductsMiddleware } from '../middleware/canManageProducts'
 import {
-
-
-
   createProductSchema,
-  paginationSchema,
+  ListProductsParams,
   updateProductSchema,
   uuidSchema
 } from './types'
@@ -19,12 +16,41 @@ const db = dbClient()
 // Server function to list products with pagination (with Zod validation)
 export const listProductsPaginated = createServerFn({ method: 'GET' })
   .middleware([canManageProductsMiddleware])
-  .inputValidator(paginationSchema)
+  .inputValidator(ListProductsParams)
   .handler(async ({ data }: { data: PaginationInput }) => {
-    const { page, pageSize } = data
-    const offset = (page - 1) * pageSize
+    const { page, limit, searchQuery, sort, order, showDeleted, category_id, manufacturer_id } = data
+    const offset = (page - 1) * limit
 
     try {
+      const filters = []
+
+      if (showDeleted) {
+        filters.push(isNotNull(productTable.deleted_at))
+      } else {
+        filters.push(isNull(productTable.deleted_at))
+      }
+
+      if (searchQuery) {
+        filters.push(like(productTable.name, `%${searchQuery}%`))
+      }
+
+      if (category_id) {
+        filters.push(eq(productTable.category_id, category_id))
+      }
+
+      if (manufacturer_id) {
+        filters.push(eq(productTable.manufacturer, manufacturer_id))
+      }
+
+      const orderBy = []
+      if (sort === 'name') {
+        orderBy.push(order === 'asc' ? asc(productTable.name) : desc(productTable.name))
+      } else if (sort === 'default_sell_price') {
+        orderBy.push(order === 'asc' ? asc(productTable.default_sell_price) : desc(productTable.default_sell_price))
+      } else {
+        orderBy.push(order === 'asc' ? asc(productTable.created_at) : desc(productTable.created_at))
+      }
+
       const products = await db
         .select({
           id: productTable.id,
@@ -37,6 +63,7 @@ export const listProductsPaginated = createServerFn({ method: 'GET' })
           category_id: productTable.category_id,
           category_name: categoryTable.name, // 🎯 JOINED column
           manufacturer_name: manufacturerTable.name, // 🎯 JOINED column
+          deleted_at: productTable.deleted_at,
         })
         .from(productTable)
         .leftJoin(categoryTable, eq(productTable.category_id, categoryTable.id))
@@ -44,18 +71,18 @@ export const listProductsPaginated = createServerFn({ method: 'GET' })
           manufacturerTable,
           eq(productTable.manufacturer, manufacturerTable.id),
         )
-        .where(sql`${productTable.deleted_at} IS NULL`)
-        .orderBy(desc(productTable.created_at))
-        .limit(pageSize)
+        .where(and(...filters))
+        .orderBy(...orderBy)
+        .limit(limit)
         .offset(offset)
 
       // Get total count for pagination info (excluding deleted)
       const totalResult = await db
         .select({ count: sql<number>`count(*)` })
         .from(productTable)
-        .where(sql`${productTable.deleted_at} IS NULL`)
+        .where(and(...filters))
       const total = totalResult[0]?.count || 0
-      const totalPages = Math.ceil(total / pageSize)
+      const totalPages = Math.ceil(total / limit)
 
       return {
         success: true,
@@ -63,7 +90,7 @@ export const listProductsPaginated = createServerFn({ method: 'GET' })
           products,
           pagination: {
             page,
-            pageSize,
+            pageSize: limit,
             total,
             totalPages,
             hasNext: page < totalPages,
@@ -198,5 +225,26 @@ export const deleteProduct = createServerFn({
     } catch (error) {
       console.error('Error deleting product:', error)
       return { success: false, message: 'Failed to delete product' }
+    }
+  })
+
+// RESTORE function to restore a product by ID
+export const restoreProduct = createServerFn({
+  method: 'POST',
+})
+  .middleware([canManageProductsMiddleware])
+  .inputValidator(uuidSchema)
+  .handler(async ({ data }: { data: { id: string } }) => {
+    try {
+      // Restore: set deleted_at to null
+      await db
+        .update(productTable)
+        .set({ deleted_at: null })
+        .where(eq(productTable.id, data.id))
+
+      return { success: true, message: 'Product restored successfully' }
+    } catch (error) {
+      console.error('Error restoring product:', error)
+      return { success: false, message: 'Failed to restore product' }
     }
   })

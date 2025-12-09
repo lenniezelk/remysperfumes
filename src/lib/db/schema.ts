@@ -32,7 +32,15 @@ export const productTable = sqliteTable("Product", {
     manufacturer: text("manufacturer")
         .references(() => manufacturerTable.id),
     deleted_at: int("deleted_at", { mode: 'timestamp_ms' }),
-});
+},
+    (table) => [
+        index("product_name_idx").on(table.name),
+        index("product_category_id_idx").on(table.category_id),
+        index("product_brand_idx").on(table.brand),
+        index("product_created_at_idx").on(table.created_at),
+        index("product_deleted_at_idx").on(table.deleted_at),
+        index("product_default_sell_price_idx").on(table.default_sell_price),
+    ]);
 
 export const productVariantTable = sqliteTable("ProductVariant", {
     id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),

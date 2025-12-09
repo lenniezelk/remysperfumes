@@ -220,11 +220,11 @@ function RouteComponent() {
   return (
     <div className="w-full overflow-x-auto">
       <NotificationsList />
-      <div className="flex justify-between mb-4 items-center py-4">
+      <div className="flex flex-wrap justify-between mb-4 items-center py-4 gap-4">
         <Heading level={4}>
           Users
         </Heading>
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-4 items-center">
           <SearchInput
             name="searchQuery"
             placeholder="Search users..."
@@ -232,59 +232,75 @@ function RouteComponent() {
             value={searchQuery}
             onChange={(e) => { setSearchQuery(e.target.value); debouncedSearch(e.target.value) }}
           />
-          <Select
-            name="sort"
-            value={search.sort}
-            onChange={(e) => navigate({ search: (prev) => ({ ...prev, sort: e.target.value as "name" | "created_at" }) })}
-          >
-            <option value="created_at">Sort by: Date Created</option>
-            <option value="name">Sort by: Name</option>
-          </Select>
-          <Select
-            name="order"
-            value={search.order}
-            onChange={(e) => navigate({ search: (prev) => ({ ...prev, order: e.target.value as "asc" | "desc" }) })}
-          >
-            <option value="desc">Descending</option>
-            <option value="asc">Ascending</option>
-          </Select>
-          <Select
-            name="limit"
-            value={search.limit.toString()}
-            onChange={(e) => navigate({ search: (prev) => ({ ...prev, limit: parseInt(e.target.value), page: 1 }) })}
-          >
-            <option value="10">10 per page</option>
-            <option value="25">25 per page</option>
-            <option value="50">50 per page</option>
-            <option value="100">100 per page</option>
-          </Select>
-          <Button
-            variant="neutral"
-            onClick={() => {
-              setSearchQuery("");
-              navigate({
-                search: {
-                  searchQuery: "",
-                  sort: "created_at",
-                  order: "desc",
-                  page: 1,
-                  limit: 10,
-                  showDeleted: false
-                }
-              });
-            }}
-          >
-            Clear Filters
-          </Button>
-          <Button
-            variant="primary"
-            onClick={() => {
-              notifications.clear();
-              navigate({ to: '/admin/users/new' });
-            }}
-          >
-            Create New User
-          </Button>
+          <div className="flex gap-2 shrink-0">
+            <div className="w-48">
+              <Select
+                name="sort"
+                value={search.sort}
+                onChange={(e) => navigate({ search: (prev) => ({ ...prev, sort: e.target.value as "name" | "created_at" }) })}
+              >
+                <option value="created_at">Sort by: Date Created</option>
+                <option value="name">Sort by: Name</option>
+              </Select>
+            </div>
+            <div className="w-36">
+              <Select
+                name="order"
+                value={search.order}
+                onChange={(e) => navigate({ search: (prev) => ({ ...prev, order: e.target.value as "asc" | "desc" }) })}
+              >
+                <option value="desc">Descending</option>
+                <option value="asc">Ascending</option>
+              </Select>
+            </div>
+          </div>
+          <div className="w-36 shrink-0">
+            <Select
+              name="limit"
+              value={search.limit.toString()}
+              onChange={(e) => navigate({ search: (prev) => ({ ...prev, limit: parseInt(e.target.value), page: 1 }) })}
+            >
+              <option value="10">10 per page</option>
+              <option value="25">25 per page</option>
+              <option value="50">50 per page</option>
+              <option value="100">100 per page</option>
+            </Select>
+          </div>
+          <div className="flex gap-2 shrink-0 flex-wrap">
+            <Button
+              variant={search.showDeleted ? "primary" : "neutral"}
+              onClick={() => navigate({ search: (prev) => ({ ...prev, showDeleted: !prev.showDeleted, page: 1 }) })}
+            >
+              {search.showDeleted ? "Hide Deleted" : "Show Deleted"}
+            </Button>
+            <Button
+              variant="neutral"
+              onClick={() => {
+                setSearchQuery("");
+                navigate({
+                  search: {
+                    searchQuery: "",
+                    sort: "created_at",
+                    order: "desc",
+                    page: 1,
+                    limit: 10,
+                    showDeleted: false
+                  }
+                });
+              }}
+            >
+              Clear Filters
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => {
+                notifications.clear();
+                navigate({ to: '/admin/users/new' });
+              }}
+            >
+              Create New User
+            </Button>
+          </div>
         </div>
       </div>
       <table className="min-w-full divide-y divide-gray-200">
@@ -309,7 +325,10 @@ function RouteComponent() {
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
+            <tr
+              key={row.id}
+              className={row.original.deleted_at ? "bg-red-50" : ""}
+            >
               {row.getVisibleCells().map((cell) => (
                 <td
                   key={cell.id}

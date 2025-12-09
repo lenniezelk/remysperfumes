@@ -23,7 +23,7 @@ import { createProductSku } from '@/lib/server/product-variant/sku'
 export const Route = createFileRoute('/admin/products/$productId')({
   loader: async ({ params }) => {
     const categories = await getAllCategories()
-    const manufacturers = await listManufacturers()
+    const manufacturers = await listManufacturers({ data: {} })
     const productResult = await getProductById({ data: { id: params.productId } })
 
     if ('error' in productResult) {
@@ -103,7 +103,7 @@ function RouteComponent() {
     : [];
 
   const [manufacturerData] = useState<Array<Manufacturer>>(() =>
-    manufacturers.status === 'SUCCESS' ? manufacturers.data : [],
+    manufacturers.status === 'SUCCESS' ? manufacturers.data.items : [],
   )
   const [productVariants, setProductVariants] = useState<ProductVariant[]>(initialProductVariants);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);

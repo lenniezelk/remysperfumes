@@ -135,7 +135,14 @@ export const stockBatchTable = sqliteTable('StockBatch', {
         .$defaultFn(() => new Date()),
     supplier: text('supplier').references(() => supplierTable.id),
     deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
-})
+}, (table) => [
+    index('stock_batch_product_variant_id_idx').on(table.product_variant_id),
+    index('stock_batch_supplier_idx').on(table.supplier),
+    index('stock_batch_received_at_idx').on(table.received_at),
+    index('stock_batch_created_at_idx').on(table.created_at),
+    index('stock_batch_deleted_at_idx').on(table.deleted_at),
+    index('stock_batch_quantity_remaining_idx').on(table.quantity_remaining),
+])
 
 export const saleTable = sqliteTable('Sale', {
     id: text('id')

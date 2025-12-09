@@ -58,7 +58,7 @@ export const createSaleItem = createServerFn({ method: 'POST' })
       if (!productVariant) {
         return {
           status: 'ERROR',
-          error: 'Product variant not found',
+          error: 'Product variant not selected',
         }
       }
 

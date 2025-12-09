@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
-import { eq } from 'drizzle-orm'
+import { and, eq, isNull } from 'drizzle-orm'
 import { canManageSalesMiddleware } from '@/lib/server/middleware/canManageSales'
 import dbClient from '@/lib/db/client'
 import { saleTable, saleItemTable } from '@/lib/db/schema'
@@ -34,7 +34,12 @@ export const deleteSale = createServerFn({ method: 'POST' })
     const saleItems = await db
       .select()
       .from(saleItemTable)
-      .where(eq(saleItemTable.sale_id, saleId))
+      .where(
+        and(
+          isNull(saleItemTable.deleted_at),
+          eq(saleItemTable.sale_id, saleId),
+        ),
+      )
 
     if (saleItems.length > 0) {
       return {

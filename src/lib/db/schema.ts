@@ -154,7 +154,13 @@ export const saleTable = sqliteTable('Sale', {
     customer_name: text('customer_name'),
     customer_contact: text('customer_contact'),
     deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
-})
+}, (table) => [
+    index('sale_customer_name_idx').on(table.customer_name),
+    index('sale_customer_contact_idx').on(table.customer_contact),
+    index('sale_date_idx').on(table.date),
+    index('sale_total_amount_idx').on(table.total_amount),
+    index('sale_deleted_at_idx').on(table.deleted_at),
+])
 
 export const saleItemTable = sqliteTable('SaleItem', {
     id: text('id')

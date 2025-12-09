@@ -1,10 +1,10 @@
 import { createServerFn } from '@tanstack/react-start'
-import { desc, eq, isNull, sql } from 'drizzle-orm'
+import { desc, eq, isNull, sql, like, asc, and, isNotNull, or } from 'drizzle-orm'
 import { canManageCategoriesMiddleware } from '../middleware/canManageCategories'
 import {
   categorySchema,
   individualCategorySchema,
-  paginationSchema,
+  ListCategoriesParams,
   updateCategorySchema,
 } from './types'
 import type {
@@ -42,29 +42,54 @@ export const getAllCategories = createServerFn({ method: 'GET' })
   })
 
 // Server function to list categories with pagination (with Zod validation)
-export const listCategoriesPaginated = createServerFn({ method: 'GET' })
+export const listCategoriesPaginated = createServerFn({ method: "GET" })
   .middleware([canManageCategoriesMiddleware])
-  .inputValidator(paginationSchema)
+  .inputValidator(ListCategoriesParams)
   .handler(async ({ data }: { data: PaginationInput }) => {
-    const { page, pageSize } = data
-    const offset = (page - 1) * pageSize
+    const { page, limit, searchQuery, sort, order, showDeleted } = data;
+    const offset = (page - 1) * limit;
 
     try {
+      const filters = [];
+
+      if (showDeleted) {
+        filters.push(isNotNull(categoryTable.deleted_at));
+      } else {
+        filters.push(isNull(categoryTable.deleted_at));
+      }
+
+      if (searchQuery) {
+        filters.push(or(like(categoryTable.name, `%${searchQuery}%`), like(categoryTable.description, `%${searchQuery}%`)));
+      }
+
+      const orderBy = [];
+      if (sort === "name") {
+        orderBy.push(
+          order === "asc" ? asc(categoryTable.name) : desc(categoryTable.name)
+        );
+      } else {
+        orderBy.push(
+          order === "asc"
+            ? asc(categoryTable.created_at)
+            : desc(categoryTable.created_at)
+        );
+      }
+
       const categories = await db()
         .select()
         .from(categoryTable)
-        .where(isNull(categoryTable.deleted_at))
-        .orderBy(desc(categoryTable.created_at))
-        .limit(pageSize)
-        .offset(offset)
+        .where(and(...filters))
+        .orderBy(...orderBy)
+        .limit(limit)
+        .offset(offset);
 
       // Get total count for pagination info
       const totalResult = await db()
         .select({ count: sql<number>`count(*)` })
         .from(categoryTable)
-        .where(isNull(categoryTable.deleted_at))
-      const total = totalResult[0]?.count || 0
-      const totalPages = Math.ceil(total / pageSize)
+        .where(and(...filters));
+      const total = totalResult[0]?.count || 0;
+      const totalPages = Math.ceil(total / limit);
 
       return {
         success: true,
@@ -72,24 +97,24 @@ export const listCategoriesPaginated = createServerFn({ method: 'GET' })
           categories,
           pagination: {
             page,
-            pageSize,
+            pageSize: limit,
             total,
             totalPages,
             hasNext: page < totalPages,
             hasPrev: page > 1,
           },
         },
-        message: 'Categories retrieved successfully',
-      }
+        message: "Categories retrieved successfully",
+      };
     } catch (error) {
-      console.error('Error listing categories:', error)
+      console.error("Error listing categories:", error);
       return {
         success: false,
         data: null,
-        message: 'Failed to retrieve categories',
-      }
+        message: "Failed to retrieve categories",
+      };
     }
-  })
+  });
 
 // POST function to create a category
 export const createCategory = createServerFn({
@@ -232,6 +257,40 @@ export const deleteCategory = createServerFn({
     await db()
       .update(categoryTable)
       .set({ deleted_at: new Date() })
+      .where(eq(categoryTable.id, id))
+
+    return {
+      status: 'SUCCESS',
+      data: null,
+    }
+  })
+
+// Restore function to restore a category by ID
+export const restoreCategory = createServerFn({
+  method: 'POST',
+})
+  .middleware([canManageCategoriesMiddleware])
+  .inputValidator(individualCategorySchema)
+  .handler(async ({ data }: { data: { id: string } }) => {
+    const { id } = data
+
+    const category = await db()
+      .select()
+      .from(categoryTable)
+      .where(eq(categoryTable.id, id))
+      .limit(1)
+
+    if (!category || category.length === 0) {
+      return {
+        status: 'ERROR',
+        error: 'Category not found',
+      }
+    }
+
+    // Restore: set deleted_at to null
+    await db()
+      .update(categoryTable)
+      .set({ deleted_at: null, updated_at: new Date() })
       .where(eq(categoryTable.id, id))
 
     return {

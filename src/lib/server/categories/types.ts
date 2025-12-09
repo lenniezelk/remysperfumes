@@ -5,12 +5,16 @@ import type { categoryTable } from '@/lib/db/schema'
 export type Category = typeof categoryTable.$inferSelect
 
 // Zod Schema for Category
-export const paginationSchema = z.object({
+export const ListCategoriesParams = z.object({
   page: z.number().int().positive().default(1),
-  pageSize: z.number().int().positive().min(1).max(100).default(10),
+  limit: z.number().int().positive().min(1).max(100).default(10),
+  searchQuery: z.string().default(""),
+  sort: z.enum(["name", "created_at"]).default("created_at"),
+  order: z.enum(["asc", "desc"]).default("desc"),
+  showDeleted: z.boolean().default(false),
 })
 
-export type PaginationInput = z.infer<typeof paginationSchema>
+export type PaginationInput = z.infer<typeof ListCategoriesParams>
 
 // Zod validation for category
 export const categorySchema = z.object({

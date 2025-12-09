@@ -33,7 +33,12 @@ export const manufacturerTable = sqliteTable('Manufacturer', {
         .notNull()
         .$defaultFn(() => new Date()),
     deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
-})
+}, (table) => [
+    index('manufacturer_name_idx').on(table.name),
+    index('manufacturer_contact_info_idx').on(table.contact_info),
+    index('manufacturer_created_at_idx').on(table.created_at),
+    index('manufacturer_deleted_at_idx').on(table.deleted_at),
+])
 
 export const productTable = sqliteTable(
     'Product',

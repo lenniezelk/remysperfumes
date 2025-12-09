@@ -29,7 +29,7 @@ import { Select } from '@/components/Select'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { ListProductsParams } from '@/lib/server/products/types'
 import type { PaginationInput } from '@/lib/server/products/types'
-import { listManufacturers } from '@/lib/server/manufacturer/list';
+import { getAllManufacturers } from '@/lib/server/manufacturer/get-all';
 
 
 const listQueryOptions = (params: PaginationInput) => queryOptions({
@@ -44,7 +44,7 @@ const categoriesQueryOptions = queryOptions({
 
 const manufacturersQueryOptions = queryOptions({
   queryKey: ['manufacturers'],
-  queryFn: () => listManufacturers(),
+  queryFn: () => getAllManufacturers(),
 })
 
 export const Route = createFileRoute('/admin/products/')({

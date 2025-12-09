@@ -17,7 +17,11 @@ import { deleteSale, restoreSale } from '@/lib/server/sales/delete'
 import { listSales, ListSalesParams } from '@/lib/server/sales/list'
 import { updateSale } from '@/lib/server/sales/update'
 import Heading from '@/components/Heading'
-import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
+import {
+  queryOptions,
+  useSuspenseQuery,
+  useQueryClient,
+} from '@tanstack/react-query'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { z } from 'zod'
 import { debounce } from '@tanstack/pacer'
@@ -125,6 +129,7 @@ function RouteComponent() {
   const [deleting, setDeleting] = useState(false)
   const [restoring, setRestoring] = useState(false)
   const router = useRouter()
+  const queryClient = useQueryClient()
   const [searchQuery, setSearchQuery] = useState(search.searchQuery)
   const [datePreset, setDatePreset] = useState<string>('all_time')
 
@@ -231,7 +236,7 @@ function RouteComponent() {
               message: 'Sale restored successfully.',
               type: 'SUCCESS',
             })
-            router.invalidate()
+            queryClient.invalidateQueries({ queryKey: ['sales'] })
           } else {
             notifications.addNotification({
               message:
@@ -259,7 +264,7 @@ function RouteComponent() {
               message: 'Sale deleted successfully.',
               type: 'SUCCESS',
             })
-            router.invalidate()
+            queryClient.invalidateQueries({ queryKey: ['sales'] })
           } else {
             notifications.addNotification({
               message:
@@ -291,7 +296,7 @@ function RouteComponent() {
             message: 'Sale restored successfully.',
             type: 'SUCCESS',
           })
-          router.invalidate()
+          queryClient.invalidateQueries({ queryKey: ['sales'] })
         } else {
           notifications.addNotification({
             message:

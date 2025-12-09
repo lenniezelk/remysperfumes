@@ -1,246 +1,258 @@
 import { index, int, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
-export const categoryTable = sqliteTable('Category', {
+export const categoryTable = sqliteTable(
+  'Category',
+  {
     id: text('id')
-        .primaryKey()
-        .$defaultFn(() => crypto.randomUUID()),
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
     name: text('name').notNull(),
     description: text('description'),
     created_at: int('created_at', { mode: 'timestamp_ms' })
-        .notNull()
-        .$defaultFn(() => new Date()),
+      .notNull()
+      .$defaultFn(() => new Date()),
     updated_at: int('updated_at', { mode: 'timestamp_ms' })
-        .notNull()
-        .$defaultFn(() => new Date()),
+      .notNull()
+      .$defaultFn(() => new Date()),
     deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
-}, (table) => [
+  },
+  (table) => [
     index('category_name_idx').on(table.name),
     index('category_created_at_idx').on(table.created_at),
     index('category_deleted_at_idx').on(table.deleted_at),
     index('category_description_idx').on(table.description),
-])
+  ],
+)
 
-export const manufacturerTable = sqliteTable('Manufacturer', {
+export const manufacturerTable = sqliteTable(
+  'Manufacturer',
+  {
     id: text('id')
-        .primaryKey()
-        .$defaultFn(() => crypto.randomUUID()),
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
     name: text('name').notNull(),
     contact_info: text('contact_info'),
     created_at: int('created_at', { mode: 'timestamp_ms' })
-        .notNull()
-        .$defaultFn(() => new Date()),
+      .notNull()
+      .$defaultFn(() => new Date()),
     updated_at: int('updated_at', { mode: 'timestamp_ms' })
-        .notNull()
-        .$defaultFn(() => new Date()),
+      .notNull()
+      .$defaultFn(() => new Date()),
     deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
-}, (table) => [
+  },
+  (table) => [
     index('manufacturer_name_idx').on(table.name),
     index('manufacturer_contact_info_idx').on(table.contact_info),
     index('manufacturer_created_at_idx').on(table.created_at),
     index('manufacturer_deleted_at_idx').on(table.deleted_at),
-])
+  ],
+)
 
 export const productTable = sqliteTable(
-    'Product',
-    {
-        id: text('id')
-            .primaryKey()
-            .$defaultFn(() => crypto.randomUUID()),
-        name: text('name').notNull(),
-        description: text('description'),
-        category_id: text('category_id')
-            .notNull()
-            .references(() => categoryTable.id),
-        brand: text('brand'),
-        default_sell_price: int('default_sell_price').notNull(),
-        created_at: int('created_at', { mode: 'timestamp_ms' })
-            .notNull()
-            .$defaultFn(() => new Date()),
-        updated_at: int('updated_at', { mode: 'timestamp_ms' })
-            .notNull()
-            .$defaultFn(() => new Date()),
-        manufacturer: text('manufacturer').references(() => manufacturerTable.id),
-        deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
-    },
-    (table) => [
-        index('product_name_idx').on(table.name),
-        index('product_category_id_idx').on(table.category_id),
-        index('product_brand_idx').on(table.brand),
-        index('product_created_at_idx').on(table.created_at),
-        index('product_deleted_at_idx').on(table.deleted_at),
-        index('product_default_sell_price_idx').on(table.default_sell_price),
-    ],
+  'Product',
+  {
+    id: text('id')
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    name: text('name').notNull(),
+    description: text('description'),
+    category_id: text('category_id')
+      .notNull()
+      .references(() => categoryTable.id),
+    brand: text('brand'),
+    default_sell_price: int('default_sell_price').notNull(),
+    created_at: int('created_at', { mode: 'timestamp_ms' })
+      .notNull()
+      .$defaultFn(() => new Date()),
+    updated_at: int('updated_at', { mode: 'timestamp_ms' })
+      .notNull()
+      .$defaultFn(() => new Date()),
+    manufacturer: text('manufacturer').references(() => manufacturerTable.id),
+    deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
+  },
+  (table) => [
+    index('product_name_idx').on(table.name),
+    index('product_category_id_idx').on(table.category_id),
+    index('product_brand_idx').on(table.brand),
+    index('product_created_at_idx').on(table.created_at),
+    index('product_deleted_at_idx').on(table.deleted_at),
+    index('product_default_sell_price_idx').on(table.default_sell_price),
+  ],
 )
 
 export const productVariantTable = sqliteTable('ProductVariant', {
-    id: text('id')
-        .primaryKey()
-        .$defaultFn(() => crypto.randomUUID()),
-    product_id: text('product_id')
-        .notNull()
-        .references(() => productTable.id),
-    name: text('name').notNull(),
-    sku: text('sku').notNull().unique(),
-    default_sell_price: int('default_sell_price'),
-    image: text('image'),
-    created_at: int('created_at', { mode: 'timestamp_ms' })
-        .notNull()
-        .$defaultFn(() => new Date()),
-    updated_at: int('updated_at', { mode: 'timestamp_ms' })
-        .notNull()
-        .$defaultFn(() => new Date()),
-    deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  product_id: text('product_id')
+    .notNull()
+    .references(() => productTable.id),
+  name: text('name').notNull(),
+  sku: text('sku').notNull().unique(),
+  default_sell_price: int('default_sell_price'),
+  image: text('image'),
+  created_at: int('created_at', { mode: 'timestamp_ms' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  updated_at: int('updated_at', { mode: 'timestamp_ms' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
 })
 
-export const supplierTable = sqliteTable('Supplier', {
+export const supplierTable = sqliteTable(
+  'Supplier',
+  {
     id: text('id')
-        .primaryKey()
-        .$defaultFn(() => crypto.randomUUID()),
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
     name: text('name').notNull(),
     contact_info: text('contact_info'),
     created_at: int('created_at', { mode: 'timestamp_ms' })
-        .notNull()
-        .$defaultFn(() => new Date()),
+      .notNull()
+      .$defaultFn(() => new Date()),
     updated_at: int('updated_at', { mode: 'timestamp_ms' })
-        .notNull()
-        .$defaultFn(() => new Date()),
+      .notNull()
+      .$defaultFn(() => new Date()),
     deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
-}, (table) => [
+  },
+  (table) => [
     index('supplier_name_idx').on(table.name),
     index('supplier_contact_info_idx').on(table.contact_info),
     index('supplier_created_at_idx').on(table.created_at),
     index('supplier_deleted_at_idx').on(table.deleted_at),
-])
+  ],
+)
 
 export const stockBatchTable = sqliteTable('StockBatch', {
-    id: text('id')
-        .primaryKey()
-        .$defaultFn(() => crypto.randomUUID()),
-    product_variant_id: text('product_variant_id')
-        .notNull()
-        .references(() => productVariantTable.id),
-    quantity_received: int('quantity_received').notNull(),
-    quantity_remaining: int('quantity_remaining').notNull(),
-    buy_price_per_unit: int('buy_price_per_unit').notNull(),
-    sell_price_per_unit: int('sell_price_per_unit').notNull(),
-    min_sale_price_per_unit: int('min_sale_price_per_unit').notNull(),
-    received_at: int('received_at', { mode: 'timestamp_ms' })
-        .notNull()
-        .$defaultFn(() => new Date()),
-    created_at: int('created_at', { mode: 'timestamp_ms' })
-        .notNull()
-        .$defaultFn(() => new Date()),
-    updated_at: int('updated_at', { mode: 'timestamp_ms' })
-        .notNull()
-        .$defaultFn(() => new Date()),
-    supplier: text('supplier').references(() => supplierTable.id),
-    deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  product_variant_id: text('product_variant_id')
+    .notNull()
+    .references(() => productVariantTable.id),
+  quantity_received: int('quantity_received').notNull(),
+  quantity_remaining: int('quantity_remaining').notNull(),
+  buy_price_per_unit: int('buy_price_per_unit').notNull(),
+  sell_price_per_unit: int('sell_price_per_unit').notNull(),
+  min_sale_price_per_unit: int('min_sale_price_per_unit').notNull(),
+  received_at: int('received_at', { mode: 'timestamp_ms' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  created_at: int('created_at', { mode: 'timestamp_ms' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  updated_at: int('updated_at', { mode: 'timestamp_ms' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  supplier: text('supplier').references(() => supplierTable.id),
+  deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
 })
 
 export const saleTable = sqliteTable('Sale', {
-    id: text('id')
-        .primaryKey()
-        .$defaultFn(() => crypto.randomUUID()),
-    date: int('date', { mode: 'timestamp_ms' })
-        .notNull()
-        .$defaultFn(() => new Date()),
-    total_amount: int('total_amount').notNull(),
-    created_at: int('created_at', { mode: 'timestamp_ms' })
-        .notNull()
-        .$defaultFn(() => new Date()),
-    updated_at: int('updated_at', { mode: 'timestamp_ms' })
-        .notNull()
-        .$defaultFn(() => new Date()),
-    customer_name: text('customer_name'),
-    customer_contact: text('customer_contact'),
-    deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  date: int('date', { mode: 'timestamp_ms' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  total_amount: int('total_amount'),
+  created_at: int('created_at', { mode: 'timestamp_ms' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  updated_at: int('updated_at', { mode: 'timestamp_ms' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  customer_name: text('customer_name'),
+  customer_contact: text('customer_contact'),
+  deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
 })
 
 export const saleItemTable = sqliteTable('SaleItem', {
-    id: text('id')
-        .primaryKey()
-        .$defaultFn(() => crypto.randomUUID()),
-    sale_id: text('sale_id')
-        .notNull()
-        .references(() => saleTable.id),
-    product_variant_id: text('product_variant_id')
-        .notNull()
-        .references(() => productVariantTable.id),
-    quantity_sold: int('quantity_sold').notNull(),
-    price_at_sale: int('price_at_sale').notNull(),
-    cost_at_sale: int('cost_at_sale').notNull(),
-    created_at: int('created_at', { mode: 'timestamp_ms' })
-        .notNull()
-        .$defaultFn(() => new Date()),
-    updated_at: int('updated_at', { mode: 'timestamp_ms' })
-        .notNull()
-        .$defaultFn(() => new Date()),
-    deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  sale_id: text('sale_id')
+    .notNull()
+    .references(() => saleTable.id),
+  product_variant_id: text('product_variant_id')
+    .notNull()
+    .references(() => productVariantTable.id),
+  quantity_sold: int('quantity_sold').notNull(),
+  price_at_sale: int('price_at_sale').notNull(),
+  cost_at_sale: int('cost_at_sale').notNull(),
+  created_at: int('created_at', { mode: 'timestamp_ms' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  updated_at: int('updated_at', { mode: 'timestamp_ms' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
 })
 
 export const saleItemBatchTable = sqliteTable('SaleItemBatch', {
-    id: text('id')
-        .primaryKey()
-        .$defaultFn(() => crypto.randomUUID()),
-    sale_item_id: text('sale_item_id')
-        .notNull()
-        .references(() => saleItemTable.id),
-    stock_batch_id: text('stock_batch_id')
-        .notNull()
-        .references(() => stockBatchTable.id),
-    quantity_from_batch: int('quantity_from_batch').notNull(),
-    cost_from_batch: int('cost_from_batch').notNull(),
-    created_at: int('created_at', { mode: 'timestamp_ms' })
-        .notNull()
-        .$defaultFn(() => new Date()),
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  sale_item_id: text('sale_item_id')
+    .notNull()
+    .references(() => saleItemTable.id),
+  stock_batch_id: text('stock_batch_id')
+    .notNull()
+    .references(() => stockBatchTable.id),
+  quantity_from_batch: int('quantity_from_batch').notNull(),
+  cost_from_batch: int('cost_from_batch').notNull(),
+  created_at: int('created_at', { mode: 'timestamp_ms' })
+    .notNull()
+    .$defaultFn(() => new Date()),
 })
 
 export const roleTable = sqliteTable('Role', {
-    id: text('id')
-        .primaryKey()
-        .$defaultFn(() => crypto.randomUUID()),
-    name: text('name').notNull().unique(),
-    description: text('description'),
-    created_at: int('created_at', { mode: 'timestamp_ms' })
-        .notNull()
-        .$defaultFn(() => new Date()),
-    updated_at: int('updated_at', { mode: 'timestamp_ms' })
-        .notNull()
-        .$defaultFn(() => new Date()),
-    key: text('key').notNull().unique(),
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text('name').notNull().unique(),
+  description: text('description'),
+  created_at: int('created_at', { mode: 'timestamp_ms' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  updated_at: int('updated_at', { mode: 'timestamp_ms' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  key: text('key').notNull().unique(),
 })
 
 export const userTable = sqliteTable(
-    'User',
-    {
-        id: text('id')
-            .primaryKey()
-            .$defaultFn(() => crypto.randomUUID()),
-        email: text('email').notNull().unique(),
-        name: text('name').notNull(),
-        role_id: text('role_id').references(() => roleTable.id),
-        is_active: integer('is_active', { mode: 'boolean' })
-            .notNull()
-            .$defaultFn(() => false),
-        created_at: int('created_at', { mode: 'timestamp_ms' })
-            .notNull()
-            .$defaultFn(() => new Date()),
-        updated_at: int('updated_at', { mode: 'timestamp_ms' })
-            .notNull()
-            .$defaultFn(() => new Date()),
-        password_hash: text('password_hash'),
-        last_login_at: int('last_login_at', { mode: 'timestamp_ms' }),
-        deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
-    },
-    (table) => [
-        index('name_idx').on(table.name),
-        index('email_idx').on(table.email),
-        index('role_id_idx').on(table.role_id),
-        index('is_active_idx').on(table.is_active),
-        index('created_at_idx').on(table.created_at),
-        index('deleted_at_idx').on(table.deleted_at),
-        index('last_login_at_idx').on(table.last_login_at),
-        // Composite index for filtering active non-deleted users
-        index('active_not_deleted_idx').on(table.is_active, table.deleted_at),
-    ],
+  'User',
+  {
+    id: text('id')
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    email: text('email').notNull().unique(),
+    name: text('name').notNull(),
+    role_id: text('role_id').references(() => roleTable.id),
+    is_active: integer('is_active', { mode: 'boolean' })
+      .notNull()
+      .$defaultFn(() => false),
+    created_at: int('created_at', { mode: 'timestamp_ms' })
+      .notNull()
+      .$defaultFn(() => new Date()),
+    updated_at: int('updated_at', { mode: 'timestamp_ms' })
+      .notNull()
+      .$defaultFn(() => new Date()),
+    password_hash: text('password_hash'),
+    last_login_at: int('last_login_at', { mode: 'timestamp_ms' }),
+    deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
+  },
+  (table) => [
+    index('name_idx').on(table.name),
+    index('email_idx').on(table.email),
+    index('role_id_idx').on(table.role_id),
+    index('is_active_idx').on(table.is_active),
+    index('created_at_idx').on(table.created_at),
+    index('deleted_at_idx').on(table.deleted_at),
+    index('last_login_at_idx').on(table.last_login_at),
+    // Composite index for filtering active non-deleted users
+    index('active_not_deleted_idx').on(table.is_active, table.deleted_at),
+  ],
 )

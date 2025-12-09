@@ -1,91 +1,105 @@
-import { useForm } from '@tanstack/react-form';
+import { useForm } from '@tanstack/react-form'
 import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { useEffect, useRef, useState } from 'react';
-import Button from '@/components/Button';
-import { FieldInfo } from '@/components/FieldInfo';
-import Heading from '@/components/Heading';
-import { Input } from '@/components/Input';
-import { useNotifications } from '@/components/notifications/Notification';
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
+import { useEffect, useRef, useState } from 'react'
+import Button from '@/components/Button'
+import { FieldInfo } from '@/components/FieldInfo'
+import Heading from '@/components/Heading'
+import { Input } from '@/components/Input'
+import { useNotifications } from '@/components/notifications/Notification'
 import { getSale } from '@/lib/server/sales/get'
-import { updateSaleData, updateSale } from '@/lib/server/sales/update';
-import { listSaleItemsBySale } from '@/lib/server/sale-item/list-by-sale';
-import { createSaleItem, CreateSaleItemInput } from '@/lib/server/sale-item/create';
-import { updateSaleItem, UpdateSaleItemData } from '@/lib/server/sale-item/update';
-import { deleteSaleItem } from '@/lib/server/sale-item/delete';
-import { listProductVariants } from '@/lib/server/product-variant/list';
-import { listStockBatches } from '@/lib/server/stock-batch/list';
+import { updateSaleData, updateSale } from '@/lib/server/sales/update'
+import { listSaleItemsBySale } from '@/lib/server/sale-item/list-by-sale'
+import {
+  createSaleItem,
+  CreateSaleItemInput,
+} from '@/lib/server/sale-item/create'
+import {
+  updateSaleItem,
+  UpdateSaleItemData,
+} from '@/lib/server/sale-item/update'
+import { deleteSaleItem } from '@/lib/server/sale-item/delete'
+import { listProductVariants } from '@/lib/server/product-variant/list'
+import { listStockBatches } from '@/lib/server/stock-batch/list'
 
 export const Route = createFileRoute('/admin/sales/$saleId')({
   component: RouteComponent,
   loader: async (ctx) => {
-    const saleResult = await getSale({ data: { saleId: ctx.params.saleId } });
-    const saleItemsResult = saleResult.status === 'SUCCESS' 
-      ? await listSaleItemsBySale({ data: { sale_id: ctx.params.saleId } })
-      : { status: 'ERROR' as const, error: 'Sale not found' };
-    const productVariantsResult = await listProductVariants();
-    const stockBatchesResult = await listStockBatches();
-    
+    const saleResult = await getSale({ data: { saleId: ctx.params.saleId } })
+    const saleItemsResult =
+      saleResult.status === 'SUCCESS'
+        ? await listSaleItemsBySale({ data: { sale_id: ctx.params.saleId } })
+        : { status: 'ERROR' as const, error: 'Sale not found' }
+    const productVariantsResult = await listProductVariants()
+    const stockBatchesResult = await listStockBatches()
+
     return {
       sale: saleResult,
       saleItems: saleItemsResult,
       productVariants: productVariantsResult,
       stockBatches: stockBatchesResult,
-    };
+    }
   },
 })
 
-type SaleItem = typeof import('@/lib/db/schema').saleItemTable.$inferSelect;
+type SaleItem = typeof import('@/lib/db/schema').saleItemTable.$inferSelect
 
-const columnHelper = createColumnHelper<SaleItem>();
+const columnHelper = createColumnHelper<SaleItem>()
 
 function getSaleItemColumns(
   onOpenEditDialog: (saleItem: SaleItem) => void,
   onOpenDeleteDialog: (saleItemId: string) => void,
-  productVariants: any[]
+  productVariants: any[],
 ) {
   return [
     columnHelper.accessor('product_variant_id', {
       header: 'Product Variant',
-      cell: info => {
-        const variant = productVariants.find(v => v.id === info.getValue());
-        return variant ? `${variant.name} (${variant.sku})` : info.getValue().substring(0, 8) + '...';
+      cell: (info) => {
+        const variant = productVariants.find((v) => v.id === info.getValue())
+        return variant
+          ? `${variant.name} (${variant.sku})`
+          : info.getValue().substring(0, 8) + '...'
       },
     }),
     columnHelper.accessor('quantity_sold', {
       header: 'Quantity',
-      cell: info => info.getValue(),
+      cell: (info) => info.getValue(),
     }),
     columnHelper.accessor('price_at_sale', {
       header: 'Price',
-      cell: info => `${(info.getValue()).toFixed(2)}`,
+      cell: (info) => `${info.getValue().toFixed(2)}`,
     }),
     columnHelper.accessor('cost_at_sale', {
       header: 'Cost',
-      cell: info => `${(info.getValue()).toFixed(2)}`,
+      cell: (info) => `${info.getValue().toFixed(2)}`,
     }),
     columnHelper.display({
       id: 'subtotal',
       header: 'Subtotal',
-      cell: info => {
-        const quantity = info.row.original.quantity_sold;
-        const price = info.row.original.price_at_sale;
-        return `${((quantity * price)).toFixed(2)}`;
+      cell: (info) => {
+        const quantity = info.row.original.quantity_sold
+        const price = info.row.original.price_at_sale
+        return `${(quantity * price).toFixed(2)}`
       },
     }),
     columnHelper.display({
       id: 'actions',
       header: 'Actions',
-      cell: info => (
+      cell: (info) => (
         <div className="flex gap-2">
           <Button
-            variant='primary'
+            variant="primary"
             onClick={() => onOpenEditDialog(info.row.original)}
           >
             Edit
           </Button>
           <Button
-            variant='error'
+            variant="error"
             onClick={() => onOpenDeleteDialog(info.row.original.id)}
           >
             Delete
@@ -93,37 +107,49 @@ function getSaleItemColumns(
         </div>
       ),
     }),
-  ];
+  ]
 }
 
 function RouteComponent() {
-  const loaderData = Route.useLoaderData();
-  const sale = loaderData.sale.status === 'SUCCESS' ? loaderData.sale.data : null;
-  const initialSaleItems = loaderData.saleItems.status === 'SUCCESS' ? loaderData.saleItems.data : [];
-  const productVariants = loaderData.productVariants.status === 'SUCCESS' ? loaderData.productVariants.data : [];
-  const stockBatches = loaderData.stockBatches.status === 'SUCCESS' ? loaderData.stockBatches.data : [];
-  
-  const [saleItems, setSaleItems] = useState<SaleItem[]>(initialSaleItems);
-  const [selectedSaleItem, setSelectedSaleItem] = useState<SaleItem | null>(null);
-  const [selectedSaleItemIdToDelete, setSelectedSaleItemIdToDelete] = useState<string | null>(null);
-  
-  const notifications = useNotifications();
-  const navigate = useNavigate();
-  const router = useRouter();
-  
-  const addDialogRef = useRef<HTMLDialogElement>(null);
-  const editDialogRef = useRef<HTMLDialogElement>(null);
-  const deleteDialogRef = useRef<HTMLDialogElement>(null);
-  
-  const [submitting, setSubmitting] = useState(false);
-  const [deleting, setDeleting] = useState(false);
+  const loaderData = Route.useLoaderData()
+  const sale =
+    loaderData.sale.status === 'SUCCESS' ? loaderData.sale.data : null
+  const initialSaleItems =
+    loaderData.saleItems.status === 'SUCCESS' ? loaderData.saleItems.data : []
+  const productVariants =
+    loaderData.productVariants.status === 'SUCCESS'
+      ? loaderData.productVariants.data
+      : []
+  const stockBatches =
+    loaderData.stockBatches.status === 'SUCCESS'
+      ? loaderData.stockBatches.data
+      : []
+
+  const [saleItems, setSaleItems] = useState<SaleItem[]>(initialSaleItems)
+  const [selectedSaleItem, setSelectedSaleItem] = useState<SaleItem | null>(
+    null,
+  )
+  const [selectedSaleItemIdToDelete, setSelectedSaleItemIdToDelete] = useState<
+    string | null
+  >(null)
+
+  const notifications = useNotifications()
+  const navigate = useNavigate()
+  const router = useRouter()
+
+  const addDialogRef = useRef<HTMLDialogElement>(null)
+  const editDialogRef = useRef<HTMLDialogElement>(null)
+  const deleteDialogRef = useRef<HTMLDialogElement>(null)
+
+  const [submitting, setSubmitting] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   // Sync sale items when loader data changes
   useEffect(() => {
     if (loaderData.saleItems.status === 'SUCCESS') {
-      setSaleItems(loaderData.saleItems.data);
+      setSaleItems(loaderData.saleItems.data)
     }
-  }, [loaderData.saleItems]);
+  }, [loaderData.saleItems])
 
   const saleForm = useForm({
     defaultValues: {
@@ -147,287 +173,335 @@ function RouteComponent() {
         restore_sale: values.value.restore_sale,
       }
 
-      notifications.clear();
+      notifications.clear()
 
       return updateSale({
         data,
-      }).then((result) => {
-        if (result.status === 'SUCCESS') {
+      })
+        .then((result) => {
+          if (result.status === 'SUCCESS') {
+            notifications.addNotification({
+              message: 'Sale updated successfully.',
+              type: 'SUCCESS',
+            })
+            router.invalidate()
+          } else {
+            notifications.addNotification({
+              message:
+                result.error || 'An error occurred while updating the sale.',
+              type: 'ERROR',
+            })
+          }
+        })
+        .catch((error) => {
           notifications.addNotification({
-            message: 'Sale updated successfully.',
-            type: 'SUCCESS',
-          });
-          router.invalidate();
-        } else {
-          notifications.addNotification({
-            message: result.error || 'An error occurred while updating the sale.',
+            message: error.message || 'An unexpected error occurred.',
             type: 'ERROR',
-          });
-        }
-      }).catch((error) => {
-        notifications.addNotification({
-          message: error.message || 'An unexpected error occurred.',
-          type: 'ERROR',
-        });
-      });
-    }
-  });
+          })
+        })
+    },
+  })
 
   const addSaleItemForm = useForm({
     defaultValues: {
       sale_id: sale?.id || '',
       product_variant_id: '',
-      stock_batch_id: '',
       quantity_sold: 1,
       price_at_sale: 0,
-      cost_at_sale: 0,
     },
     validators: {
       onChange: CreateSaleItemInput,
     },
     onSubmit: async (values) => {
-      setSubmitting(true);
-      notifications.clear();
-      
+      setSubmitting(true)
+      notifications.clear()
+
       return createSaleItem({
         data: values.value,
-      }).then((result) => {
-        if (result.status === 'SUCCESS') {
+      })
+        .then((result) => {
+          if (result.status === 'SUCCESS') {
+            notifications.addNotification({
+              message: 'Sale item added successfully.',
+              type: 'SUCCESS',
+            })
+
+            // Check if any batches were exhausted
+            if (result.exhaustedBatches && result.exhaustedBatches.length > 0) {
+              notifications.addNotification({
+                message: `Warning: ${result.exhaustedBatches.length} stock batch${result.exhaustedBatches.length > 1 ? 'es' : ''} now empty. Consider restocking soon.`,
+                type: 'WARNING',
+              })
+            }
+
+            addSaleItemForm.reset()
+            addDialogRef.current?.close()
+            router.invalidate()
+          } else {
+            notifications.addNotification({
+              message:
+                result.error || 'An error occurred while adding the sale item.',
+              type: 'ERROR',
+            })
+          }
+        })
+        .catch((error) => {
           notifications.addNotification({
-            message: 'Sale item added successfully.',
-            type: 'SUCCESS',
-          });
-          addSaleItemForm.reset();
-          addDialogRef.current?.close();
-          router.invalidate();
-        } else {
-          notifications.addNotification({
-            message: result.error || 'An error occurred while adding the sale item.',
+            message: error.message || 'An unexpected error occurred.',
             type: 'ERROR',
-          });
-        }
-      }).catch((error) => {
-        notifications.addNotification({
-          message: error.message || 'An unexpected error occurred.',
-          type: 'ERROR',
-        });
-      }).finally(() => {
-        setSubmitting(false);
-      });
+          })
+        })
+        .finally(() => {
+          setSubmitting(false)
+        })
     },
-  });
+  })
 
   const editSaleItemForm = useForm({
     defaultValues: {
       saleItemId: selectedSaleItem?.id || '',
       sale_id: selectedSaleItem?.sale_id || '',
       product_variant_id: selectedSaleItem?.product_variant_id || '',
-      stock_batch_id: selectedSaleItem?.stock_batch_id || '',
       quantity_sold: selectedSaleItem?.quantity_sold || 1,
       price_at_sale: selectedSaleItem?.price_at_sale || 0,
-      cost_at_sale: selectedSaleItem?.cost_at_sale || 0,
     },
     validators: {
       onChange: UpdateSaleItemData,
     },
     onSubmit: async (values) => {
-      setSubmitting(true);
-      notifications.clear();
-      
+      setSubmitting(true)
+      notifications.clear()
+
       return updateSaleItem({
         data: values.value,
-      }).then((result) => {
-        if (result.status === 'SUCCESS') {
+      })
+        .then((result) => {
+          if (result.status === 'SUCCESS') {
+            notifications.addNotification({
+              message: 'Sale item updated successfully.',
+              type: 'SUCCESS',
+            })
+
+            // Check if any batches were exhausted
+            if (result.exhaustedBatches && result.exhaustedBatches.length > 0) {
+              notifications.addNotification({
+                message: `Warning: ${result.exhaustedBatches.length} stock batch${result.exhaustedBatches.length > 1 ? 'es' : ''} now empty. Consider restocking soon.`,
+                type: 'WARNING',
+              })
+            }
+
+            editDialogRef.current?.close()
+            router.invalidate()
+          } else {
+            notifications.addNotification({
+              message:
+                result.error ||
+                'An error occurred while updating the sale item.',
+              type: 'ERROR',
+            })
+          }
+        })
+        .catch((error) => {
           notifications.addNotification({
-            message: 'Sale item updated successfully.',
-            type: 'SUCCESS',
-          });
-          editDialogRef.current?.close();
-          router.invalidate();
-        } else {
-          notifications.addNotification({
-            message: result.error || 'An error occurred while updating the sale item.',
+            message: error.message || 'An unexpected error occurred.',
             type: 'ERROR',
-          });
-        }
-      }).catch((error) => {
-        notifications.addNotification({
-          message: error.message || 'An unexpected error occurred.',
-          type: 'ERROR',
-        });
-      }).finally(() => {
-        setSubmitting(false);
-      });
+          })
+        })
+        .finally(() => {
+          setSubmitting(false)
+        })
     },
-  });
+  })
 
   // Update edit form when selected item changes
   useEffect(() => {
     if (selectedSaleItem) {
-      editSaleItemForm.setFieldValue('saleItemId', selectedSaleItem.id);
-      editSaleItemForm.setFieldValue('sale_id', selectedSaleItem.sale_id);
-      editSaleItemForm.setFieldValue('product_variant_id', selectedSaleItem.product_variant_id);
-      editSaleItemForm.setFieldValue('stock_batch_id', selectedSaleItem.stock_batch_id);
-      editSaleItemForm.setFieldValue('quantity_sold', selectedSaleItem.quantity_sold);
-      editSaleItemForm.setFieldValue('price_at_sale', selectedSaleItem.price_at_sale);
-      editSaleItemForm.setFieldValue('cost_at_sale', selectedSaleItem.cost_at_sale);
+      editSaleItemForm.setFieldValue('saleItemId', selectedSaleItem.id)
+      editSaleItemForm.setFieldValue('sale_id', selectedSaleItem.sale_id)
+      editSaleItemForm.setFieldValue(
+        'product_variant_id',
+        selectedSaleItem.product_variant_id,
+      )
+      editSaleItemForm.setFieldValue(
+        'quantity_sold',
+        selectedSaleItem.quantity_sold,
+      )
+      editSaleItemForm.setFieldValue(
+        'price_at_sale',
+        selectedSaleItem.price_at_sale,
+      )
     }
-  }, [selectedSaleItem]);
+  }, [selectedSaleItem])
 
   const handleDeleteSaleItem = async (saleItemId: string) => {
-    setDeleting(true);
-    notifications.clear();
-    
-    deleteSaleItem({ data: { saleItemId } }).then((result) => {
-      if (result.status === 'SUCCESS') {
+    setDeleting(true)
+    notifications.clear()
+
+    deleteSaleItem({ data: { saleItemId } })
+      .then((result) => {
+        if (result.status === 'SUCCESS') {
+          notifications.addNotification({
+            message: 'Sale item deleted successfully.',
+            type: 'SUCCESS',
+          })
+          deleteDialogRef.current?.close()
+          router.invalidate()
+        } else {
+          notifications.addNotification({
+            message:
+              result.error || 'An error occurred while deleting the sale item.',
+            type: 'ERROR',
+          })
+        }
+      })
+      .catch((error) => {
         notifications.addNotification({
-          message: 'Sale item deleted successfully.',
-          type: 'SUCCESS',
-        });
-        deleteDialogRef.current?.close();
-        router.invalidate();
-      } else {
-        notifications.addNotification({
-          message: result.error || 'An error occurred while deleting the sale item.',
+          message: error.message || 'An unexpected error occurred.',
           type: 'ERROR',
-        });
-      }
-    }).catch((error) => {
-      notifications.addNotification({
-        message: error.message || 'An unexpected error occurred.',
-        type: 'ERROR',
-      });
-    }).finally(() => {
-      setDeleting(false);
-    });
-  };
+        })
+      })
+      .finally(() => {
+        setDeleting(false)
+      })
+  }
 
   const openEditDialog = (saleItem: SaleItem) => {
-    setSelectedSaleItem(saleItem);
-    editDialogRef.current?.showModal();
-  };
+    setSelectedSaleItem(saleItem)
+    editDialogRef.current?.showModal()
+  }
 
   const openDeleteDialog = (saleItemId: string) => {
-    setSelectedSaleItemIdToDelete(saleItemId);
-    deleteDialogRef.current?.showModal();
-  };
+    setSelectedSaleItemIdToDelete(saleItemId)
+    deleteDialogRef.current?.showModal()
+  }
 
-  const columns = getSaleItemColumns(openEditDialog, openDeleteDialog, productVariants);
+  const columns = getSaleItemColumns(
+    openEditDialog,
+    openDeleteDialog,
+    productVariants,
+  )
   const table = useReactTable({
     data: saleItems,
     columns,
     getCoreRowModel: getCoreRowModel(),
-  });
+  })
 
   const calculateTotal = () => {
-    return saleItems.reduce((sum, item) => sum + (item.quantity_sold * item.price_at_sale), 0);
-  };
+    return saleItems.reduce(
+      (sum, item) => sum + item.quantity_sold * item.price_at_sale,
+      0,
+    )
+  }
 
   if (!sale) {
-    return <Heading level={2}>Sale not found</Heading>;
+    return <Heading level={2}>Sale not found</Heading>
   }
 
   return (
     <div className="w-full max-w-6xl mx-auto">
-      <Heading level={2} className='mt-12 mb-4'>
+      <Heading level={2} className="mt-12 mb-4">
         Edit Sale
       </Heading>
-      
+
       {/* Sale Edit Form */}
       <form
-        className='mt-8 w-full max-w-md space-y-4'
+        className="mt-8 w-full max-w-md space-y-4"
         onSubmit={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          saleForm.handleSubmit();
-        }}>
+          e.preventDefault()
+          e.stopPropagation()
+          saleForm.handleSubmit()
+        }}
+      >
         <div>
           <saleForm.Field
             name="date"
-            children={
-              (field) => (
-                <>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Sale Date
-                  </label>
-                  <Input
-                    type="date"
-                    name={field.name}
-                    value={field.state.value instanceof Date ? field.state.value.toISOString().split('T')[0] : ''}
-                    onChange={(e) => field.handleChange(new Date(e.target.value))}
-                    hasError={field.state.meta.isTouched && !field.state.meta.isValid}
-                  />
-                  <FieldInfo field={field} />
-                </>
-              )
-            }
+            children={(field) => (
+              <>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Sale Date
+                </label>
+                <Input
+                  type="date"
+                  name={field.name}
+                  value={
+                    field.state.value instanceof Date
+                      ? field.state.value.toISOString().split('T')[0]
+                      : ''
+                  }
+                  onChange={(e) => field.handleChange(new Date(e.target.value))}
+                  hasError={
+                    field.state.meta.isTouched && !field.state.meta.isValid
+                  }
+                />
+                <FieldInfo field={field} />
+              </>
+            )}
           />
         </div>
-        <div className='mt-2'>
+        <div className="mt-2">
           <saleForm.Field
             name="customer_name"
-            children={
-              (field) => (
-                <>
-                  <Input
-                    name={field.name}
-                    value={field.state.value || ''}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder='Enter Customer Name'
-                    hasError={field.state.meta.isTouched && !field.state.meta.isValid}
-                  />
-                  <FieldInfo field={field} />
-                </>
-              )
-            }
+            children={(field) => (
+              <>
+                <Input
+                  name={field.name}
+                  value={field.state.value || ''}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  placeholder="Enter Customer Name"
+                  hasError={
+                    field.state.meta.isTouched && !field.state.meta.isValid
+                  }
+                />
+                <FieldInfo field={field} />
+              </>
+            )}
           />
         </div>
-        <div className='mt-2'>
+        <div className="mt-2">
           <saleForm.Field
             name="customer_contact"
-            children={
-              (field) => (
-                <>
-                  <Input
-                    name={field.name}
-                    value={field.state.value || ''}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder='Enter Customer Contact'
-                    hasError={field.state.meta.isTouched && !field.state.meta.isValid}
-                  />
-                  <FieldInfo field={field} />
-                </>
-              )
-            }
+            children={(field) => (
+              <>
+                <Input
+                  name={field.name}
+                  value={field.state.value || ''}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  placeholder="Enter Customer Contact"
+                  hasError={
+                    field.state.meta.isTouched && !field.state.meta.isValid
+                  }
+                />
+                <FieldInfo field={field} />
+              </>
+            )}
           />
         </div>
         {sale?.deleted_at !== null && (
-          <div className='mt-2'>
+          <div className="mt-2">
             <saleForm.Field
               name="restore_sale"
-              children={
-                (field) => (
-                  <>
-                    <label className='flex items-center space-x-2'>
-                      <input
-                        type='checkbox'
-                        name={field.name}
-                        checked={field.state.value}
-                        onChange={(e) => field.handleChange(e.target.checked)}
-                        className='checkbox'
-                      />
-                      <span>Restore Sale?</span>
-                    </label>
-                    <FieldInfo field={field} />
-                  </>
-                )
-              }
+              children={(field) => (
+                <>
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      name={field.name}
+                      checked={field.state.value}
+                      onChange={(e) => field.handleChange(e.target.checked)}
+                      className="checkbox"
+                    />
+                    <span>Restore Sale?</span>
+                  </label>
+                  <FieldInfo field={field} />
+                </>
+              )}
             />
-          </div>)}
-        <div className='flex flex-row justify-between mt-8'>
+          </div>
+        )}
+        <div className="flex flex-row justify-between mt-8">
           <button
-            type='button'
-            className='btn btn-neutral'
+            type="button"
+            className="btn btn-neutral"
             onClick={() => navigate({ to: '/admin/sales' })}
           >
             Back to Sales
@@ -435,10 +509,7 @@ function RouteComponent() {
           <saleForm.Subscribe
             selector={(state) => [state.canSubmit, state.isSubmitting]}
             children={([canSubmit, isSubmitting]) => (
-              <Button
-                type='submit'
-                disabled={!canSubmit || isSubmitting}
-              >
+              <Button type="submit" disabled={!canSubmit || isSubmitting}>
                 {isSubmitting ? 'Updating...' : 'Save Changes'}
               </Button>
             )}
@@ -453,8 +524,8 @@ function RouteComponent() {
           <Button
             variant="primary"
             onClick={() => {
-              notifications.clear();
-              addDialogRef.current?.showModal();
+              notifications.clear()
+              addDialogRef.current?.showModal()
             }}
           >
             Add Sale Item
@@ -465,33 +536,35 @@ function RouteComponent() {
         <div className="w-full overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
-              {table.getHeaderGroups().map(headerGroup => (
+              {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
-                  {headerGroup.headers.map(header => (
+                  {headerGroup.headers.map((header) => (
                     <th
                       key={header.id}
                       className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                     >
-                      {header.isPlaceholder ? null : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
                     </th>
                   ))}
                 </tr>
               ))}
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {table.getRowModel().rows.map(row => (
+              {table.getRowModel().rows.map((row) => (
                 <tr key={row.id}>
-                  {row.getVisibleCells().map(cell => (
+                  {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
                       className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </td>
                   ))}
@@ -500,8 +573,12 @@ function RouteComponent() {
             </tbody>
             <tfoot className="bg-gray-50">
               <tr>
-                <td colSpan={4} className="px-6 py-4 text-right font-bold">Total:</td>
-                <td className="px-6 py-4 font-bold">{(calculateTotal()).toFixed(2)}</td>
+                <td colSpan={4} className="px-6 py-4 text-right font-bold">
+                  Total:
+                </td>
+                <td className="px-6 py-4 font-bold">
+                  {calculateTotal().toFixed(2)}
+                </td>
                 <td></td>
               </tr>
             </tfoot>
@@ -513,14 +590,19 @@ function RouteComponent() {
       <dialog ref={addDialogRef} className="modal">
         <div className="modal-box max-w-2xl">
           <form method="dialog">
-            <button disabled={submitting} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+            <button
+              disabled={submitting}
+              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >
+              ✕
+            </button>
           </form>
           <h3 className="font-bold text-lg mb-4">Add Sale Item</h3>
           <form
             onSubmit={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              addSaleItemForm.handleSubmit();
+              e.preventDefault()
+              e.stopPropagation()
+              addSaleItemForm.handleSubmit()
             }}
             className="space-y-4"
           >
@@ -528,37 +610,18 @@ function RouteComponent() {
               name="product_variant_id"
               children={(field) => (
                 <>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Product Variant</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Product Variant
+                  </label>
                   <select
                     className="select select-bordered w-full"
                     value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
                   >
                     <option value="">Select a product variant</option>
-                    {productVariants.map(variant => (
+                    {productVariants.map((variant) => (
                       <option key={variant.id} value={variant.id}>
                         {variant.name} ({variant.sku})
-                      </option>
-                    ))}
-                  </select>
-                  <FieldInfo field={field} />
-                </>
-              )}
-            />
-            <addSaleItemForm.Field
-              name="stock_batch_id"
-              children={(field) => (
-                <>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Stock Batch</label>
-                  <select
-                    className="select select-bordered w-full"
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  >
-                    <option value="">Select a stock batch</option>
-                    {stockBatches.map(batch => (
-                      <option key={batch.id} value={batch.id}>
-                        Batch {batch.id.substring(0, 8)}... (Available: {batch.quantity_remaining})
                       </option>
                     ))}
                   </select>
@@ -570,13 +633,19 @@ function RouteComponent() {
               name="quantity_sold"
               children={(field) => (
                 <>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Quantity
+                  </label>
                   <Input
                     type="number"
                     min="1"
                     value={field.state.value}
-                    onChange={(e) => field.handleChange(parseInt(e.target.value))}
-                    hasError={field.state.meta.isTouched && !field.state.meta.isValid}
+                    onChange={(e) =>
+                      field.handleChange(parseInt(e.target.value))
+                    }
+                    hasError={
+                      field.state.meta.isTouched && !field.state.meta.isValid
+                    }
                   />
                   <FieldInfo field={field} />
                 </>
@@ -586,29 +655,19 @@ function RouteComponent() {
               name="price_at_sale"
               children={(field) => (
                 <>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Price</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Price
+                  </label>
                   <Input
                     type="number"
                     min="0"
                     value={field.state.value}
-                    onChange={(e) => field.handleChange(parseInt(e.target.value))}
-                    hasError={field.state.meta.isTouched && !field.state.meta.isValid}
-                  />
-                  <FieldInfo field={field} />
-                </>
-              )}
-            />
-            <addSaleItemForm.Field
-              name="cost_at_sale"
-              children={(field) => (
-                <>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Cost</label>
-                  <Input
-                    type="number"
-                    min="0"
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(parseInt(e.target.value))}
-                    hasError={field.state.meta.isTouched && !field.state.meta.isValid}
+                    onChange={(e) =>
+                      field.handleChange(parseInt(e.target.value))
+                    }
+                    hasError={
+                      field.state.meta.isTouched && !field.state.meta.isValid
+                    }
                   />
                   <FieldInfo field={field} />
                 </>
@@ -643,14 +702,19 @@ function RouteComponent() {
       <dialog ref={editDialogRef} className="modal">
         <div className="modal-box max-w-2xl">
           <form method="dialog">
-            <button disabled={submitting} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+            <button
+              disabled={submitting}
+              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >
+              ✕
+            </button>
           </form>
           <h3 className="font-bold text-lg mb-4">Edit Sale Item</h3>
           <form
             onSubmit={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              editSaleItemForm.handleSubmit();
+              e.preventDefault()
+              e.stopPropagation()
+              editSaleItemForm.handleSubmit()
             }}
             className="space-y-4"
           >
@@ -658,37 +722,18 @@ function RouteComponent() {
               name="product_variant_id"
               children={(field) => (
                 <>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Product Variant</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Product Variant
+                  </label>
                   <select
                     className="select select-bordered w-full"
                     value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
                   >
                     <option value="">Select a product variant</option>
-                    {productVariants.map(variant => (
+                    {productVariants.map((variant) => (
                       <option key={variant.id} value={variant.id}>
                         {variant.name} ({variant.sku})
-                      </option>
-                    ))}
-                  </select>
-                  <FieldInfo field={field} />
-                </>
-              )}
-            />
-            <editSaleItemForm.Field
-              name="stock_batch_id"
-              children={(field) => (
-                <>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Stock Batch</label>
-                  <select
-                    className="select select-bordered w-full"
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  >
-                    <option value="">Select a stock batch</option>
-                    {stockBatches.map(batch => (
-                      <option key={batch.id} value={batch.id}>
-                        Batch {batch.id.substring(0, 8)}... (Available: {batch.quantity_remaining})
                       </option>
                     ))}
                   </select>
@@ -700,13 +745,19 @@ function RouteComponent() {
               name="quantity_sold"
               children={(field) => (
                 <>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Quantity
+                  </label>
                   <Input
                     type="number"
                     min="1"
                     value={field.state.value}
-                    onChange={(e) => field.handleChange(parseInt(e.target.value))}
-                    hasError={field.state.meta.isTouched && !field.state.meta.isValid}
+                    onChange={(e) =>
+                      field.handleChange(parseInt(e.target.value))
+                    }
+                    hasError={
+                      field.state.meta.isTouched && !field.state.meta.isValid
+                    }
                   />
                   <FieldInfo field={field} />
                 </>
@@ -716,29 +767,19 @@ function RouteComponent() {
               name="price_at_sale"
               children={(field) => (
                 <>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Price</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Price
+                  </label>
                   <Input
                     type="number"
                     min="0"
                     value={field.state.value}
-                    onChange={(e) => field.handleChange(parseInt(e.target.value))}
-                    hasError={field.state.meta.isTouched && !field.state.meta.isValid}
-                  />
-                  <FieldInfo field={field} />
-                </>
-              )}
-            />
-            <editSaleItemForm.Field
-              name="cost_at_sale"
-              children={(field) => (
-                <>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Cost</label>
-                  <Input
-                    type="number"
-                    min="0"
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(parseInt(e.target.value))}
-                    hasError={field.state.meta.isTouched && !field.state.meta.isValid}
+                    onChange={(e) =>
+                      field.handleChange(parseInt(e.target.value))
+                    }
+                    hasError={
+                      field.state.meta.isTouched && !field.state.meta.isValid
+                    }
                   />
                   <FieldInfo field={field} />
                 </>
@@ -773,10 +814,19 @@ function RouteComponent() {
       <dialog ref={deleteDialogRef} className="modal">
         <div className="modal-box">
           <form method="dialog">
-            <button disabled={deleting} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+            <button
+              disabled={deleting}
+              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >
+              ✕
+            </button>
           </form>
-          <p className="font-bold text-lg">Are you sure you want to delete this sale item?</p>
-          <p className="text-sm text-gray-600 mt-2">This will restore the quantity to the stock batch.</p>
+          <p className="font-bold text-lg">
+            Are you sure you want to delete this sale item?
+          </p>
+          <p className="text-sm text-gray-600 mt-2">
+            This will restore the quantity to the stock batch.
+          </p>
           <div className="modal-action">
             <Button
               disabled={deleting}
@@ -790,11 +840,11 @@ function RouteComponent() {
               variant="error"
               onClick={() => {
                 if (selectedSaleItemIdToDelete) {
-                  handleDeleteSaleItem(selectedSaleItemIdToDelete);
+                  handleDeleteSaleItem(selectedSaleItemIdToDelete)
                 }
               }}
             >
-              {deleting ? "Deleting..." : "Delete"}
+              {deleting ? 'Deleting...' : 'Delete'}
             </Button>
           </div>
         </div>

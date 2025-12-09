@@ -15,8 +15,8 @@ export const Route = createFileRoute('/admin/stock-batches/$stockBatchId')({
     loader: async (ctx) => {
         const [stockBatchResult, variants, suppliers] = await Promise.all([
             getStockBatchById({ data: { stockBatchId: ctx.params.stockBatchId } }),
-            listProductVariantsForDropdown(),
-            listSuppliers(),
+            listProductVariantsForDropdown({ data: undefined }),
+            listSuppliers({ data: {} }),
         ]);
         return { stockBatchResult, variants, suppliers };
     },
@@ -26,7 +26,7 @@ function RouteComponent() {
     const { stockBatchResult, variants, suppliers } = Route.useLoaderData();
     const stockBatch = stockBatchResult.status === 'SUCCESS' ? stockBatchResult.data : null;
     const productVariants = variants.status === 'SUCCESS' ? variants.data : [];
-    const supplierList = suppliers.status === 'SUCCESS' ? suppliers.data : [];
+    const supplierList = suppliers.status === 'SUCCESS' ? suppliers.data.items : [];
     const notifications = useNotifications();
     const navigate = useNavigate();
     const router = useRouter();
@@ -261,7 +261,13 @@ function RouteComponent() {
                                         <Input
                                             type="date"
                                             name={field.name}
-                                            value={field.state.value.toLocaleDateString()}
+                                            value={(() => {
+                                                const date = new Date(field.state.value);
+                                                const year = date.getFullYear();
+                                                const month = String(date.getMonth() + 1).padStart(2, '0');
+                                                const day = String(date.getDate()).padStart(2, '0');
+                                                return `${year}-${month}-${day}`;
+                                            })()}
                                             onChange={(e) => field.handleChange(new Date(e.target.value))}
                                             hasError={field.state.meta.isTouched && !field.state.meta.isValid}
                                         />

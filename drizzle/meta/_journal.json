@@ -99,6 +99,13 @@
       "when": 1765268670311,
       "tag": "0012_living_scrambler",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "6",
+      "when": 1765277126015,
+      "tag": "0014_lumpy_blur",
+      "breakpoints": true
     }
   ]
 }

@@ -246,6 +246,23 @@ export const updateSaleItem = createServerFn({ method: 'POST' })
         }
       }
 
+      // Update the sale's total_amount
+      // Calculate the difference between the old and new sale item totals
+      const oldTotal = saleItem.quantity_sold * saleItem.price_at_sale
+      const newTotal =
+        updatedSaleItem.quantity_sold * updatedSaleItem.price_at_sale
+      const difference = newTotal - oldTotal
+
+      if (difference !== 0) {
+        await db
+          .update(saleTable)
+          .set({
+            total_amount: (sale.total_amount || 0) + difference,
+            updated_at: new Date(),
+          })
+          .where(eq(saleTable.id, sale_id))
+      }
+
       return {
         status: 'SUCCESS',
         data: updatedSaleItem,

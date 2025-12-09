@@ -389,13 +389,6 @@ function RouteComponent() {
     getCoreRowModel: getCoreRowModel(),
   })
 
-  const calculateTotal = () => {
-    return saleItems.reduce(
-      (sum, item) => sum + item.quantity_sold * item.price_at_sale,
-      0,
-    )
-  }
-
   if (!sale) {
     return <Heading level={2}>Sale not found</Heading>
   }
@@ -491,7 +484,7 @@ function RouteComponent() {
                 <Input
                   type="number"
                   name={field.name}
-                  value={calculateTotal()}
+                  value={sale?.total_amount || 0}
                   disabled
                   hasError={
                     field.state.meta.isTouched && !field.state.meta.isValid
@@ -614,7 +607,7 @@ function RouteComponent() {
                   Total:
                 </td>
                 <td className="px-6 py-4 font-bold">
-                  {calculateTotal().toFixed(2)}
+                  {(sale?.total_amount || 0).toFixed(2)}
                 </td>
                 <td></td>
               </tr>

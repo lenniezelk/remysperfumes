@@ -4,6 +4,7 @@ import { eq } from 'drizzle-orm'
 import { canManageSalesMiddleware } from '@/lib/server/middleware/canManageSales'
 import dbClient from '@/lib/db/client'
 import {
+  saleTable,
   saleItemTable,
   saleItemBatchTable,
   stockBatchTable,
@@ -58,6 +59,24 @@ export const deleteSaleItem = createServerFn({ method: 'POST' })
           })
           .where(eq(stockBatchTable.id, allocation.stock_batch_id))
       }
+    }
+
+    // Update the sale's total_amount by subtracting this item's total
+    const sale = await db
+      .select()
+      .from(saleTable)
+      .where(eq(saleTable.id, saleItem.sale_id))
+      .get()
+
+    if (sale) {
+      const saleItemTotal = saleItem.quantity_sold * saleItem.price_at_sale
+      await db
+        .update(saleTable)
+        .set({
+          total_amount: (sale.total_amount || 0) - saleItemTotal,
+          updated_at: new Date(),
+        })
+        .where(eq(saleTable.id, saleItem.sale_id))
     }
 
     // Soft delete: set deleted_at to current timestamp

@@ -130,6 +130,16 @@ export const createSaleItem = createServerFn({ method: 'POST' })
         }
       }
 
+      // Update the sale's total_amount
+      const saleItemTotal = data.quantity_sold * data.price_at_sale
+      await db
+        .update(saleTable)
+        .set({
+          total_amount: (sale.total_amount || 0) + saleItemTotal,
+          updated_at: new Date(),
+        })
+        .where(eq(saleTable.id, data.sale_id))
+
       return {
         status: 'SUCCESS',
         data: insertedSaleItem[0],

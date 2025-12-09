@@ -1,52 +1,44 @@
 import { index, int, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
-export const categoryTable = sqliteTable(
-    'Category',
-    {
-        id: text('id')
-            .primaryKey()
-            .$defaultFn(() => crypto.randomUUID()),
-        name: text('name').notNull(),
-        description: text('description'),
-        created_at: int('created_at', { mode: 'timestamp_ms' })
-            .notNull()
-            .$defaultFn(() => new Date()),
-        updated_at: int('updated_at', { mode: 'timestamp_ms' })
-            .notNull()
-            .$defaultFn(() => new Date()),
-        deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
-    },
-    (table) => [
-        index('category_name_idx').on(table.name),
-        index('category_created_at_idx').on(table.created_at),
-        index('category_deleted_at_idx').on(table.deleted_at),
-        index('category_description_idx').on(table.description),
-    ],
-)
+export const categoryTable = sqliteTable('Category', {
+    id: text('id')
+        .primaryKey()
+        .$defaultFn(() => crypto.randomUUID()),
+    name: text('name').notNull(),
+    description: text('description'),
+    created_at: int('created_at', { mode: 'timestamp_ms' })
+        .notNull()
+        .$defaultFn(() => new Date()),
+    updated_at: int('updated_at', { mode: 'timestamp_ms' })
+        .notNull()
+        .$defaultFn(() => new Date()),
+    deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
+}, (table) => [
+    index('category_name_idx').on(table.name),
+    index('category_created_at_idx').on(table.created_at),
+    index('category_deleted_at_idx').on(table.deleted_at),
+    index('category_description_idx').on(table.description),
+])
 
-export const manufacturerTable = sqliteTable(
-    'Manufacturer',
-    {
-        id: text('id')
-            .primaryKey()
-            .$defaultFn(() => crypto.randomUUID()),
-        name: text('name').notNull(),
-        contact_info: text('contact_info'),
-        created_at: int('created_at', { mode: 'timestamp_ms' })
-            .notNull()
-            .$defaultFn(() => new Date()),
-        updated_at: int('updated_at', { mode: 'timestamp_ms' })
-            .notNull()
-            .$defaultFn(() => new Date()),
-        deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
-    },
-    (table) => [
-        index('manufacturer_name_idx').on(table.name),
-        index('manufacturer_contact_info_idx').on(table.contact_info),
-        index('manufacturer_created_at_idx').on(table.created_at),
-        index('manufacturer_deleted_at_idx').on(table.deleted_at),
-    ],
-)
+export const manufacturerTable = sqliteTable('Manufacturer', {
+    id: text('id')
+        .primaryKey()
+        .$defaultFn(() => crypto.randomUUID()),
+    name: text('name').notNull(),
+    contact_info: text('contact_info'),
+    created_at: int('created_at', { mode: 'timestamp_ms' })
+        .notNull()
+        .$defaultFn(() => new Date()),
+    updated_at: int('updated_at', { mode: 'timestamp_ms' })
+        .notNull()
+        .$defaultFn(() => new Date()),
+    deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
+}, (table) => [
+    index('manufacturer_name_idx').on(table.name),
+    index('manufacturer_contact_info_idx').on(table.contact_info),
+    index('manufacturer_created_at_idx').on(table.created_at),
+    index('manufacturer_deleted_at_idx').on(table.deleted_at),
+])
 
 export const productTable = sqliteTable(
     'Product',
@@ -100,29 +92,25 @@ export const productVariantTable = sqliteTable('ProductVariant', {
     deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
 })
 
-export const supplierTable = sqliteTable(
-    'Supplier',
-    {
-        id: text('id')
-            .primaryKey()
-            .$defaultFn(() => crypto.randomUUID()),
-        name: text('name').notNull(),
-        contact_info: text('contact_info'),
-        created_at: int('created_at', { mode: 'timestamp_ms' })
-            .notNull()
-            .$defaultFn(() => new Date()),
-        updated_at: int('updated_at', { mode: 'timestamp_ms' })
-            .notNull()
-            .$defaultFn(() => new Date()),
-        deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
-    },
-    (table) => [
-        index('supplier_name_idx').on(table.name),
-        index('supplier_contact_info_idx').on(table.contact_info),
-        index('supplier_created_at_idx').on(table.created_at),
-        index('supplier_deleted_at_idx').on(table.deleted_at),
-    ],
-)
+export const supplierTable = sqliteTable('Supplier', {
+    id: text('id')
+        .primaryKey()
+        .$defaultFn(() => crypto.randomUUID()),
+    name: text('name').notNull(),
+    contact_info: text('contact_info'),
+    created_at: int('created_at', { mode: 'timestamp_ms' })
+        .notNull()
+        .$defaultFn(() => new Date()),
+    updated_at: int('updated_at', { mode: 'timestamp_ms' })
+        .notNull()
+        .$defaultFn(() => new Date()),
+    deleted_at: int('deleted_at', { mode: 'timestamp_ms' }),
+}, (table) => [
+    index('supplier_name_idx').on(table.name),
+    index('supplier_contact_info_idx').on(table.contact_info),
+    index('supplier_created_at_idx').on(table.created_at),
+    index('supplier_deleted_at_idx').on(table.deleted_at),
+])
 
 export const stockBatchTable = sqliteTable('StockBatch', {
     id: text('id')
@@ -156,7 +144,7 @@ export const saleTable = sqliteTable('Sale', {
     date: int('date', { mode: 'timestamp_ms' })
         .notNull()
         .$defaultFn(() => new Date()),
-    total_amount: int('total_amount'),
+    total_amount: int('total_amount').notNull(),
     created_at: int('created_at', { mode: 'timestamp_ms' })
         .notNull()
         .$defaultFn(() => new Date()),

@@ -156,7 +156,7 @@ export const saleTable = sqliteTable('Sale', {
   date: int('date', { mode: 'timestamp_ms' })
     .notNull()
     .$defaultFn(() => new Date()),
-  total_amount: int('total_amount'),
+  total_amount: int('total_amount').notNull(),
   created_at: int('created_at', { mode: 'timestamp_ms' })
     .notNull()
     .$defaultFn(() => new Date()),

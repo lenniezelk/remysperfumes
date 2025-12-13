@@ -5,7 +5,6 @@ import type { Result, User, UserUpdateData } from "@/lib/types";
 import type { RoleKey } from "@/lib/permissions";
 import dbClient from "@/lib/db/client";
 import { roleTable, userTable } from "@/lib/db/schema";
-import { createRandomPassword, hashPassword } from "@/lib/server/auth/utils";
 import { canManageUsersMiddleware } from "@/lib/server/middleware/canManageUsers";
 
 export const UpdateUserData = z.object({
@@ -14,7 +13,6 @@ export const UpdateUserData = z.object({
     email: z.email(),
     role_id: z.uuid({ message: "Invalid role ID" }),
     is_active: z.boolean(),
-    createNewPassword: z.boolean(),
 });
 
 export const updateAdminUser = createServerFn({ method: 'POST' })
@@ -63,13 +61,6 @@ export const updateAdminUser = createServerFn({ method: 'POST' })
             is_active: data.is_active,
             updated_at: new Date(),
         };
-
-        if (data.createNewPassword) {
-            const newPassword = createRandomPassword(8);
-            updatedUserData.password_hash = await hashPassword(newPassword);
-            // log new password to console for now
-            console.log(`User ${data.email} password updated to: ${newPassword}`);
-        }
 
         await db.update(userTable).set(updatedUserData).where(eq(userTable.id, data.userId));
 

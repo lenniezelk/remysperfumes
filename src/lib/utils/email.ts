@@ -27,6 +27,7 @@ export const sendPasswordEmail = async (password: string, receiver: string) => {
                     }
                 ],
                 TemplateID: Number(env.PASSWORD_EMAIL_TEMPLATE_ID),
+                TemplateLanguage: true,
                 Variables: {
                     password,
                 }

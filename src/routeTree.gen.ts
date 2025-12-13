@@ -36,6 +36,7 @@ import { Route as AdminProductsProductIdRouteImport } from './routes/admin/produ
 import { Route as AdminManufacturersNewRouteImport } from './routes/admin/manufacturers/new'
 import { Route as AdminManufacturersManufacturerIdRouteImport } from './routes/admin/manufacturers/$manufacturerId'
 import { Route as AdminCategoriesNewRouteImport } from './routes/admin/categories/new'
+import { Route as AdminReportsSalesIndexRouteImport } from './routes/admin/reports/sales/index'
 import { Route as AdminCategoriesCategoryIdRouteImport } from './routes/admin/categories/category.$id'
 
 const NotAuthorizedRoute = NotAuthorizedRouteImport.update({
@@ -176,6 +177,11 @@ const AdminCategoriesNewRoute = AdminCategoriesNewRouteImport.update({
   path: '/categories/new',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminReportsSalesIndexRoute = AdminReportsSalesIndexRouteImport.update({
+  id: '/reports/sales/',
+  path: '/reports/sales/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminCategoriesCategoryIdRoute =
   AdminCategoriesCategoryIdRouteImport.update({
     id: '/categories/category/$id',
@@ -212,6 +218,7 @@ export interface FileRoutesByFullPath {
   '/admin/suppliers': typeof AdminSuppliersIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/admin/categories/category/$id': typeof AdminCategoriesCategoryIdRoute
+  '/admin/reports/sales': typeof AdminReportsSalesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -241,6 +248,7 @@ export interface FileRoutesByTo {
   '/admin/suppliers': typeof AdminSuppliersIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/admin/categories/category/$id': typeof AdminCategoriesCategoryIdRoute
+  '/admin/reports/sales': typeof AdminReportsSalesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -272,6 +280,7 @@ export interface FileRoutesById {
   '/admin/suppliers/': typeof AdminSuppliersIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
   '/admin/categories/category/$id': typeof AdminCategoriesCategoryIdRoute
+  '/admin/reports/sales/': typeof AdminReportsSalesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -304,6 +313,7 @@ export interface FileRouteTypes {
     | '/admin/suppliers'
     | '/admin/users'
     | '/admin/categories/category/$id'
+    | '/admin/reports/sales'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -333,6 +343,7 @@ export interface FileRouteTypes {
     | '/admin/suppliers'
     | '/admin/users'
     | '/admin/categories/category/$id'
+    | '/admin/reports/sales'
   id:
     | '__root__'
     | '/'
@@ -363,6 +374,7 @@ export interface FileRouteTypes {
     | '/admin/suppliers/'
     | '/admin/users/'
     | '/admin/categories/category/$id'
+    | '/admin/reports/sales/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -564,6 +576,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCategoriesNewRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/reports/sales/': {
+      id: '/admin/reports/sales/'
+      path: '/reports/sales'
+      fullPath: '/admin/reports/sales'
+      preLoaderRoute: typeof AdminReportsSalesIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/categories/category/$id': {
       id: '/admin/categories/category/$id'
       path: '/categories/category/$id'
@@ -598,6 +617,7 @@ interface AdminRouteRouteChildren {
   AdminSuppliersIndexRoute: typeof AdminSuppliersIndexRoute
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
   AdminCategoriesCategoryIdRoute: typeof AdminCategoriesCategoryIdRoute
+  AdminReportsSalesIndexRoute: typeof AdminReportsSalesIndexRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
@@ -624,6 +644,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminSuppliersIndexRoute: AdminSuppliersIndexRoute,
   AdminUsersIndexRoute: AdminUsersIndexRoute,
   AdminCategoriesCategoryIdRoute: AdminCategoriesCategoryIdRoute,
+  AdminReportsSalesIndexRoute: AdminReportsSalesIndexRoute,
 }
 
 const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(

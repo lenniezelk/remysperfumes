@@ -123,10 +123,6 @@ function RouteComponent() {
     loaderData.productVariants.status === 'SUCCESS'
       ? loaderData.productVariants.data
       : []
-  const stockBatches =
-    loaderData.stockBatches.status === 'SUCCESS'
-      ? loaderData.stockBatches.data
-      : []
 
   const [saleItems, setSaleItems] = useState<SaleItem[]>(initialSaleItems)
   const [selectedSaleItem, setSelectedSaleItem] = useState<SaleItem | null>(

@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import {
   createColumnHelper,
   flexRender,
@@ -128,7 +128,6 @@ function RouteComponent() {
   const restoreDialogRef = useRef<HTMLDialogElement>(null)
   const [deleting, setDeleting] = useState(false)
   const [restoring, setRestoring] = useState(false)
-  const router = useRouter()
   const queryClient = useQueryClient()
   const [searchQuery, setSearchQuery] = useState(search.searchQuery)
   const [datePreset, setDatePreset] = useState<string>('all_time')

@@ -8,6 +8,7 @@ import { roleTable, userTable } from "@/lib/db/schema";
 import { rolesUserCanCreateBasedOnRole } from "@/lib/permissions";
 import { createRandomPassword, hashPassword } from "@/lib/server/auth/utils";
 import { canManageUsersMiddleware } from "@/lib/server/middleware/canManageUsers";
+import { sendPasswordEmail } from "@/lib/utils/email";
 
 export const CreateUserData = z.object({
     name: z.string().min(2, { message: "Name must be at least 2 characters long" }).max(100, { message: "Name must be at most 100 characters long" }),
@@ -52,8 +53,13 @@ export const createAdminUser = createServerFn({ method: 'POST' })
             updated_at: new Date(),
         };
 
-        // log password to console for now
-        console.log(`New user created: ${data.email} with password: ${password}`);
+        const sendPasswordEmailResult = await sendPasswordEmail(password, data.email);
+        if (sendPasswordEmailResult.status === 'ERROR') {
+            return {
+                status: "ERROR",
+                error: sendPasswordEmailResult.error || "Failed to send password email",
+            };
+        }
 
         await db.insert(userTable).values(newUser);
 

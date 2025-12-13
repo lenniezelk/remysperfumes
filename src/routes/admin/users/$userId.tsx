@@ -5,9 +5,11 @@ import { FieldInfo } from '@/components/FieldInfo'
 import Heading from '@/components/Heading'
 import { Input } from '@/components/Input'
 import Button from '@/components/Button'
-import { useNotifications } from '@/components/notifications/Notification'
+import { useNotifications, NotificationsList } from '@/components/notifications/Notification'
 import { fetchEditUserInitialData } from '@/lib/server/users/get'
 import { UpdateUserData, updateAdminUser } from '@/lib/server/users/update'
+import { resetPassword } from '@/lib/server/users/resetPassword'
+import { useRef, useState } from 'react'
 
 export const Route = createFileRoute('/admin/users/$userId')({
   component: RouteComponent,
@@ -21,13 +23,45 @@ function RouteComponent() {
   const notifications = useNotifications();
   const navigate = useNavigate();
   const router = useRouter();
+
+  const resetPasswordDialogRef = useRef<HTMLDialogElement>(null);
+  const [resettingPassword, setResettingPassword] = useState(false);
+
+  const resetUserPassword = async () => {
+    if (!user) return;
+    setResettingPassword(true);
+    notifications.clear();
+
+    try {
+      const result = await resetPassword({ data: { userId: user.id } });
+      if (result.status === 'SUCCESS') {
+        notifications.addNotification({
+          message: 'Password reset successfully. New password has been sent to the user.',
+          type: 'SUCCESS',
+        });
+        resetPasswordDialogRef.current?.close();
+      } else {
+        notifications.addNotification({
+          message: result.error || 'Failed to reset password.',
+          type: 'ERROR',
+        });
+      }
+    } catch (error: any) {
+      notifications.addNotification({
+        message: error.message || 'An unexpected error occurred.',
+        type: 'ERROR',
+      });
+    } finally {
+      setResettingPassword(false);
+    }
+  };
+
   const form = useForm({
     defaultValues: {
       userId: user ? user.id : '',
       name: user ? user.name : '',
       email: user ? user.email : '',
       role_id: user ? user?.role?.id || '' : '',
-      createNewPassword: false,
       is_active: user ? user.is_active : true,
     },
     validators: {
@@ -40,7 +74,6 @@ function RouteComponent() {
         email: values.value.email,
         role_id: values.value.role_id || '',
         is_active: values.value.is_active,
-        createNewPassword: values.value.createNewPassword,
       }
       return updateAdminUser({
         data,
@@ -82,9 +115,13 @@ function RouteComponent() {
 
   return (
     <>
-      <Heading level={2} className='mt-12 mb-4'>
-        Edit User
-      </Heading>
+      <NotificationsList />
+      <div className="flex justify-between items-center mt-12 mb-4">
+        <Heading level={2}>
+          Edit User
+        </Heading>
+
+      </div>
       <form
         className='mt-8 w-full max-w-md space-y-4'
         onSubmit={(e) => {
@@ -92,7 +129,19 @@ function RouteComponent() {
           e.stopPropagation();
           form.handleSubmit();
         }}>
-        <div>
+        <div className='flex justify-end'>
+          <Button
+            variant="neutral"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              resetPasswordDialogRef.current?.showModal()
+            }}
+          >
+            Reset Password
+          </Button>
+        </div>
+        <div className='mt-2'>
           <form.Field
             name="name"
             children={
@@ -161,27 +210,6 @@ function RouteComponent() {
         </div>
         <div className='mt-2'>
           <form.Field
-            name="createNewPassword"
-            children={
-              (field) => {
-                return (
-                  <label className='flex items-center space-x-2'>
-                    <input
-                      type='checkbox'
-                      name={field.name}
-                      checked={field.state.value}
-                      onChange={(e) => field.handleChange(e.target.checked)}
-                      className='checkbox'
-                    />
-                    <span>Generate New Password? (New Password will be sent to user's email)</span>
-                  </label>
-                )
-              }
-            }
-          />
-        </div>
-        <div className='mt-2'>
-          <form.Field
             name="is_active"
             children={
               (field) => {
@@ -205,7 +233,11 @@ function RouteComponent() {
           <button
             type='button'
             className='btn btn-neutral'
-            onClick={() => navigate({ to: '/admin/users' })}
+            onClick={() => {
+              notifications.clear();
+              navigate({ to: '/admin/users' });
+              form.reset();
+            }}
           >
             Cancel
           </button>
@@ -222,6 +254,32 @@ function RouteComponent() {
           />
         </div>
       </form>
+
+      {/* Reset Password Confirmation Dialog */}
+      <dialog id="resetPasswordMetrics" className="modal" ref={resetPasswordDialogRef}>
+        <div className="modal-box">
+          <form method="dialog">
+            <button disabled={resettingPassword} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          </form>
+          <h3 className="font-bold text-lg">Reset Password</h3>
+          <p className="py-4">Are you sure you want to reset the password for <strong>{user?.name}</strong>? A new password will be generated and sent to their email.</p>
+          <div className="modal-action">
+            <form method="dialog">
+              <button disabled={resettingPassword} className="btn btn-neutral mr-2">Cancel</button>
+              <button
+                disabled={resettingPassword}
+                className="btn btn-primary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  resetUserPassword();
+                }}
+              >
+                {resettingPassword ? "Resetting..." : "Confirm Reset"}
+              </button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </>
   )
 }

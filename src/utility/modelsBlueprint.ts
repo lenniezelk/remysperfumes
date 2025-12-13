@@ -7,10 +7,11 @@ import {
   ShoppingCart,
   Tags,
   Users,
+  BarChart,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import type { FileRouteTypes } from '@/routeTree.gen'
-import type { RoleKey } from '@/lib/permissions';
+import type { RoleKey } from '@/lib/permissions'
 import { roles } from '@/lib/permissions'
 
 export interface ModelBlueprint {
@@ -95,6 +96,14 @@ export const modelsBlueprint: Array<ModelBlueprint> = [
     description: 'Manage system users',
     icon: Users,
     route: '/admin/users',
+    roles: [roles.MANAGER, roles.ADMIN, roles.SUPERADMIN],
+  },
+  {
+    key: 'reports',
+    name: 'Reports',
+    description: 'View sales and performance reports',
+    icon: BarChart,
+    route: '/admin/reports/sales',
     roles: [roles.MANAGER, roles.ADMIN, roles.SUPERADMIN],
   },
 ]

@@ -5,7 +5,7 @@ import { FieldInfo } from '@/components/FieldInfo'
 import Heading from '@/components/Heading'
 import { Input } from '@/components/Input'
 import Button from '@/components/Button'
-import { useNotifications } from '@/components/notifications/Notification'
+import { useNotifications, NotificationsList } from '@/components/notifications/Notification'
 import { fetchEditUserInitialData } from '@/lib/server/users/get'
 import { UpdateUserData, updateAdminUser } from '@/lib/server/users/update'
 import { resetPassword } from '@/lib/server/users/resetPassword'
@@ -115,16 +115,12 @@ function RouteComponent() {
 
   return (
     <>
+      <NotificationsList />
       <div className="flex justify-between items-center mt-12 mb-4">
         <Heading level={2}>
           Edit User
         </Heading>
-        <Button
-          variant="neutral"
-          onClick={() => resetPasswordDialogRef.current?.showModal()}
-        >
-          Reset Password
-        </Button>
+
       </div>
       <form
         className='mt-8 w-full max-w-md space-y-4'
@@ -133,7 +129,19 @@ function RouteComponent() {
           e.stopPropagation();
           form.handleSubmit();
         }}>
-        <div>
+        <div className='flex justify-end'>
+          <Button
+            variant="neutral"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              resetPasswordDialogRef.current?.showModal()
+            }}
+          >
+            Reset Password
+          </Button>
+        </div>
+        <div className='mt-2'>
           <form.Field
             name="name"
             children={
@@ -225,7 +233,11 @@ function RouteComponent() {
           <button
             type='button'
             className='btn btn-neutral'
-            onClick={() => navigate({ to: '/admin/users' })}
+            onClick={() => {
+              notifications.clear();
+              navigate({ to: '/admin/users' });
+              form.reset();
+            }}
           >
             Cancel
           </button>

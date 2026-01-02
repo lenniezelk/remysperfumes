@@ -14,7 +14,7 @@
     "cf-typegen": "wrangler types --env-interface Env",
     "db:generate": "drizzle-kit generate",
     "db:local:migrate": "wrangler d1 migrations apply DB --local",
-    "db:local:query": "wrangler d1 execute DB --local --command",
+    "db:local:query": "wrangler d1 execute DB --json --local --command",
     "db:local:execute": "wrangler d1 execute DB --local --file",
     "seed:local:roles": "tsx src/lib/db/seed.ts --add-roles",
     "seed:local:superadmin": "tsx src/lib/db/seed.ts --add-superadmin",
@@ -23,7 +23,15 @@
     "db:prod:execute": "wrangler d1 execute DB --remote --file",
     "seed:prod:roles": "tsx src/lib/db/seed.ts --add-roles --remote",
     "seed:prod:superadmin": "tsx src/lib/db/seed.ts --add-superadmin --remote",
-    "kv:create": "wrangler kv namespace create --binding"
+    "kv:create": "wrangler kv namespace create --binding",
+    "prepare": "husky",
+    "scan-secrets": "gitleaks protect --staged --baseline-path .gitleaks-baseline.json --verbose"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@react-oauth/google": "^0.12.2",
@@ -64,7 +72,9 @@
     "@vitejs/plugin-react": "^5.0.4",
     "daisyui": "^5.5.3",
     "drizzle-kit": "^0.31.6",
+    "husky": "^9.1.7",
     "jsdom": "^27.0.0",
+    "lint-staged": "^16.2.7",
     "prettier": "^3.5.3",
     "tsx": "^4.20.6",
     "typescript": "^5.7.2",
